@@ -1,0 +1,12 @@
+########### Powertools #######################
+$powertoolsContentCatalog=powertoolsContentCatalog
+$powertoolsContentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$powertoolsContentCatalog]),CatalogVersion.version[default=Staged])[default=$powertoolsContentCatalog:Staged]
+$powertoolsPicture=media(code, $powertoolsContentCV)
+$siteResource=jar:com.acc.initialdata.constants.BncInitialDataConstants&/bncinitialdata/import/coredata
+$defaultLanguage=en
+
+INSERT_UPDATE Media;$powertoolsContentCV[unique=true];code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpeg'];altText;folder(qualifier)[default='images']
+;;powertoolsAccentureLogo;logoimg.jpg;$siteResource/images/logoimg.jpg;;Apparel DE Accenture Logo;;
+
+INSERT_UPDATE SimpleBannerComponent;$powertoolsContentCV[unique=true];uid[unique=true];name;&componentRef;$powertoolsPicture[lang=$defaultLanguage];urlLink
+;;SiteLogoComponent;Site Logo Component;SiteLogoComponent;powertoolsAccentureLogo:powertoolsContentCatalog:Staged;"/"

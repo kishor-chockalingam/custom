@@ -1,0 +1,15 @@
+############### Electronics ###############
+$electronicsCatalog=electronicsContentCatalog
+$electronicsContentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$electronicsCatalog]),CatalogVersion.version[default=Staged])[default=$electronicsCatalog:Staged]
+$defaultLanguage=en
+$siteResource=jar:com.acc.initialdata.constants.BncInitialDataConstants&/bncinitialdata/import/coredata
+$electronicsPicture=media(code, $electronicsContentCV)
+
+
+# Site Logo Right
+INSERT_UPDATE Media;$electronicsContentCV[unique=true];code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpeg'];altText;folder(qualifier)[default='images']
+;;ElectronicsAccentureLogo;logoimg.jpg;$siteResource/images/logoimg.jpg;;Electronics Accenture Logo;;
+
+# Site Logo Right Component
+INSERT_UPDATE SimpleBannerComponent;$electronicsContentCV[unique=true];uid[unique=true];name;&componentRef;$electronicsPicture[lang=$defaultLanguage];urlLink
+;;SiteLogoComponent;Site Logo Component;SiteLogoComponent;ElectronicsAccentureLogo:electronicsContentCatalog:Staged;"/"

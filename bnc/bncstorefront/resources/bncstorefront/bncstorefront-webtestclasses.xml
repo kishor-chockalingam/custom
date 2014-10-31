@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testclasses>
+  <bncstorefront>
+    <testclass>com.acc.storefront.filters.CommonResourcesAddOnFilterTest</testclass>
+    <testclass>com.acc.storefront.controllers.cms.NavigationBarComponentControllerTest</testclass>
+    <testclass>com.acc.storefront.security.impl.WebHttpSessionRequestCacheUnitTest</testclass>
+    <testclass>com.acc.storefront.security.cookie.EnhancedCookieGeneratorTest</testclass>
+    <testclass>com.acc.storefront.security.impl.CartUsurpProtectionUnitTest</testclass>
+    <testclass>com.acc.storefront.filters.AnonymousCheckoutFilterTest</testclass>
+    <testclass>com.acc.storefront.controllers.cms.CartSuggestionComponentControllerTest</testclass>
+    <testclass>com.acc.storefront.controllers.cms.DefaultCMSComponentControllerTest</testclass>
+    <testclass>com.acc.storefront.interceptors.CSRFHandlerInterceptorTest</testclass>
+    <testclass>com.acc.storefront.controllers.cms.ProductCarouselComponentControllerTest</testclass>
+    <testclass>com.acc.storefront.filters.CustomerLocationRestorationFilterTest</testclass>
+    <testclass>com.acc.storefront.controllers.cms.MiniCartComponentControllerTest</testclass>
+    <testclass>com.acc.storefront.web.view.UiExperienceViewResolverTest</testclass>
+    <testclass>com.acc.storefront.filters.AcceleratorAddOnFilterTest</testclass>
+    <testclass>com.acc.storefront.controllers.pages.SearchPageControllerUnitTest</testclass>
+    <testclass>com.acc.storefront.filters.TagResourcesAddOnFilterTest</testclass>
+    <testclass>com.acc.storefront.controllers.cms.PurchasedCategorySuggestionComponentControllerTest</testclass>
+    <testclass>com.acc.storefront.filters.AbstractAddOnFilterTest</testclass>
+    <testclass>com.acc.storefront.interceptors.i18n.SetLanguageBeforeControllerHandlerTest</testclass>
+    <testclass>com.acc.storefront.controllers.cms.CategoryFeatureComponentControllerTest</testclass>
+    <testclass>com.acc.storefront.controllers.cms.ProductFeatureComponentControllerTest</testclass>
+    <testclass>com.acc.storefront.controllers.cms.ProductReferencesComponentControllerTest</testclass>
+    <testclass>com.acc.storefront.controllers.pages.CartPageControllerTest</testclass>
+  </bncstorefront>
+</testclasses>

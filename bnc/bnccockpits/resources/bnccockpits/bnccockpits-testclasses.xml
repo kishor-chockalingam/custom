@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testclasses>
+  <bnccockpits>
+    <testclass>com.acc.cockpits.jalo.YAcceleratorcockpitsTest</testclass>
+    <testclass>com.acc.cockpits.cmscockpit.sitewizard.CMSSiteUtilsTest</testclass>
+  </bnccockpits>
+</testclasses>

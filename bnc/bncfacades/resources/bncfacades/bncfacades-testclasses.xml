@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testclasses>
+  <bncfacades>
+    <testclass>com.acc.facades.suggestion.DefaultSimpleSuggestionFacadeIntegrationTest</testclass>
+    <testclass>com.acc.facades.suggestion.impl.DefaultSimpleSuggestionFacadeTest</testclass>
+    <testclass>com.acc.facades.flow.impl.DefaultCheckoutFlowFacadeTest</testclass>
+    <testclass>com.acc.facades.flow.impl.DefaultMobileCheckoutFlowFacadeTest</testclass>
+  </bncfacades>
+</testclasses>

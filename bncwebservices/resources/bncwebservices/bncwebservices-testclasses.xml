@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testclasses>
+  <bncwebservices>
+    <testclass>com.acc.expressupdate.channel.ProductExpressUpdateChannelListenerTest</testclass>
+    <testclass>com.acc.expressupdate.impl.ProductExpressUpdateQueueTest</testclass>
+    <testclass>com.acc.expressupdate.populators.ProductExpressUpdateElementPopulatorTest</testclass>
+    <testclass>com.acc.expressupdate.util.ProductExpressUpdateElementPredicateTest</testclass>
+  </bncwebservices>
+</testclasses>

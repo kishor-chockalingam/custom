@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<web-app id="bncwebservices" version="3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" 
+         metadata-complete="true">
+  <absolute-ordering />
+  
+	<display-name>bncwebservices</display-name>
+
+	<!-- spring based filter chain -->
+	<filter>
+		<description>
+			Spring configured chain of spring filter beans
+		</description>
+		<filter-name>commerceWebServicesFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+
+	<!-- provides support for ETag and If-None-Match, shallow -->
+	<filter>
+		<filter-name>ETagFilter</filter-name>
+		<filter-class>org.springframework.web.filter.ShallowEtagHeaderFilter</filter-class>
+	</filter>
+
+	<filter>
+		<filter-name>clientCredentialsTokenEndpointFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+
+	<filter>
+		<filter-name>httpPutFormFilter</filter-name>
+		<filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
+	</filter>
+
+	<filter>
+		<filter-name>CORS</filter-name>
+		<filter-class>com.thetransactioncompany.cors.CORSFilter</filter-class>
+		<init-param>
+			<param-name>cors.supportedMethods</param-name>
+			<param-value>GET, POST, HEAD, PUT, DELETE, OPTIONS</param-value>
+		</init-param>
+		<init-param>
+			<!-- fix for http://code.google.com/p/chromium/issues/detail?id=108394 -->
+			<param-name>cors.supportedHeaders</param-name>
+			<param-value>origin, content-type, accept</param-value>
+		</init-param>
+	</filter>
+
+	<filter>
+		<filter-name>XSSFilter</filter-name>
+		<filter-class>de.hybris.platform.servicelayer.web.XSSFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>XSSFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>clientCredentialsTokenEndpointFilter</filter-name>
+		<url-pattern>/oauth/token</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>ETagFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>httpPutFormFilter</filter-name>
+		<servlet-name>springmvc</servlet-name>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>CORS</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping><filter-name>commerceWebServicesFilterChain</filter-name><servlet-name>springmvc</servlet-name></filter-mapping>
+
+	<servlet>
+		<servlet-name>springmvc</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>springmvc</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+	<!-- Enabling a Spring web application context with 'session' and 'request' scope. - The 'contextConfigLocation' param specifies where 
+		your configuration files <location>/servletRequestBindingException.jsp</location>are located. - The HybrisContextLoaderListener extends the usual SpringContextLoaderListener (which loads 
+		the context from specified location) by adding the global application context of the platform as parent context. With having the global 
+		context set as parent you can access or override beans of the global context and get the 'tenant' scope. - The RequestContextListener 
+		is needed for exposing the 'request' scope to the context. Furthermore it is needed when overriding the 'jalosession' bean for your 
+		web application. -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>WEB-INF/bncwebservices-web-spring.xml</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>de.hybris.platform.spring.HybrisContextLoaderListener</listener-class>
+	</listener>
+
+	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	<error-page>
+		<exception-type>org.springframework.web.bind.ServletRequestBindingException</exception-type>
+		<location>/servletRequestBindingException.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>405</error-code>
+		<location>/methodNotSupported.jsp</location>
+	</error-page>
+
+</web-app> 

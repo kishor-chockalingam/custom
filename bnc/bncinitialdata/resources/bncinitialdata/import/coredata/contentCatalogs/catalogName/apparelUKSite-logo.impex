@@ -1,0 +1,12 @@
+########### Apparel-UK #######################
+$apparelUKContentCatalog=apparel-ukContentCatalog
+$apparelUKContentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$apparelUKContentCatalog]),CatalogVersion.version[default=Staged])[default=$apparelUKContentCatalog:Staged]
+$apparelUKPicture=media(code, $apparelUKContentCV)
+$siteResource=jar:com.acc.initialdata.constants.BncInitialDataConstants&/bncinitialdata/import/coredata
+$defaultLanguage=en
+
+INSERT_UPDATE Media;$apparelUKContentCV[unique=true];code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpeg'];altText;folder(qualifier)[default='images']
+;;ApparelAccentureLogo;logoimg.jpg;$siteResource/images/logoimg.jpg;;Apparel UK Accenture Logo;;
+
+INSERT_UPDATE SimpleBannerComponent;$apparelUKContentCV[unique=true];uid[unique=true];name;&componentRef;$apparelUKPicture[lang=$defaultLanguage];urlLink
+;;SiteLogoComponent;Site Logo Component;SiteLogoComponent;ApparelAccentureLogo:apparel-ukContentCatalog:Staged;"/"

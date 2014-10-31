@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<enunciate label="test" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="http://enunciate.codehaus.org/schemas/enunciate-1.26.xsd">
+	<namespaces>
+		<namespace id="api" uri="http://api.example.com/"/>
+	</namespaces>
+	<modules>
+		<!-- Docs -->
+		<docs splashPackage="com.acc" title="OCC" copyright="hybris"/>
+		<java-client disabled="false"/>
+		<amf disabled="true"/>
+		<c disabled="true"/>
+		<obj-c disabled="true"/>
+		<csharp disabled="true"/>
+		<spring-app disabled="true"/>
+		<cxf disabled="true"/>
+		<gwt disabled="true"/>
+		<jaxws-ri disabled="true"/>
+		<jersey disabled="true"/>
+	</modules>
+</enunciate>

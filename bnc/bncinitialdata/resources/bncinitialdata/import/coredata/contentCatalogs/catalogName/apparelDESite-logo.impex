@@ -1,0 +1,12 @@
+########### Apparel-DE #######################
+$apparelDEContentCatalog=apparel-deContentCatalog
+$apparelDEContentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$apparelDEContentCatalog]),CatalogVersion.version[default=Staged])[default=$apparelDEContentCatalog:Staged]
+$apparelDEPicture=media(code, $apparelDEContentCV)
+$siteResource=jar:com.acc.initialdata.constants.BncInitialDataConstants&/bncinitialdata/import/coredata
+$defaultLanguage=de
+
+INSERT_UPDATE Media;$apparelDEContentCV[unique=true];code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpeg'];altText;folder(qualifier)[default='images']
+;;ApparelDEAccentureLogo;logoimg.jpg;$siteResource/images/logoimg.jpg;;Apparel DE Accenture Logo;;
+
+INSERT_UPDATE SimpleBannerComponent;$apparelDEContentCV[unique=true];uid[unique=true];name;&componentRef;$apparelDEPicture[lang=$defaultLanguage];urlLink
+;;SiteLogoComponent;Site Logo Component;SiteLogoComponent;ApparelDEAccentureLogo:apparel-deContentCatalog:Staged;"/"

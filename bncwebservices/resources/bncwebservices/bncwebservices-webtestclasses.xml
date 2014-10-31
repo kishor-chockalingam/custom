@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testclasses>
+  <bncwebservices>
+    <testclass>com.acc.test.SearchQueryDataParserTest</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.docu.BaseWSTestWatcher.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.DocumentationSuite.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.DummyHostnameVerifier</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.CatalogTests.groovy</testclass>
+    <testclass>com.acc.xstream.XmlXStreamFactoryTest</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.PromotionTests.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.ProductTests.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.CartTests.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.CustomerTests.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.markers.AvoidCollectingOutputFromTest</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.OAuth2Tests.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.docu.TestUtilCustomDelegatingMetaClass.groovy</testclass>
+    <testclass>com.acc.test.ProductWebServiceTest</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.docu.SaveWSOutputStrategy.groovy</testclass>
+    <testclass>com.acc.test.TestConstants</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.LogoutTests.groovy</testclass>
+    <testclass>com.acc.test.UserWebServiceTest</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.docu.TestUtilMethodInvListener</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.VoucherTests.groovy</testclass>
+    <testclass>com.acc.xstream.JsonXStreamFactoryTest</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.docu.DefaultSaveWSOuptutStrategy.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.BaseWSTest.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.StoresTests.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.docu.SummaryOfRunningTest.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.DummyTrustManager</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.OCCDemo_Oauth2.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.TestUtil.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.CustomerGroupTests.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.docu.TestUtilMethodInvEvent</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.AddressTest.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.FlowTests.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.OCCDemo_Basic_Auth.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.MiscTests.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.AllTests.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.markers.CollectOutputFromTest</testclass>
+    <testclass>com.acc.xstream.XmlXStreamMarshallerFactoryTest</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.docu.SaveByResourcesWSOutputStrategy.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.docu.WSRequestSummary.groovy</testclass>
+    <testclass>com.acc.test.groovy.webservicetests.HttpsRestrictedUrlsTests.groovy</testclass>
+  </bncwebservices>
+</testclasses>

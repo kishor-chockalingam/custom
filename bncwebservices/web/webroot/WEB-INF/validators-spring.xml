@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	                       http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+	<!-- Validators -->
+	<bean id="minimalAddressValidator" class="com.acc.validator.CompositeValidator">
+		<property name="validators">
+			<list>
+				<bean class="com.acc.validator.FieldNotEmptyOrTooLongValidator">
+					<property name="fieldPath" value="firstName"/>
+					<property name="maxLength" value="255"/>
+				</bean>
+				<bean class="com.acc.validator.FieldNotEmptyOrTooLongValidator">
+					<property name="fieldPath" value="lastName"/>
+					<property name="maxLength" value="255"/>
+				</bean>
+				<bean class="com.acc.validator.FieldNotEmptyOrTooLongValidator">
+					<property name="fieldPath" value="line1"/>
+					<property name="maxLength" value="255"/>
+				</bean>
+				<bean class="com.acc.validator.FieldNotEmptyOrTooLongValidator">
+					<property name="fieldPath" value="town"/>
+					<property name="maxLength" value="255"/>
+				</bean>
+				<bean class="com.acc.validator.FieldNotEmptyOrTooLongValidator">
+					<property name="fieldPath" value="postalCode"/>
+					<property name="maxLength" value="10"/>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="commonAddressValidator" class="com.acc.validator.CompositeValidator">
+		<property name="validators">
+			<list>
+				<ref bean="minimalAddressValidator"/>
+				<bean class="com.acc.validator.FieldNotEmptyOrTooLongValidator">
+					<property name="fieldPath" value="titleCode"/>
+					<property name="maxLength" value="255"/>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="japaneseAddressValidator" class="com.acc.validator.CompositeValidator">
+		<property name="validators">
+			<list>
+				<ref bean="minimalAddressValidator"/>
+				<bean class="com.acc.validator.FieldNotEmptyOrTooLongValidator">
+					<property name="fieldPath" value="line2"/>
+					<property name="maxLength" value="255"/>
+				</bean>
+				<bean class="com.acc.validator.FieldNotEmptyOrTooLongValidator">
+					<property name="fieldPath" value="region.isocode"/>
+					<property name="maxLength" value="7"/>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="chineseAddressValidator" class="com.acc.validator.CompositeValidator">
+		<property name="validators">
+			<list>
+				<ref bean="commonAddressValidator"/>
+				<bean class="com.acc.validator.FieldNotEmptyOrTooLongValidator">
+					<property name="fieldPath" value="region.isocode"/>
+					<property name="maxLength" value="7"/>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<alias name="defaultAddressValidator" alias="addressValidator"/>
+	<bean id="defaultAddressValidator"
+	      class="com.acc.validator.CountryAwareAddressValidator">
+		<property name="commonAddressValidator" ref="commonAddressValidator"/>
+		<property name="countrySpecificAddressValidators">
+			<map>
+				<entry key="JP" value-ref="japaneseAddressValidator"/>
+				<entry key="CN" value-ref="chineseAddressValidator"/>
+			</map>
+		</property>
+	</bean>
+
+	<alias name="defaultPaymentAddressValidator" alias="paymentAddressValidator"/>
+	<bean id="defaultPaymentAddressValidator"
+	      class="com.acc.validator.CompositeValidator">
+		<property name="validators">
+			<list>
+				<bean class="com.acc.validator.FieldNotEmptyValidator">
+					<property name="fieldPath" value="billingAddress.titleCode"/>
+				</bean>
+				<bean class="com.acc.validator.FieldNotEmptyValidator">
+					<property name="fieldPath" value="billingAddress.firstName"/>
+				</bean>
+				<bean class="com.acc.validator.FieldNotEmptyValidator">
+					<property name="fieldPath" value="billingAddress.lastName"/>
+				</bean>
+				<bean class="com.acc.validator.FieldNotEmptyValidator">
+					<property name="fieldPath" value="billingAddress.line1"/>
+				</bean>
+				<bean class="com.acc.validator.FieldNotEmptyValidator">
+					<property name="fieldPath" value="billingAddress.town"/>
+				</bean>
+				<bean class="com.acc.validator.FieldNotEmptyOrTooLongValidator">
+					<property name="fieldPath" value="billingAddress.postalCode"/>
+					<property name="maxLength" value="10"/>
+				</bean>
+				<bean class="com.acc.validator.FieldNotEmptyOrTooLongValidator">
+					<property name="fieldPath" value="billingAddress.country.isocode"/>
+					<property name="maxLength" value="2"/>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+</beans>

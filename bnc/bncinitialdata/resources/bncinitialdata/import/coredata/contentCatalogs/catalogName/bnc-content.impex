@@ -1,0 +1,82 @@
+$passwordEncoding=md5
+$defaultPassword=12341234
+$setPassword=@password[translator=de.hybris.platform.impex.jalo.translators.ConvertPlaintextToEncodedUserPasswordTranslator][default='$passwordEncoding:$defaultPassword']
+
+$contentCatalog=electronicsContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$profilePicture=profilePicture(code, $contentCV)
+$defaultLanguage=en
+$siteResource=jar:com.acc.initialdata.constants.BncInitialDataConstants&/bncinitialdata/import/coredata
+$picture=media(code, $contentCV)
+
+
+########### Component #############
+
+insert_update SimpleSuggestionComponent;catalogVersion(catalog(id),version)[unique=true,allownull=true];maximumNumberProducts[allownull=true];name;onlyOneRestrictionMustApply[allownull=true];uid[unique=true,allownull=true,forcewrite=true];visible[allownull=true]
+;electronicsContentCatalog:Staged;10;RecommendedProductsComponent;true;RecommendedProductsComponent;true
+
+insert_update RecentlyViewedProductsComponent;catalogVersion(catalog(id),version)[unique=true,allownull=true];name;onlyOneRestrictionMustApply[allownull=true];uid[unique=true,allownull=true];visible[allownull=true]
+;electronicsContentCatalog:Staged;RecentlyViewedProductsComponent;true;RecentlyViewedProductsComponent;true
+
+######## Content slots #############
+
+insert_update ContentSlot;active[allownull=true];catalogVersion(catalog(id),version)[unique=true,allownull=true];name;uid[unique=true,allownull=true];cmsComponents(uid[unique=true,allownull=true])
+;true;electronicsContentCatalog:Staged;RecommendedProductsSlots;RecommendedProductsSlots;RecommendedProductsComponent
+;true;electronicsContentCatalog:Staged;RecentlySlots;RecentlySlots;RecentlyViewedProductsComponent
+
+
+
+#### Content slots for Pages ##############
+
+insert_update ContentSlotForPage;catalogVersion(catalog(id),version)[unique=true,allownull=true];contentSlot(catalogVersion(catalog(id),version),uid)[allownull=true];page(catalogVersion(catalog(id),version),uid)[allownull=true];position[allownull=true];uid[unique=true,allownull=true]
+;electronicsContentCatalog:Staged;electronicsContentCatalog:Staged:RecommendedProductsSlots;electronicsContentCatalog:Staged:account;recommendedProducts;recommendedCFP
+;electronicsContentCatalog:Staged;electronicsContentCatalog:Staged:RecentlySlots;electronicsContentCatalog:Staged:account;recentlyViewed;recentlyViewedCFP
+
+
+
+
+
+
+################### Electronics site Customer for BNC ##############################
+
+INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpeg'];altText;folder(qualifier)[default='images']
+;;HemantProfilePic;Hemant.jpg;$siteResource/images/Hemant.jpg;;Hemant Sharma;;
+;;JalajProfilePic;Jalaj.jpg;$siteResource/images/Jalaj.jpg;;Jalaj Sharma;;
+;;VinayProfilePic;Vinay.jpg;$siteResource/images/Vinay.jpg;;Vinay Sutrave;;
+
+
+INSERT_UPDATE Customer;groups(uid);uid[unique=true];name;$setPassword;customerId;profilePicture(catalogVersion(catalog(id),version),code);&userId;UUID
+;"customergroup";"akash.saluja1@xyz.com";"Akash Saluja";;eda4b92b-07ab-4ca4-8ecd-43d53123bd98;;akashSalujaID;eda4b92b-07ab-4ca4-8ecd-43d53123bd98
+;"customergroup";"hemant.sharma@xyz.com";"Hemant Sharma";;9644f07f-d1b3-4e91-ac18-d5ed89bd2f77;electronicsContentCatalog:Staged:HemantProfilePic;hemantSharmaID;9644f07f-d1b3-4e91-ac18-d5ed89bd2f77
+;"customergroup";"jalaj.sharma@xyz.com";"Jalaj Sharma";;06f6d800-8cbd-454b-8370-5646a3e156e3;electronicsContentCatalog:Staged:JalajProfilePic;jalajSharmaID;06f6d800-8cbd-454b-8370-5646a3e156e3
+;"customergroup";"vinay.sutrave@xyz.com";"Vinay Sutrave";;1ba2e297-13b4-4ae0-91ab-212467f400f6;electronicsContentCatalog:Staged:VinayProfilePic;vinaySutraveID;1ba2e297-13b4-4ae0-91ab-212467f400f6
+;"customergroup";"sankar.sundar@xyz.com";"Shankar Sundar";;98373e92-2c28-4abc-b002-b2d9a4615e6d;;shankarSundarID;98373e92-2c28-4abc-b002-b2d9a4615e6d
+;"customergroup";"naresh.khanduri@xyz.com";"Naresh Khanduri Sundar";;8ed6cf9d-1c78-4849-a988-ff0f7abe7261;;nareshKhanduriID;8ed6cf9d-1c78-4849-a988-ff0f7abe7261
+
+ 
+
+INSERT_UPDATE Address;&addId;owner(&userId);streetname[unique=true];postalcode[unique=true];duplicate[unique=true];town;country(isocode);billingAddress;contactAddress;shippingAddress;unloadingAddress;firstname;lastname;email;gender(code);middlename;phone1;title(code);url;company;fax;department;appartment;dateOfBirth[dateformat=MM/dd/yyyy]
+;AkashAddressID;akashSalujaID;300 BOYLSTON AVE E;98102;false;BOYLSTON;US;false;true;false;false;Akash;Saluja;Akash.saluja1@xyz.com;MALE;;+44 1234567;mr;;Hybris;;;Birla Appartment;05/11/1981
+;HemantAddressID;hemantSharmaID;100 MAIN ST;98104;false;SEATTLE WA;US;false;true;false;false;Hemant;Sharma;Hemant.sharma@xyz.com;MALE;;+44 1234567;mr;;Hybris;;;ABC Appartment;02/13/1982
+;JalajAddressID;jalajSharmaID;BITBOOST;85728;false;TUCSON AZ;US;false;true;false;false;Jalaj;Sharma;Jalaj.sharma@xyz.com;MALE;;+44 1234567;mr;;Hybris;;;Panchkula Appartment;09/18/1983
+;VinayAddressID;vinaySutraveID;799 E DRAGRAM;85705;false;TUCSON;US;false;true;false;false;Vinay;Sutrave;Vinay.sutrave@xyz.com;MALE;;+44 1234567;mr;;Hybris;;;Panchkula Appartment Banglore;09/18/1978
+;ShankarAddressID;shankarSundarID;200 E MAIN ST;85123;false;PHOENIX AZ;US;false;true;false;false;Shankar;Sundar;Sankar.sundar@xyz.com;MALE;;+44 1234567;mr;;Hybris;;;Navi Appartment;09/18/1985
+;NareshAddressID;nareshKhanduriID;421 E DRACHMAN;85705-7598;false;TUCSON AZ;US;false;true;false;false;Naresh;Khanduri;Naresh.khanduri@xyz.com;MALE;;+44 1234567;mr;;Hybris;;;Lal Villa Appartment;02/14/1976
+
+
+
+
+
+########################################################################################
+
+#To create csrGroup if not created
+INSERT_UPDATE Usergroup;uid[unique=true];locName;description
+;csrGroup;CSR Group;CSR Group
+
+#To create CSR User in csrGroup
+INSERT_UPDATE Customer;uid[unique=true];name;description;groups(uid);password
+;peter;Peter Gabriel;CSR Lead;csrGroup;12341234
+;csrUser;CSR User;CSR Lead;csrGroup;12341234
+
+INSERT_UPDATE config;ValueHolder[unique=true]
+;10;

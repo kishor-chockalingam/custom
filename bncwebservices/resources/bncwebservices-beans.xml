@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ [y] hybris Platform
+
+ Copyright (c) 2000-2013 hybris AG
+ All rights reserved.
+
+ This software is the confidential and proprietary information of hybris
+ ("Confidential Information"). You shall not disclose such Confidential
+ Information and shall use it only in accordance with the terms of the
+ license agreement you entered into with hybris.
+-->
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="beans.xsd">
+
+	<enum class="com.acc.populator.options.PaymentInfoOption">
+		<value>BASIC</value>
+		<value>BILLING_ADDRESS</value>
+	</enum>
+	
+	<!--auth response  -->
+	<bean class="com.acc.auth.data.LogoutResponse">
+		<property name="success" type="boolean"/>
+	</bean>
+
+	<!-- error data -->
+	<bean class="com.acc.error.data.ErrorData">
+		<property name="className" type="String"/>
+		<property name="message" type="String"/>
+	</bean>		
+
+	<bean class="com.acc.error.data.ValidationErrorData" extends="com.acc.error.data.ErrorData">
+		<property name="validationErrors" type="java.util.Collection&lt;java.lang.String>" />
+	</bean>		
+
+	<!-- storesession data -->
+
+	<bean class="com.acc.storesession.data.LanguageDataList">
+		<property name="languages" type="java.util.Collection&lt;de.hybris.platform.commercefacades.storesession.data.LanguageData>" />
+	</bean>		
+
+	<bean class="com.acc.storesession.data.CurrencyDataList">
+		<property name="currencies" type="java.util.Collection&lt;de.hybris.platform.commercefacades.storesession.data.CurrencyData>" />
+	</bean>		
+
+	<!-- order data -->
+
+	<bean class="com.acc.order.data.CardTypeDataList">
+		<property name="cardTypes" type="java.util.List&lt;de.hybris.platform.commercefacades.order.data.CardTypeData>" />
+	</bean>		
+
+	<!-- product data -->
+
+	<bean class="com.acc.product.data.ProductDataList">
+		<property name="products" type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.ProductData>" />
+		<property name="catalog" type="String"/>
+		<property name="version" type="String"/>
+		<property name="totalProductCount" type="int"/>
+		<property name="totalPageCount" type="int"/>
+		<property name="currentPage" type="int"/>
+	</bean>		
+
+	<bean class="com.acc.product.data.PromotionDataList">
+		<property name="promotions" type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.PromotionData>" />
+	</bean>		
+
+	<bean class="com.acc.product.data.ReviewDataList">
+		<property name="reviews" type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.ReviewData>" />
+	</bean>		
+
+	<bean class="com.acc.product.data.SuggestionDataList">
+		<property name="suggestions" type="java.util.List&lt;de.hybris.platform.commercefacades.product.data.SuggestionData>" />
+	</bean>		
+
+	<!-- user data -->
+
+	<bean class="com.acc.user.data.TitleDataList">
+		<property name="titles" type="java.util.List&lt;de.hybris.platform.commercefacades.user.data.TitleData>" />
+	</bean>		
+
+	<bean class="com.acc.user.data.CountryDataList">
+		<property name="countries" type="java.util.List&lt;de.hybris.platform.commercefacades.user.data.CountryData>" />
+	</bean>		
+
+	<bean class="com.acc.user.data.AddressDataList">
+		<property name="addresses" type="java.util.List&lt;de.hybris.platform.commercefacades.user.data.AddressData>" />
+	</bean>		
+
+	<!-- Additional title property for CustomerData -->
+	<bean class="de.hybris.platform.commercefacades.user.data.CustomerData" extends="de.hybris.platform.commercefacades.user.data.PrincipalData">
+		<property name="title" type="String"/>
+	</bean>
+
+	<bean class="com.acc.user.data.LoginChangeResponse">
+		<property name="success" type="boolean"/>
+	</bean>
+
+	<bean class="com.acc.user.data.PasswordRestoreResponse">
+		<property name="success" type="boolean"/>
+	</bean>
+
+	<!-- expressupdate data -->
+
+	<bean class="com.acc.expressupdate.data.ProductExpressUpdateElementData">
+		<property name="code" type="String"/>
+		<property name="catalogId" type="String"/>
+		<property name="catalogVersion" type="String"/>
+	</bean>
+	
+	<bean class="com.acc.expressupdate.data.ProductExpressUpdateElementDataList">
+		<property name="productExpressUpdateElements" type="java.util.List&lt;com.acc.expressupdate.data.ProductExpressUpdateElementData>" />
+	</bean>
+
+</beans>

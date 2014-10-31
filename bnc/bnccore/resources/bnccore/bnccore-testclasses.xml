@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testclasses>
+  <bnccore>
+    <testclass>com.acc.core.checkout.flow.impl.NewCustomerCheckoutFlowStrategyTest</testclass>
+    <testclass>com.acc.core.suggestion.DefaultSimpleSuggestionServiceIntegrationTest</testclass>
+    <testclass>com.acc.core.checkout.flow.impl.PickUpInStoreCheckoutFlowStrategyTest</testclass>
+    <testclass>com.acc.core.batch.task.BatchIntegrationTest</testclass>
+    <testclass>com.acc.core.checkout.flow.impl.SiteCheckoutFlowStrategyTest</testclass>
+    <testclass>com.acc.core.checkout.flow.impl.FixedCheckoutFlowStrategyTest</testclass>
+    <testclass>com.acc.core.suggestion.impl.DefaultSimpleSuggestionServiceTest</testclass>
+  </bnccore>
+</testclasses>

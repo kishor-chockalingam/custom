@@ -1,0 +1,1378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- [y] hybris Platform Copyright (c) 2000-2013 hybris AG All rights reserved. 
+	This software is the confidential and proprietary information of hybris ("Confidential 
+	Information"). You shall not disclose such Confidential Information and shall 
+	use it only in accordance with the terms of the license agreement you entered 
+	into with hybris. -->
+
+<!-- WARNING: This is the Spring WEB configuration file. If you want to replace 
+	items or managers you have to do this from the extensions core configuration 
+	file (bncwebservices/resources/bncwebservices-spring.xml) -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
+       xsi:schemaLocation="http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+		http://www.springframework.org/schema/util
+		http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/security 
+		http://www.springframework.org/schema/security/spring-security-3.1.xsd
+		http://www.springframework.org/schema/security/oauth2 
+     	http://www.springframework.org/schema/security/spring-security-oauth2-1.0.xsd">
+
+	<!-- View Resolver required for OAuth2 confirmation page -->
+	<bean id="viewResolver"
+	      class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+
+	<!-- Registering the hybris "tenant" scope This is the custom hybris scope 
+		that manages the lifetime of a "tenant". If you do not deal with tenants 
+		("multimandantenfähigkeit"), then there is no need to understand what this 
+		is for. -->
+	<!-- Needed by Hybris.
+	<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+		<property name="scopes">
+			<map>
+				<entry key="tenant" value="de.hybris.platform.spring.TenantScope" />
+			</map>
+		</property>
+	</bean> -->
+
+	<!-- Load additional configuration -->
+	<import resource="spring-filter-config.xml"/>
+
+
+	<!-- Security OAuth2 -->
+
+	<!-- This is the token endpoint, e.g. used for exhanging an authorization 
+		grant into an access token or for direct token response using the resource 
+		owner password grant. NOTICE: require the HTTPS channel for production! -->
+	<http pattern="/oauth/token" create-session="stateless"
+	      authentication-manager-ref="clientAuthenticationManager"
+	      entry-point-ref="oauthAuthenticationEntryPoint" xmlns="http://www.springframework.org/schema/security">
+		<intercept-url pattern="/oauth/token" access="IS_AUTHENTICATED_FULLY"/>
+		<!-- for PRODUCTION requires-channel="https" -->
+		<anonymous enabled="false"/>
+		<http-basic entry-point-ref="oauthAuthenticationEntryPoint"/>
+		<!-- include this only if you need to authenticate clients via request 
+			parameters -->
+		<custom-filter ref="clientCredentialsTokenEndpointFilter"
+		               before="BASIC_AUTH_FILTER"/>
+		<access-denied-handler ref="oauthAccessDeniedHandler"/>
+	</http>
+
+
+	<!-- OAuth2 protected resources -->
+	<http pattern="/v1/**" entry-point-ref="oauthAuthenticationEntryPoint"
+	      access-decision-manager-ref="accessDecisionManager"
+	      xmlns="http://www.springframework.org/schema/security">
+		<anonymous username="anonymous" granted-authority="ROLE_ANONYMOUS"/>
+		<session-management
+				session-authentication-strategy-ref="fixation"/>
+
+		<intercept-url pattern="/**/cart/address/**"
+		               requires-channel="https"/>
+		<intercept-url pattern="/**/cart/deliverymodes/**"
+		               requires-channel="https"/>
+		<intercept-url pattern="/**/cart/authorize/**"
+		               requires-channel="https"/>
+		<intercept-url pattern="/**/cart/placeorder/**"
+		               requires-channel="https"/>
+		<intercept-url pattern="/**/cart/paymentinfo/**"
+		               requires-channel="https"/>
+		<intercept-url pattern="/**/cart/restore/**"
+		               requires-channel="https"/>
+		<intercept-url pattern="/**/cart/voucher/**"
+		               requires-channel="https"/>
+		<intercept-url pattern="/**/cart/promotion/**"
+		               requires-channel="https"/>
+		<intercept-url pattern="/**/orders/**" requires-channel="https"/>
+		<intercept-url pattern="/**/customers/**"
+		               requires-channel="https"/>
+		<intercept-url pattern="/**/customergroups/**"
+		               requires-channel="https"/>
+		<intercept-url pattern="/**/promotions/**"
+		               requires-channel="https"/>
+		<intercept-url pattern="/**/vouchers/**"
+		               requires-channel="https"/>
+		<intercept-url pattern="/**/products/export/**" 
+					   requires-channel="https"/>
+		<intercept-url pattern="/**/products/expressUpdate/**" 
+		               requires-channel="https"/>
+		<port-mappings>
+			<port-mapping
+					http="#{configurationService.configuration.getProperty('tomcat.http.port')}"
+					https="#{configurationService.configuration.getProperty('tomcat.ssl.port')}"/>
+		</port-mappings>
+
+		<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER"/>
+		<custom-filter ref="hybrisUserFilter" after="LAST"/>
+		<access-denied-handler ref="oauthAccessDeniedHandler"/>
+
+	</http>
+
+	<bean id="hybrisUserFilter"
+	      class="com.acc.oauth2.HybrisOauth2UserFilter"/>
+
+	<http access-denied-page="/login.jsp?authorization_error=true"
+	      disable-url-rewriting="true" xmlns="http://www.springframework.org/schema/security">
+		<intercept-url pattern="/oauth/**" access="ROLE_CUSTOMERGROUP"/>
+		<intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+
+		<form-login authentication-failure-url="/login.jsp?authentication_error=true"
+		            default-target-url="/index.jsp" login-page="/login.jsp"
+		            login-processing-url="/login.do"/>
+		<logout logout-success-url="/index.jsp" logout-url="/logout.do"/>
+		<anonymous/>
+	</http>
+
+	<bean id="oauthAuthenticationEntryPoint"
+	      class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
+		<property name="realmName" value="hybris"/>
+	</bean>
+
+	<bean id="oauthAccessDeniedHandler"
+	      class="org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler"/>
+
+	<bean id="clientCredentialsTokenEndpointFilter"
+	      class="org.springframework.security.oauth2.provider.client.ClientCredentialsTokenEndpointFilter">
+		<property name="authenticationManager" ref="clientAuthenticationManager"/>
+	</bean>
+
+	<bean id="accessDecisionManager"
+	      class="org.springframework.security.access.vote.AffirmativeBased">
+		<property name="decisionVoters">
+			<list>
+				<bean id="roleVoter" class="org.springframework.security.access.vote.RoleVoter"/>
+				<bean id="authenticatedVoter"
+				      class="org.springframework.security.access.vote.AuthenticatedVoter"/>
+			</list>
+		</property>
+	</bean>
+
+
+	<bean id="fixation"
+	      class="de.hybris.platform.servicelayer.security.spring.HybrisSessionFixationProtectionStrategy"/>
+
+
+	<authentication-manager id="clientAuthenticationManager"
+	                        xmlns="http://www.springframework.org/schema/security">
+		<authentication-provider user-service-ref="clientDetailsUserService"/>
+	</authentication-manager>
+
+	<authentication-manager alias="authenticationManager"
+	                        xmlns="http://www.springframework.org/schema/security">
+		<security:authentication-provider
+				ref="coreAuthenticationProvider"/>
+	</authentication-manager>
+
+	<bean id="coreAuthenticationProvider"
+	      class="de.hybris.platform.spring.security.CoreAuthenticationProvider">
+		<property name="userDetailsService" ref="coreUserDetailsService"/>
+	</bean>
+
+	<bean id="coreUserDetailsService"
+	      class="de.hybris.platform.spring.security.CoreUserDetailsService"/>
+
+
+	<bean id="clientDetailsUserService"
+	      class="org.springframework.security.oauth2.provider.client.ClientDetailsUserDetailsService">
+		<constructor-arg ref="clientDetails"/>
+	</bean>
+
+	<bean id="tokenStore"
+	      class="org.springframework.security.oauth2.provider.token.InMemoryTokenStore"/>
+
+	<bean id="tokenServices"
+	      class="org.springframework.security.oauth2.provider.token.DefaultTokenServices">
+		<property name="tokenStore" ref="tokenStore"/>
+		<property name="supportRefreshToken" value="true"/>
+		<property name="refreshTokenValiditySeconds" value="2592000"/>
+		<!-- 60*60*24*30 = 30d -->
+		<property name="accessTokenValiditySeconds" value="43200"/>
+		<!-- 60*60*12 = 12h -->
+	</bean>
+
+
+	<oauth:authorization-server
+			client-details-service-ref="clientDetails" token-services-ref="tokenServices">
+		<oauth:authorization-code/>
+		<oauth:implicit/>
+		<oauth:refresh-token/>
+		<oauth:client-credentials/>
+		<oauth:password/>
+	</oauth:authorization-server>
+
+	<oauth:resource-server id="resourceServerFilter"
+	                       resource-id="hybris" token-services-ref="tokenServices"/>
+
+	<!-- Each client application, e.g. mobile android client, mobile iOS client, 
+		will need to be created here. Below are just examples. It makes sense to 
+		create client_id's for each seperate client app, e.g. your iOS mobile app, 
+		your android mobile app, your external frontend, etc. -->
+	<oauth:client-details-service id="clientDetails">
+		<oauth:client client-id="client-side" resource-ids="hybris"
+		              authorized-grant-types="implicit,client_credentials" authorities="ROLE_CLIENT"
+		              secret="secret" redirect-uri="http://localhost:8080/oauth2_implicit_callback"/>
+		<oauth:client client-id="mobile_android" resource-ids="hybris"
+		              authorized-grant-types="authorization_code,refresh_token,password,client_credentials"
+		              authorities="ROLE_CLIENT" secret="secret"
+		              redirect-uri="http://localhost:8080/oauth2_callback"/>
+		<oauth:client client-id="trusted_client" resource-ids="hybris"
+		              authorized-grant-types="authorization_code,refresh_token,client_credentials"
+		              authorities="ROLE_TRUSTED_CLIENT" secret="secret" />
+	</oauth:client-details-service>
+
+
+	<security:global-method-security
+			pre-post-annotations="enabled" proxy-target-class="true"
+			secured-annotations="enabled">
+		<security:expression-handler ref="oauthExpressionHandler"/>
+	</security:global-method-security>
+
+	<oauth:expression-handler id="oauthExpressionHandler"/>
+
+	<oauth:web-expression-handler id="oauthWebExpressionHandler"/>
+
+
+	<!-- Security -->
+
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="false">
+			<bean id="xStreamJSONConverter"
+			      class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+				<constructor-arg ref="jsonXStreamMarshallerFactory"/>
+				<property name="supportedMediaTypes">
+					<util:list id="mimeJSonTypesList">
+						<util:constant id="json"
+						               static-field="org.springframework.http.MediaType.APPLICATION_JSON"/>
+					</util:list>
+				</property>
+			</bean>
+			<bean id="xStreamXmlConverter"
+			      class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+				<constructor-arg ref="xmlXStreamMarshallerFactory"/>
+				<property name="supportedMediaTypes">
+					<util:list id="mimeXmlTypesList">
+						<util:constant id="xml"
+						               static-field="org.springframework.http.MediaType.APPLICATION_XML"/>
+					</util:list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<context:annotation-config/>
+	<context:component-scan base-package="com.acc"
+	                        scope-resolver="de.hybris.platform.spring.IgnoreTenantScopeMetadataResolver"/>
+
+	<mvc:default-servlet-handler/>
+
+	<bean id="cwsSearchQueryCodec"
+	      class="com.acc.util.ws.impl.DefaultSearchQueryCodec"/>
+
+	<!-- custom converters configuration -->
+
+	<bean id="converterPostProcessor"
+	      class="com.acc.conv.ConverterPostProcessor">
+		<constructor-arg name="xStream">
+			<bean
+					class="com.acc.xstream.XmlXStreamFactory"/>
+		</constructor-arg>
+	</bean>
+
+	<!-- type converters -->
+	<bean class="de.hybris.platform.commercefacades.xstream.conv.TypeConverterMapping">
+		<property name="aliasedClass" value="de.hybris.platform.commercefacades.product.data.PriceData"/>
+		<property name="converter">
+			<bean class="com.acc.conv.PriceDataValueConverter"/>
+		</property>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.conv.TypeConverterMapping">
+		<property name="converter">
+			<bean class="com.acc.conv.StringValueConverter">
+				<property name="limit" value="500"/>
+			</bean>
+		</property>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.conv.TypeConverterMapping">
+		<property name="converter">
+			<bean
+					class="com.acc.conv.Oauth2AccessTokenConverter"/>
+		</property>
+	</bean>
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.conv.TypeConverterMapping">
+		<property name="converter">
+			<bean
+					class="com.acc.conv.SearchQueryDataConverter">
+				<property name="solrSearchQueryEncoder" ref="solrSearchQueryEncoder"/>
+			</bean>
+		</property>
+	</bean>
+
+	<!-- type aliases -->
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="category"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.CategoryData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="customer"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.user.data.CustomerData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="error"/>
+		<property name="aliasedClass"
+		          value="com.acc.error.data.ErrorData"/>
+	</bean>
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="validationError"/>
+		<property name="aliasedClass"
+		          value="com.acc.error.data.ValidationErrorData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="languages"/>
+		<property name="aliasedClass"
+		          value="com.acc.storesession.data.LanguageDataList"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="currencies"/>
+		<property name="aliasedClass"
+		          value="com.acc.storesession.data.CurrencyDataList"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="countries"/>
+		<property name="aliasedClass"
+		          value="com.acc.user.data.CountryDataList"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="cardTypes"/>
+		<property name="aliasedClass"
+		          value="com.acc.order.data.CardTypeDataList"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="reviews"/>
+		<property name="aliasedClass"
+		          value="com.acc.product.data.ReviewDataList"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="addresses"/>
+		<property name="aliasedClass"
+		          value="com.acc.user.data.AddressDataList"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="export"/>
+		<property name="aliasedClass"
+		          value="com.acc.product.data.ProductDataList"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="review"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.ReviewData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="image"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.ImageData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="product"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.ProductData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="searchResult"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.search.facetdata.FacetSearchPageData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="searchResult"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.search.facetdata.ProductSearchPageData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="searchResult"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.search.facetdata.ProductCategorySearchPageData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="facet"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.search.facetdata.FacetData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="breadcrumb"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.search.facetdata.BreadcrumbData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="value"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.search.facetdata.FacetValueData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="classification"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.ClassificationData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="feature"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.FeatureData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="promotion"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.PromotionData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="promotionRestriction"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.promotion.data.PromotionRestrictionData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="promotionResult"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.PromotionResultData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="voucher"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.voucher.data.VoucherData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="consumedOrderEntry"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.order.data.PromotionOrderEntryConsumedData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="featureValue"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.FeatureValueData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="filter"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.search.solrfacetsearch.data.SolrSearchQueryTermData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="sort"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.search.pagedata.SortData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="catalog"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.catalog.data.CatalogData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="catalogVersion"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.catalog.data.CatalogVersionData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="category"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.catalog.data.CategoryHierarchyData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="cart"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.order.data.CartData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="cartModification"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.order.data.CartModificationData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="address"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.user.data.AddressData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="deliveryMode"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.order.data.DeliveryModeData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="deliveryMode"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.order.data.ZoneDeliveryModeData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="order"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.order.data.OrderData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="order"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.order.data.OrderHistoryData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="orderEntry"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.order.data.OrderEntryData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="cardType"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.order.data.CardTypeData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="creditCardPaymentInfo"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.order.data.CCPaymentInfoData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="searchResults"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.search.pagedata.SearchPageData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="language"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.storesession.data.LanguageData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="currency"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.storesession.data.CurrencyData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="country"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.user.data.CountryData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="titles"/>
+		<property name="aliasedClass"
+		          value="com.acc.user.data.TitleDataList"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="title"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.user.data.TitleData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="paymentInfos"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.order.data.CCPaymentInfoDatas"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="deliveryModes"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.order.data.DeliveryModesData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="catalogs"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.catalog.data.CatalogsData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="reference"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.ProductReferenceData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="references"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.ProductReferencesData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="orders"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.order.data.OrderHistoriesData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="logout"/>
+		<property name="aliasedClass"
+		          value="com.acc.auth.data.LogoutResponse"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="suggestions"/>
+		<property name="aliasedClass"
+		          value="com.acc.product.data.SuggestionDataList"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="suggestion"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.SuggestionData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="userGroups"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.user.data.UserGroupDataList"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="userGroup"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.user.data.UserGroupData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="principal"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.user.data.PrincipalData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="oauth2Token"/>
+		<property name="aliasedClass"
+		          value="org.springframework.security.oauth2.common.DefaultOAuth2AccessToken"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="store"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.storelocator.data.PointOfServiceData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="day"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.storelocator.data.WeekdayOpeningDayData"/>
+	</bean>
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="loginChange"/>
+		<property name="aliasedClass"
+		          value="com.acc.user.data.LoginChangeResponse"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="searchResult"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.storefinder.data.StoreFinderSearchPageData"/>
+	</bean>
+
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="passwordRestore"/>
+		<property name="aliasedClass"
+		          value="com.acc.user.data.PasswordRestoreResponse"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="consignmentEntry"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.order.data.ConsignmentEntryData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="consignment"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.order.data.ConsignmentData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="variantOptionQualifier"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.VariantOptionQualifierData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="baseOption"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.BaseOptionData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="variantOption"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.VariantOptionData"/>
+	</bean>
+
+	<bean class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="product"/>
+		<property name="aliasedClass"
+		          value="com.acc.expressupdate.data.ProductExpressUpdateElementData"/>
+	</bean>
+
+	<bean class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="expressUpdate"/>
+		<property name="aliasedClass"
+		          value="com.acc.expressupdate.data.ProductExpressUpdateElementDataList"/>
+	</bean>
+
+	<bean class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="cartRestoration"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.order.data.CartRestorationData"/>
+	</bean>
+
+	<bean class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="promotions"/>
+		<property name="aliasedClass" value="com.acc.product.data.PromotionDataList"/>
+	</bean>
+
+	<bean class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="searchResult"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.storefinder.data.StoreFinderStockSearchPageData"/>
+	</bean>
+
+	<bean class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="storeStock"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.storelocator.data.PointOfServiceStockData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.TypeAliasMapping">
+		<property name="alias" value="day"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.storelocator.data.SpecialOpeningDayData"/>
+	</bean>
+
+	<!-- attribute converters -->
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.conv.AttributeConverterMapping">
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.ProductData"/>
+		<property name="converter">
+			<bean class="com.acc.conv.StringValueConverter">
+				<property name="limit" value="500"/>
+			</bean>
+		</property>
+		<property name="attributeName" value="description"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.conv.AttributeConverterMapping">
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.ReviewData"/>
+		<property name="converter" ref="customDateConverter"/>
+		<property name="attributeName" value="date"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.conv.AttributeConverterMapping">
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.catalog.data.AbstractCatalogItemData"/>
+		<property name="converter" ref="customDateConverter"/>
+		<property name="attributeName" value="lastModified"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.conv.AttributeConverterMapping">
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.order.data.OrderData"/>
+		<property name="converter" ref="customDateConverter"/>
+		<property name="attributeName" value="created"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.conv.AttributeConverterMapping">
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.order.data.OrderHistoryData"/>
+		<property name="converter" ref="customDateConverter"/>
+		<property name="attributeName" value="placed"/>
+	</bean>
+
+	<bean class="de.hybris.platform.commercefacades.xstream.conv.AttributeConverterMapping">
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.PromotionData"/>
+		<property name="converter" ref="customDateConverter"/>
+		<property name="attributeName" value="startDate"/>
+	</bean>
+
+	<bean class="de.hybris.platform.commercefacades.xstream.conv.AttributeConverterMapping">
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.PromotionData"/>
+		<property name="converter" ref="customDateConverter"/>
+		<property name="attributeName" value="endDate"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.conv.AttributeConverterMapping">
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.storelocator.data.PointOfServiceData"/>
+		<property name="converter">
+			<bean
+					class="com.acc.conv.FeaturesMapConverter">
+			</bean>
+		</property>
+		<property name="attributeName" value="features"/>
+	</bean>
+
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.conv.AttributeConverterMapping">
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.storelocator.data.PointOfServiceData"/>
+		<property name="converter">
+			<bean
+					class="com.acc.conv.FeaturesMapConverter">
+			</bean>
+		</property>
+		<property name="attributeName" value="features"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.conv.AttributeConverterMapping">
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.search.facetdata.FacetData"/>
+		<property name="converter">
+			<bean
+					class="com.acc.conv.FacetValueDataListConverter">
+			</bean>
+		</property>
+		<property name="attributeName" value="values"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.conv.AttributeConverterMapping">
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.search.facetdata.FacetData"/>
+		<property name="converter">
+			<bean
+					class="com.acc.conv.FacetValueDataListConverter">
+			</bean>
+		</property>
+		<property name="attributeName" value="topValues"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.conv.AttributeConverterMapping">
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.search.facetdata.ProductSearchPageData"/>
+		<property name="converter">
+			<bean
+					class="com.acc.conv.SpellingSuggestionDataConverter">
+			</bean>
+		</property>
+		<property name="attributeName" value="spellingSuggestion"/>
+	</bean>
+
+	<bean id="customDateConverter"
+	      class="com.acc.conv.CustomDateConverter">
+		<property name="wsDateFormatter" ref="wsDateFormatter"/>
+	</bean>
+
+	<!-- field aliases -->
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.FieldAliasMapping">
+		<property name="alias" value="class"/>
+		<property name="fieldName" value="className"/>
+		<property name="aliasedClass"
+		          value="com.acc.error.data.ErrorData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.FieldAliasMapping">
+		<property name="alias" value="products"/>
+		<property name="fieldName" value="results"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.search.facetdata.ProductSearchPageData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.FieldAliasMapping">
+		<property name="alias" value="totalResults"/>
+		<property name="fieldName" value="totalNumberOfResults"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.search.pagedata.PaginationData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.FieldAliasMapping">
+		<property name="alias" value="totalPages"/>
+		<property name="fieldName" value="numberOfPages"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.search.pagedata.PaginationData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.FieldAliasMapping">
+		<property name="alias" value="defaultAddress"/>
+		<property name="fieldName" value="defaultShippingAddress"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.user.data.CustomerData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.FieldAliasMapping">
+		<property name="alias" value="categories"/>
+		<property name="fieldName" value="categoriesHierarchyData"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.catalog.data.CatalogVersionData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.FieldAliasMapping">
+		<property name="alias" value="cardType"/>
+		<property name="fieldName" value="cardTypeData"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.order.data.CCPaymentInfoData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.FieldAliasMapping">
+		<property name="alias" value="weekDays"/>
+		<property name="fieldName" value="weekDayOpeningList"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.storelocator.data.OpeningScheduleData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.FieldAliasMapping">
+		<property name="alias" value="specialDays"/>
+		<property name="fieldName" value="specialDayOpeningList"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.storelocator.data.OpeningScheduleData"/>
+	</bean>
+
+	<bean class="de.hybris.platform.commercefacades.xstream.alias.FieldAliasMapping">
+		<property name="alias" value="stores"/>
+		<property name="fieldName" value="results"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.storefinder.data.StoreFinderSearchPageData"/>
+	</bean>
+
+	<bean class="de.hybris.platform.commercefacades.xstream.alias.FieldAliasMapping">
+		<property name="alias" value="consignmentEntries"/>
+		<property name="fieldName" value="entries"/>
+		<property name="aliasedClass" value="de.hybris.platform.commercefacades.order.data.ConsignmentData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.FieldAliasMapping">
+		<property name="alias" value="promotion"/>
+		<property name="fieldName" value="promotionData"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.PromotionResultData"/>
+	</bean>
+
+	<!-- attribute aliases -->
+
+	<!-- Sample mapping which moves element url from ProductData and places 
+		it as attribute urlAttr !!!!!!!!!!!!!!!!!Warning!!!!!!!!!!!!!!!!!!! This 
+		setup will affect a JSON and XML notations Beware that JSON implementation 
+		does not support correctly attribute element as XML notation does. !!!!!!!!!!!!!!!!!Warning!!!!!!!!!!!!!!!!!!! 
+		bean class="de.hybris.platform.commercefacades.xstream.alias.AttributeAliasMapping"> 
+		<property name="alias" value="urlAttr" /> <property name="attributeName" 
+		value="url" /> <property name="aliasedClass" value="de.hybris.platform.commercefacades.product.data.ProductData" 
+		/> </bean -->
+
+	<!-- <bean class="de.hybris.platform.commercefacades.xstream.alias.AttributeAliasMapping"> 
+		<property name="alias" value="urlAttr" /> <property name="attributeName" 
+		value="url" /> <property name="aliasedClass" value="de.hybris.platform.commercefacades.product.data.ProductData" 
+		/> </bean> -->
+
+	<!-- omitted fields -->
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.AttributeOmitMapping">
+		<property name="attributeName" value="sort"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.search.solrfacetsearch.data.SolrSearchQueryData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.AttributeOmitMapping">
+		<property name="attributeName" value="filterTerms"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.search.solrfacetsearch.data.SolrSearchQueryData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.AttributeOmitMapping">
+		<property name="attributeName" value="freeTextSearch"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.search.solrfacetsearch.data.SolrSearchQueryData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.AttributeOmitMapping">
+		<property name="attributeName" value="code"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.search.facetdata.FacetData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.AttributeOmitMapping">
+		<property name="attributeName" value="code"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commerceservices.search.facetdata.FacetValueData"/>
+	</bean>
+
+	<!-- CategoryData omit fields -->
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.AttributeOmitMapping">
+		<property name="attributeName" value="name"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.CategoryData"/>
+	</bean>
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.AttributeOmitMapping">
+		<property name="attributeName" value="description"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.CategoryData"/>
+	</bean>
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.AttributeOmitMapping">
+		<property name="attributeName" value="supercategories"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.product.data.CategoryData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.AttributeOmitMapping">
+		<property name="attributeName" value="shippingAddress"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.user.data.AddressData"/>
+	</bean>
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.AttributeOmitMapping">
+		<property name="attributeName" value="billingAddress"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.user.data.AddressData"/>
+	</bean>
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.AttributeOmitMapping">
+		<property name="attributeName" value="defaultAddress"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.user.data.AddressData"/>
+	</bean>
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.AttributeOmitMapping">
+		<property name="attributeName" value="defaultBillingAddress"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.user.data.CustomerData"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.AttributeOmitMapping">
+		<property name="attributeName" value="cardType"/>
+		<property name="aliasedClass"
+		          value="de.hybris.platform.commercefacades.order.data.CCPaymentInfoData"/>
+	</bean>
+
+	<bean class="de.hybris.platform.commercefacades.xstream.alias.AttributeOmitMapping">
+		<property name="attributeName" value="visibleInAddressBook"/>
+		<property name="aliasedClass" value="de.hybris.platform.commercefacades.user.data.AddressData"/>
+	</bean>
+
+	<!-- Implicit collections -->
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.ImplicitCollection">
+		<property name="ownerType"
+		          value="com.acc.user.data.TitleDataList"/>
+		<property name="fieldName" value="titles"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.ImplicitCollection">
+		<property name="ownerType"
+		          value="de.hybris.platform.commercefacades.order.data.CCPaymentInfoDatas"/>
+		<property name="fieldName" value="paymentInfos"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.ImplicitCollection">
+		<property name="ownerType"
+		          value="com.acc.storesession.data.LanguageDataList"/>
+		<property name="fieldName" value="languages"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.ImplicitCollection">
+		<property name="ownerType"
+		          value="com.acc.storesession.data.CurrencyDataList"/>
+		<property name="fieldName" value="currencies"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.ImplicitCollection">
+		<property name="ownerType"
+		          value="com.acc.user.data.CountryDataList"/>
+		<property name="fieldName" value="countries"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.ImplicitCollection">
+		<property name="ownerType"
+		          value="com.acc.order.data.CardTypeDataList"/>
+		<property name="fieldName" value="cardTypes"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.ImplicitCollection">
+		<property name="ownerType"
+		          value="com.acc.user.data.AddressDataList"/>
+		<property name="fieldName" value="addresses"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.ImplicitCollection">
+		<property name="ownerType"
+		          value="de.hybris.platform.commercefacades.order.data.DeliveryModesData"/>
+		<property name="fieldName" value="deliveryModes"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.ImplicitCollection">
+		<property name="ownerType"
+		          value="de.hybris.platform.commercefacades.catalog.data.CatalogsData"/>
+		<property name="fieldName" value="catalogs"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.ImplicitCollection">
+		<property name="ownerType"
+		          value="de.hybris.platform.commercefacades.product.data.ProductReferencesData"/>
+		<property name="fieldName" value="references"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.ImplicitCollection">
+		<property name="ownerType"
+		          value="de.hybris.platform.commercefacades.order.data.OrderHistoriesData"/>
+		<property name="fieldName" value="orders"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.ImplicitCollection">
+		<property name="ownerType"
+		          value="com.acc.product.data.SuggestionDataList"/>
+		<property name="fieldName" value="suggestions"/>
+	</bean>
+
+	<bean
+			class="de.hybris.platform.commercefacades.xstream.alias.ImplicitCollection">
+		<property name="ownerType"
+		          value="de.hybris.platform.commercefacades.user.data.UserGroupDataList"/>
+		<property name="fieldName" value="userGroups"/>
+	</bean>
+
+	<bean class="de.hybris.platform.commercefacades.xstream.alias.ImplicitCollection">
+		<property name="ownerType" value="com.acc.product.data.PromotionDataList"/>
+		<property name="fieldName" value="promotions"/>
+	</bean>
+
+	<!-- xstream , marshaller factory -->
+
+	<bean id="xmlXStreamMarshallerFactory"
+	      class="com.acc.xstream.XmlXStreamMarshallerFactory">
+		<property name="XStream">
+			<bean
+					class="com.acc.xstream.XmlXStreamFactory"/>
+		</property>
+	</bean>
+	<bean id="jsonXStreamMarshallerFactory"
+	      class="com.acc.xstream.JsonXStreamMarshallerFactory">
+		<property name="XStream">
+			<bean
+					class="com.acc.xstream.JsonXStreamFactory"/>
+		</property>
+	</bean>
+
+	<bean id="xmlXStreamFactory"
+	      class="com.acc.xstream.XmlXStreamFactory"/>
+	<bean id="jsonXStreamFactory"
+	      class="com.acc.xstream.JsonXStreamFactory"/>
+
+	<!-- <bean id="xStreamXmlConverter" class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter" 
+		> <constructor-arg ref="xmlXStreamMarshallerFactory" /> <property name="supportedMediaTypes"> 
+		<util:list id="mimeXmlTypesList"> <util:constant id="xml" static-field="org.springframework.http.MediaType.APPLICATION_XML"/> 
+		</util:list> </property> </bean> <bean id="xStreamJSONConverter" class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter" 
+		> <constructor-arg ref="jsonXStreamMarshallerFactory" /> <property name="supportedMediaTypes"> 
+		<util:list id="mimeJSonTypesList"> <util:constant id="json" static-field="org.springframework.http.MediaType.APPLICATION_JSON"/> 
+		</util:list> </property> </bean> -->
+
+	<!-- converter registry -->
+	<!-- <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" 
+		> <property name="messageConverters"> <util:list id="beanList"> <ref bean="xStreamJSONConverter" 
+		/> <ref bean="xStreamXmlConverter" /> </util:list> </property> aop:scoped-proxy/ 
+		</bean> -->
+
+	<!-- <bean id="methodHandlerExceptionResolver" class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerExceptionResolver"> 
+		<property name="messageConverters"> <util:list id="beanList"> <ref bean="xStreamJSONConverter" 
+		/> <ref bean="xStreamXmlConverter" /> </util:list> </property> </bean> -->
+
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>/WEB-INF/messages/messages</value>
+			</list>
+		</property>
+		<property name="defaultEncoding" value="UTF-8"/>
+	</bean>
+
+	<alias name="defaultWsDateFormatter" alias="wsDateFormatter"/>
+	<bean id="defaultWsDateFormatter"
+	      class="com.acc.formatters.impl.DefaultWsDateFormatter"/>
+
+	<util:set id="baseFilterResourceExceptions">
+		<value>logoutsuccessful</value>
+		<value>customers/current/logout</value>
+	</util:set>
+
+	<import resource="validators-spring.xml"/>
+
+	<alias name="defaultWsContextInformationLoader" alias="wsContextInformationLoader"/>
+	<bean id="defaultWsContextInformationLoader"
+	      class="com.acc.context.impl.DefaultContextInformationLoader">
+		<property name="baseSiteService" ref="baseSiteService"/>
+		<property name="activateBaseSiteInSessionStrategy" ref="activateBaseSiteInSessionStrategy"/>
+		<property name="configurationService" ref="configurationService"/>
+		<property name="baseSiteResourceExceptions" ref="baseFilterResourceExceptions"/>
+		<property name="baseStoreService" ref="baseStoreService"/>
+		<property name="commonI18NService" ref="commonI18NService"/>
+		<property name="commerceCommonI18NService" ref="commerceCommonI18NService"/>
+		<property name="calculationService" ref="calculationService"/>
+		<property name="cartService" ref="cartService"/>
+	</bean>
+</beans>
