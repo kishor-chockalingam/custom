@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<project default="build-jar" basedir=".">
+	<target name="build-jar">
+		<jar destfile="scanProcessUtil.jar">
+		    <fileset dir="classes" excludes="**/Test.class"/>
+		    <fileset dir="config" excludes="**/Test.properties"/>
+		  </jar>
+	</target>
+</project>
