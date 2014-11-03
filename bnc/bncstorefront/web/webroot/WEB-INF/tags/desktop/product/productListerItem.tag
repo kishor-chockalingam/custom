@@ -11,6 +11,7 @@
 <%@ taglib prefix="theme" tagdir="/WEB-INF/tags/shared/theme" %>
 <%@ taglib prefix="format" tagdir="/WEB-INF/tags/shared/format" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 
 
@@ -62,29 +63,16 @@
 		</a>
 		
 		
-		<%-- <c:url value="/wishlist/add/?productCodePost=${product.code}" var="favouriteFormAction" />
-
-<a href="${favouriteFormAction}"> Add to wishlist</a> --%>
-
-		
-	
-		<%-- <!--code added for wishlist  -->
-		
-		<c:url value="/wishlist/add" var="addToWishlistUrl"/>			
-		<ycommerce:testId code="wishlist">
-		
-		<spring:theme code="text.addToWishlist" var="addToWishlistText"/>
-		
-		<a href="${addToWishlistUrl}" >Add to wishlist</a>	<form:form id="addToWishlistForm${product.code}" action="${addToWishlistUrl}" method="post" class="add_to_Wishlist_form">
-					<input type="hidden" name="productCodePost" value="${product.code}"/>
-					<button type="button" class="positive" >${addToWishlistText}</button>				
-					
-				</form:form>
-				
-			</ycommerce:testId>
-		 --%>
-			
 		<div class="cart clearfix">
+				<!--code added for wishlist  -->
+				<c:url value="/wishlist/modify?productCodePost=${product.code}&wl=add" var="addToWishlistUrl"/>			
+				<ycommerce:testId code="wishlist">
+					<spring:theme code="text.addToWishlist" var="addToWishlistText"/>
+					<sec:authorize ifNotGranted="ROLE_ANONYMOUS">
+						<a href="${addToWishlistUrl}" style="text-decoration: underline;">Add to Wishlist</a> 	
+					</sec:authorize>		
+				</ycommerce:testId>
+				
 				<c:url value="/cart/add" var="addToCartUrl"/>
 
 				<form:form id="addToCartForm${product.code}" action="${addToCartUrl}" method="post" class="add_to_cart_form">
