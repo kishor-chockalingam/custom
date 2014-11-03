@@ -13,6 +13,7 @@
 <%@ taglib prefix="ycommerce" uri="http://hybris.com/tld/ycommercetags" %>
 <%@ taglib prefix="product" tagdir="/WEB-INF/tags/desktop/product" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <spring:theme code="text.addToCart" var="addToCartText"/>
 
@@ -53,13 +54,13 @@
 		<ycommerce:testId code="wishlist">
 		
 		<spring:theme code="text.addToWishlist" var="addToWishlistText"/>
-		
-		<a href="${addToWishlistUrl}" >wishlist</a> 	 <%-- <form:form id="addToWishlistForm${product.code}" action="${addToWishlistUrl}" method="post" class="add_to_Wishlist_form">
-					<input type="hidden" name="productCodePost" value="${product.code}"/>
-					<button type="button" class="positive" >${addToWishlistText}</button>				
-					
-				</form:form>  --%>
-				
+		<sec:authorize ifNotGranted="ROLE_ANONYMOUS">
+			<a href="${addToWishlistUrl}" >wishlist</a> 	 <%-- <form:form id="addToWishlistForm${product.code}" action="${addToWishlistUrl}" method="post" class="add_to_Wishlist_form">
+						<input type="hidden" name="productCodePost" value="${product.code}"/>
+						<button type="button" class="positive" >${addToWishlistText}</button>				
+						
+					</form:form>  --%>
+		</sec:authorize>		
 			</ycommerce:testId>
 		
 
