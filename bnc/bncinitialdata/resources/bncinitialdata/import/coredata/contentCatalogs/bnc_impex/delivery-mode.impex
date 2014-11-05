@@ -1,0 +1,32 @@
+#
+# Import Delivery Modes / Zones
+#
+#% impex.setLocale(Locale.GERMAN)
+
+# Currencies
+$usCurrency=USD
+# Language
+$lang=en
+
+# Zone Delivery Modes
+INSERT_UPDATE ZoneDeliveryMode; code[unique=true];net;active[default=true]
+;pickup-net;true
+;pickup-gross;false
+
+# USA
+INSERT_UPDATE ZoneDeliveryModeValue ; deliveryMode(code)[unique=true] ; zone(code)[default='usa'][unique=true]; currency(isocode)[unique=true] ; value  ; minimum[unique=true]
+;pickup-net;;$usCurrency;0,00;0,00
+;pickup-gross;;$usCurrency;0,00;0,00
+
+
+
+# Zone Delivery Modes
+UPDATE ZoneDeliveryMode;code[unique=true];name[lang=$lang];description[lang=$lang]
+;pickup-net;"Pick up from next counter";"Pick up from next counter"
+;pickup-gross;"Pick up from next counter";"Pick up from next counter"
+
+
+
+INSERT_UPDATE BaseStore2DeliveryModeRel;source(uid)[unique=true];target(code)[unique=true]
+;electronics;pickup-gross
+;electronics;pickup-net
