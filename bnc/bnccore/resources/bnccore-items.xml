@@ -198,6 +198,35 @@
 				</attributes>
 			</itemtype>
 			
+			<itemtype code="CollectOrder" extends="GenericItem"
+			autocreate="true" generate="true">
+			<description>Customer collect order details when customer choose delivery method pickup from next counter.
+						</description>
+						<deployment table="CollectOrder" typecode="12222" />
+			<attributes>
+				<attribute qualifier="CID " type="java.lang.String">
+					<modifiers read="true" write="true" search="true" optional="true" />
+					<persistence type="property" />
+				</attribute>
+				<attribute qualifier="OID " type="java.lang.String">
+					<modifiers read="true" write="true" search="true" optional="true" />
+					<persistence type="property" />
+				</attribute>
+				<attribute qualifier="UCOID " type="java.lang.String">
+					<modifiers read="true" write="true" search="true" optional="false" />
+					<persistence type="property" />
+				</attribute>
+				<attribute qualifier="PID " type="java.lang.String">
+					<modifiers read="true" write="true" search="true" optional="true" />
+					<persistence type="property" />
+				</attribute>
+				<attribute qualifier="Status " type="java.lang.String">
+					<modifiers read="true" write="true" search="true" optional="true" />
+					<persistence type="property" />
+				</attribute>
+			</attributes>
+		</itemtype>
+			
 			
 			
 		</typegroup>
