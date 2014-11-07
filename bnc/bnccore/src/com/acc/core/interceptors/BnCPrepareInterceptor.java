@@ -1,20 +1,21 @@
 /**
  * 
  */
-package com.acc.fulfilmentprocess.interceptors;
-
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+package com.acc.core.interceptors;
 
 import de.hybris.platform.core.model.order.OrderModel;
 import de.hybris.platform.servicelayer.interceptor.InterceptorContext;
 import de.hybris.platform.servicelayer.interceptor.InterceptorException;
 import de.hybris.platform.servicelayer.interceptor.PrepareInterceptor;
 
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.acc.core.util.UCOIDUtility;
+
 
 /**
  * @author swarnima.gupta
@@ -35,7 +36,7 @@ public class BnCPrepareInterceptor implements PrepareInterceptor
 			try
 			{
 				order.setUCOID(new UCOIDUtility().getUCOID(order.getUser().getUid(), order.getCode()));
-				LOG.info("## Modified Order Number "+order.getUCOID()+" added UCOID ##");
+				LOG.info("## Modified Order Number " + order.getUCOID() + " added UCOID ##");
 			}
 			catch (NoSuchAlgorithmException | InvalidKeyException e)
 			{

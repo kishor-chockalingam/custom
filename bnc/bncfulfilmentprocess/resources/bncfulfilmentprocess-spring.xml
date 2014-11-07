@@ -110,15 +110,5 @@
 		<property name="businessProcessService" ref="businessProcessService"/>
 		<property name="sessionService" ref="sessionService"/>
 	</bean>
-	
-	
-	<bean id="bnCPrepareInterceptor" class="com.acc.fulfilmentprocess.interceptors.BnCPrepareInterceptor"
-      autowire="byName" scope="tenant" />
-      
-    <bean id="bNCPrepareInterceptorMapping" 
-      class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
-	    <property name="interceptor" ref="bnCPrepareInterceptor"/>
-	    <property name="typeCode" value="Order"/>
-	    <property name="order" value="5000"/>
-	</bean>
+
 </beans>

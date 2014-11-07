@@ -459,4 +459,14 @@
 	<bean id="storeCustomerServiceImpl" class="com.acc.core.service.storecustomer.impl.StoreCustomerServiceImpl" >
 	</bean>
 	
+	
+	<bean id="bnCPrepareInterceptor" class="com.acc.core.interceptors.BnCPrepareInterceptor"
+      autowire="byName" scope="tenant" />
+      
+    <bean id="bNCPrepareInterceptorMapping" 
+      class="de.hybris.platform.servicelayer.interceptor.impl.InterceptorMapping">
+	    <property name="interceptor" ref="bnCPrepareInterceptor"/>
+	    <property name="typeCode" value="Order"/>
+	    <property name="order" value="5000"/>
+	</bean>
 </beans>
