@@ -469,4 +469,9 @@
 	    <property name="typeCode" value="Order"/>
 	    <property name="order" value="5000"/>
 	</bean>
+	
+	<alias name="customerCollectOrderServiceImpl" alias="customerCollectOrderService" />
+	<bean id="customerCollectOrderServiceImpl"
+		class="com.acc.core.services.collectorder.impl.CustomerCollectOrderServiceImpl">
+	</bean>
 </beans>
