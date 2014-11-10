@@ -14,12 +14,6 @@
 package com.acc.storefront.controllers.pages;
 
 import de.hybris.platform.acceleratorservices.controllers.page.PageType;
-import de.hybris.platform.acceleratorstorefrontcommons.annotations.RequireHardLogIn;
-import de.hybris.platform.acceleratorstorefrontcommons.constants.WebConstants;
-import de.hybris.platform.acceleratorstorefrontcommons.controllers.pages.AbstractCheckoutController;
-import de.hybris.platform.acceleratorstorefrontcommons.forms.GuestRegisterForm;
-import de.hybris.platform.acceleratorstorefrontcommons.forms.validation.GuestRegisterValidator;
-import de.hybris.platform.acceleratorstorefrontcommons.security.AutoLoginStrategy;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.cms2.model.pages.AbstractPageModel;
 import de.hybris.platform.commercefacades.order.CheckoutFacade;
@@ -29,11 +23,14 @@ import de.hybris.platform.commercefacades.order.data.OrderEntryData;
 import de.hybris.platform.commercefacades.product.ProductFacade;
 import de.hybris.platform.commercefacades.product.ProductOption;
 import de.hybris.platform.commercefacades.product.data.ProductData;
+import de.hybris.platform.commerceservices.customer.CustomerAccountService;
 import de.hybris.platform.commerceservices.customer.DuplicateUidException;
+import de.hybris.platform.commerceservices.strategies.CheckoutCustomerStrategy;
+import de.hybris.platform.core.model.order.OrderModel;
 import de.hybris.platform.servicelayer.exceptions.ModelNotFoundException;
-import com.acc.facades.flow.impl.SessionOverrideCheckoutFlowFacade;
-import com.acc.storefront.controllers.ControllerConstants;
-import de.hybris.platform.acceleratorstorefrontcommons.controllers.util.GlobalMessages;
+import de.hybris.platform.servicelayer.user.UserService;
+import de.hybris.platform.store.BaseStoreModel;
+import de.hybris.platform.store.services.BaseStoreService;
 
 import java.util.Arrays;
 
@@ -52,6 +49,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.acc.facades.flow.impl.SessionOverrideCheckoutFlowFacade;
+import com.acc.storefront.controllers.ControllerConstants;
+import de.hybris.platform.acceleratorstorefrontcommons.annotations.RequireHardLogIn;
+import de.hybris.platform.acceleratorstorefrontcommons.constants.WebConstants;
+import de.hybris.platform.acceleratorstorefrontcommons.controllers.pages.AbstractCheckoutController;
+import de.hybris.platform.acceleratorstorefrontcommons.forms.GuestRegisterForm;
+import de.hybris.platform.acceleratorstorefrontcommons.forms.validation.GuestRegisterValidator;
+import de.hybris.platform.acceleratorstorefrontcommons.security.AutoLoginStrategy;
+import de.hybris.platform.cms2.model.pages.AbstractPageModel;
+import de.hybris.platform.acceleratorstorefrontcommons.controllers.util.GlobalMessages;
+import de.hybris.platform.core.model.user.CustomerModel;
 
 
 /**
@@ -78,14 +87,28 @@ public class CheckoutController extends AbstractCheckoutController
 	@Resource(name = "orderFacade")
 	private OrderFacade orderFacade;
 
+
+
+	@Resource(name = "checkoutCustomerStrategy")
+	private CheckoutCustomerStrategy checkoutCustomerStrategy;
 	@Resource(name = "checkoutFacade")
 	private CheckoutFacade checkoutFacade;
+
+	private OrderModel orderModel;
 
 	@Resource(name = "guestRegisterValidator")
 	private GuestRegisterValidator guestRegisterValidator;
 
 	@Resource(name = "autoLoginStrategy")
 	private AutoLoginStrategy autoLoginStrategy;
+
+
+	@Resource(name = "userService")
+	private UserService userService;
+	@Resource(name = "customerAccountService")
+	private CustomerAccountService customerAccountService;
+	@Resource(name = "baseStoreService")
+	private BaseStoreService baseStoreService;
 
 	@ExceptionHandler(ModelNotFoundException.class)
 	public String handleModelNotFoundException(final ModelNotFoundException exception, final HttpServletRequest request)
@@ -185,8 +208,9 @@ public class CheckoutController extends AbstractCheckoutController
 	{
 		final OrderData orderDetails = orderFacade.getOrderDetailsForCode(orderCode);
 
-		if(orderDetails.isGuestCustomer() && !StringUtils.substringBefore(orderDetails.getUser().getUid(),"|").
-				equals(getSessionService().getAttribute(WebConstants.ANONYMOUS_CHECKOUT_GUID)))
+		if (orderDetails.isGuestCustomer()
+				&& !StringUtils.substringBefore(orderDetails.getUser().getUid(), "|").equals(
+						getSessionService().getAttribute(WebConstants.ANONYMOUS_CHECKOUT_GUID)))
 		{
 			return getCheckoutRedirectUrl();
 		}
@@ -199,8 +223,25 @@ public class CheckoutController extends AbstractCheckoutController
 				final ProductData product = productFacade.getProductForCodeAndOptions(productCode,
 						Arrays.asList(ProductOption.BASIC, ProductOption.PRICE, ProductOption.CATEGORIES));
 				entry.setProduct(product);
+
 			}
+
+
+			final BaseStoreModel baseStoreModel = baseStoreService.getCurrentBaseStore();
+
+		
+						final OrderModel orderModel = checkoutCustomerStrategy.isAnonymousCheckout() ? customerAccountService
+								.getOrderDetailsForGUID(orderCode, baseStoreModel):
+									customerAccountService.getOrderForCode((CustomerModel) userService.getCurrentUser(), orderCode, baseStoreModel);
+						if (StringUtils.isNotEmpty(orderModel.getUCOID()))
+					{
+		
+						model.addAttribute("UCOID", orderModel.getUCOID());
+					System.out.println("ucoid" + orderModel.getUCOID());
+					}
 		}
+
+
 
 		model.addAttribute("orderCode", orderCode);
 		model.addAttribute("orderData", orderDetails);

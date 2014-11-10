@@ -41,6 +41,12 @@
 			<c:if test="${not empty orderData.statusDisplay}">
 				<spring:theme code="text.account.order.status.display.${orderData.statusDisplay}" var="orderStatus"/>
 				<div><spring:theme code="text.account.order.orderStatus" text="The order is {0}" arguments="${orderStatus}"/></div>
+				<c:if test="${not empty UCOID}">
+				<div><spring:theme code="text.account.order.UCOID" text="UCOID is {0}" arguments="${UCOID}"/> 
+			<font size="1" color="red"><b>	<spring:theme code="text.account.order.secretUCOIDMessage" /></b></font>
+				</div>
+				
+				</c:if>
 			</c:if>
 		</div>
 		
