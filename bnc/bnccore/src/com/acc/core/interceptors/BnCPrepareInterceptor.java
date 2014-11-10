@@ -9,9 +9,6 @@ import de.hybris.platform.servicelayer.interceptor.InterceptorContext;
 import de.hybris.platform.servicelayer.interceptor.InterceptorException;
 import de.hybris.platform.servicelayer.interceptor.PrepareInterceptor;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,21 +38,17 @@ public class BnCPrepareInterceptor implements PrepareInterceptor
 		LOG.info("## In BnCPrepareInterceptor ##");
 		if (StringUtils.isEmpty(order.getUCOID()) && PICKUP_GROSS.equals(order.getDeliveryMode().getCode()))
 		{
-			try
-			{
-				order.setUCOID(new UCOIDUtility().getUCOID(order.getUser().getUid(), order.getCode()));
-				LOG.info("## Modified Order Number " + order.getUCOID() + " added UCOID ##");
 
-				saveColelctOrder(order, ctx);
-			}
-			catch (NoSuchAlgorithmException | InvalidKeyException e)
-			{
-				LOG.error(e.getMessage(), e);
-			}
+			order.setUCOID(new UCOIDUtility().getUCOID(order.getCode()));
+			LOG.info("## Modified Order Number " + order.getUCOID() + " added UCOID ##");
+
+			saveColelctOrder(order, ctx);
+
+
 		}
-	
+
 	}
-	
+
 	/**
 	 * This helper method is used to save the Customer collect order if he/she choose delivery mode as
 	 * "Pickup from next counter".
