@@ -26,6 +26,19 @@
 		<property name="name" type="String"/>
 	</bean>
 	
+	<bean class="com.acc.facades.collectOrder.data.CollectOrderData">
+		<property name="ucoid" type="String"/>
+		<property name="orderId" type="String"/>
+		<property name="customerId" type="String"/>
+		<property name="pId" type="String"/>
+		<property name="status" type="com.acc.facades.collectOrder.CollectOrderStatus"/>
+	</bean>
+	
+	<enum class="com.acc.facades.collectOrder.CollectOrderStatus">
+		<value>PENDING</value>
+		<value>COMPLETED</value>
+	</enum>
+	
 	<!--Start: Wishlist2EntryData -->
 
 <bean class="com.acc.facades.wishlist.data.Wishlist2EntryData">

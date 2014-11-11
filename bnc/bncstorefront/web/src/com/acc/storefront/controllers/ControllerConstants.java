@@ -91,6 +91,8 @@ public interface ControllerConstants
 				String csrLoginPage = "pages/account/csrLoginPage";
 				String customerDetailsPage = "pages/account/customerDetailsPage";
 				String assistcustomerPage = "pages/account/assistcustomerPage";
+				String ordersListPage = "pages/account/ordersListPage";
+				String orderDetailsPage = "pages/account/orderDetailsPage";
 			}
 
 			interface Checkout

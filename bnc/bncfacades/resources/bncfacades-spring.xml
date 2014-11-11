@@ -242,10 +242,22 @@
 	 
 <bean id="wishlist2Data" class="com.acc.facades.wishlist.data.Wishlist2Data" scope="prototype"/>
 	
+<bean id="collectOrderPopulator" class="com.acc.facade.collectorder.populator.CollectOrderPopulator" />
+
+<bean id="collectOrderData" class="com.acc.facades.collectOrder.data.CollectOrderData" scope="prototype"/>
+	
+<bean id="collectOrderConverter" parent="abstractPopulatingConverter">
+	<lookup-method name="createTarget" bean="collectOrderData"/>
+	<property name="populators">
+		<list>
+			<ref bean="collectOrderPopulator" />
+		</list>
+	</property>
+</bean>
 	
 	
-	
-	
-	
+<bean id="customerCollectOrderFacade" class="com.acc.core.collectorder.facade.impl.CustomerCollectOrderFacadeImpl">
+	<property name="customerCollectOrderService" ref="customerCollectOrderService"/>
+</bean>		
 
 </beans>

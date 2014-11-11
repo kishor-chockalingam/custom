@@ -185,5 +185,15 @@
 
 	</form>
 	</div>
+	
+	<div id="inStoreOrders">
+	<br>
+	<br>
+	<br>
+		<c:url value="/orderslist/vieworders" var="viewOrdersURL"></c:url>
+		<form action="${viewOrdersURL}" method="get">
+			<input type="submit" value="View In-Store Orders"></input>
+		</form>
+	</div>
 
 </template:page>

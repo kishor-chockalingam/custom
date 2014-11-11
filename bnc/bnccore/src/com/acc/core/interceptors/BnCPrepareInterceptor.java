@@ -4,7 +4,6 @@
 package com.acc.core.interceptors;
 
 import de.hybris.platform.core.model.order.OrderModel;
-import de.hybris.platform.servicelayer.config.ConfigurationService;
 import de.hybris.platform.servicelayer.interceptor.InterceptorContext;
 import de.hybris.platform.servicelayer.interceptor.InterceptorException;
 import de.hybris.platform.servicelayer.interceptor.PrepareInterceptor;
@@ -16,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.acc.core.model.CollectOrderModel;
 import com.acc.core.services.collectorder.CustomerCollectOrderService;
 import com.acc.core.util.UCOIDUtility;
+import com.acc.facades.collectOrder.CollectOrderStatus;
 
 
 /**
@@ -26,10 +26,9 @@ public class BnCPrepareInterceptor implements PrepareInterceptor
 {
 	private static final String PICKUP_GROSS = "pickup-gross";
 	private static final Logger LOG = Logger.getLogger(BnCPrepareInterceptor.class);
+	
 	@Autowired
 	private CustomerCollectOrderService customerCollectOrderService;
-	@Autowired
-	private ConfigurationService configurationService;
 
 	@Override
 	public void onPrepare(final Object model, final InterceptorContext ctx) throws InterceptorException
@@ -38,13 +37,10 @@ public class BnCPrepareInterceptor implements PrepareInterceptor
 		LOG.info("## In BnCPrepareInterceptor ##");
 		if (StringUtils.isEmpty(order.getUCOID()) && PICKUP_GROSS.equals(order.getDeliveryMode().getCode()))
 		{
-
 			order.setUCOID(new UCOIDUtility().getUCOID(order.getCode()));
 			LOG.info("## Modified Order Number " + order.getUCOID() + " added UCOID ##");
 
 			saveColelctOrder(order, ctx);
-
-
 		}
 
 	}
@@ -64,7 +60,7 @@ public class BnCPrepareInterceptor implements PrepareInterceptor
 		collectOrderModel.setCID(order.getUser().getUid());
 		collectOrderModel.setOID(order.getCode());
 		collectOrderModel.setUCOID(order.getUCOID());
-		collectOrderModel.setStatus(configurationService.getConfiguration().getString("order.status.pending", ""));
+		collectOrderModel.setStatus(CollectOrderStatus.PENDING.toString());
 		customerCollectOrderService.saveCustomerColectOrder(collectOrderModel);
 		LOG.info("Customer Collect Order data saved successfully from.");
 
