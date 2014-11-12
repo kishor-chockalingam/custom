@@ -84,8 +84,8 @@ public class CustomerCollectOrderDaoImpl implements CustomerCollectOrderDao
 	@Override
 	public List<CollectOrderModel> getCustomerListOrders(final String customerID)
 	{
-		final String query = "SELECT {PK} from {collectOrder} where {cid}='" + customerID
-				+ "' AND {status} IN ('PENDING','COMPLETED')";
+		final String query = "SELECT {PK} from {collectOrder} where {cid}='" + customerID + "'";;
+				//+ "' AND {status} IN ('PENDING','COMPLETED')";
 		final SearchResult<CollectOrderModel> result = flexibleSearchService.search(query);
 		return CollectionUtils.isEmpty(result.getResult()) ? null : result.getResult();
 	}

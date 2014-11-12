@@ -78,6 +78,16 @@
 					</ul>
 				</div>
 				
+				<div class="tile column orderHistory">
+					<c:url value="/orderslist/customerpickuporders" var="encodedUrl" />
+					<div class="headline"><a href="${encodedUrl}"><spring:theme code="text.account.collectedOrder" text="Collected Order History"/></a></div>
+					<ul>
+						<ycommerce:testId code="myAccount_options_orderHistory_groupbox">
+							<li><a href="${encodedUrl}"><spring:theme code="text.account.collectedOrder" text="View order history"/></a></li>
+						</ycommerce:testId>
+					</ul>
+				</div>
+				
 		
 		
 	</div>
