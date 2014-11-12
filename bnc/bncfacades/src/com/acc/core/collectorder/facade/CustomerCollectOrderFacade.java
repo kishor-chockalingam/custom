@@ -27,5 +27,14 @@ public interface CustomerCollectOrderFacade
 	 * @return CollectOrderData
 	 */
 	public CollectOrderData getCollectOrderByOrderCode(String orderCode);
+	
+	/**
+	 * 
+	 * @param customerID
+	 * @return
+	 */
+	public List<CollectOrderData> getCustomerListOrders(final String customerID);
+	
+	
 
 }

@@ -93,6 +93,7 @@ public interface ControllerConstants
 				String assistcustomerPage = "pages/account/assistcustomerPage";
 				String ordersListPage = "pages/account/ordersListPage";
 				String orderDetailsPage = "pages/account/orderDetailsPage";
+				String CustomerCollectOrderPage = "pages/account/CustomerCollectOrderPage";
 			}
 
 			interface Checkout

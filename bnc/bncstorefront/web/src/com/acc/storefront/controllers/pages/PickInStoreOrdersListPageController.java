@@ -77,5 +77,19 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
 		return ControllerConstants.Views.Pages.Account.orderDetailsPage;
 	}
+	
+	@RequestMapping(value = "/customerpickuporders", method = RequestMethod.GET)
+	public String getCustomerPickupOrdersList(final Model model, final HttpServletRequest request,
+			final HttpServletResponse response) throws CMSItemNotFoundException
+	{
+		LOG.info("Calling methos to fetch Customer list of Collected Orders whose customer ID is ["
+				+ userService.getCurrentUser().getUid());
+		model.addAttribute("collectOrdersDataList",
+				customerCollectOrderFacade.getCustomerListOrders(userService.getCurrentUser().getUid()));
+		model.addAttribute("collectOrderDataForm", new CollectOrderData());
+		storeCmsPageInModel(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
+		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
+		return ControllerConstants.Views.Pages.Account.CustomerCollectOrderPage;
+	}
 
 }

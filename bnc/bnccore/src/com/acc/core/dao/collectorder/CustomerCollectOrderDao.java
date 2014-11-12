@@ -27,5 +27,12 @@ public interface CustomerCollectOrderDao
 	 * @return CollectOrderModel
 	 */
 	public CollectOrderModel getCollectOrderByOrderCode(String orderCode);
+	
+	/**
+	 * 
+	 * @param customerID
+	 * @return
+	 */
+	public List<CollectOrderModel> getCustomerListOrders(String customerID);
 
 }

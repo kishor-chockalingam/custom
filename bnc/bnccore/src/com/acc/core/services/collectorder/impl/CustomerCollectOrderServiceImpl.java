@@ -92,4 +92,15 @@ public class CustomerCollectOrderServiceImpl implements CustomerCollectOrderServ
 	{
 		return customerCollectOrderDao.getCollectOrderByOrderCode(orderCode);
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.acc.core.services.collectorder.CustomerCollectOrderService#getCustomerListOrders(java.lang.String)
+	 */
+	@Override
+	public List<CollectOrderModel> getCustomerListOrders(final String customerID)
+	{
+		return customerCollectOrderDao.getCustomerListOrders(customerID);
+	}
 }

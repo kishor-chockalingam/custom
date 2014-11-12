@@ -36,4 +36,11 @@ public interface CustomerCollectOrderService
 	 * @return CollectOrderModel
 	 */
 	public CollectOrderModel getCollectOrderByOrderCode(String orderCode);
+	
+		/**
+	 * 
+	 * @param customerID
+	 * @return
+	 */
+	public List<CollectOrderModel> getCustomerListOrders(final String customerID);
 }

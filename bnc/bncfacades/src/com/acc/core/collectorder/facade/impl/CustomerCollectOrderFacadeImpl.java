@@ -81,5 +81,27 @@ public class CustomerCollectOrderFacadeImpl implements CustomerCollectOrderFacad
 	{
 		return collectOrderConverter.convert(customerCollectOrderService.getCollectOrderByOrderCode(orderCode));
 	}
+	
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.acc.core.collectorder.facade.CustomerCollectOrderFacade#getCustomerListOrders(java.lang.String)
+	 */
+	@Override
+	public List<CollectOrderData> getCustomerListOrders(final String customerID)
+	{
+		final List<CollectOrderModel> customerOrdersList = customerCollectOrderService.getCustomerListOrders(customerID);
+		final List<CollectOrderData> collectOrderDataList = new ArrayList<CollectOrderData>();
+		if (null != customerOrdersList)
+		{
+			for (final CollectOrderModel collectOrderModel : customerOrdersList)
+			{
+				collectOrderDataList.add(collectOrderConverter.convert(collectOrderModel));
+			}
+		}
+		return collectOrderDataList;
+	}
+
 
 }
