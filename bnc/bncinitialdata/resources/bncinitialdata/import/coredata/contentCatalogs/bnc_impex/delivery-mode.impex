@@ -48,8 +48,8 @@ INSERT_UPDATE ZoneDeliveryModeValue ; deliveryMode(code)[unique=true] ; zone(cod
 
 # Zone Delivery Modes
 UPDATE ZoneDeliveryMode;code[unique=true];name[lang=$lang];description[lang=$lang]
-;pickup-net;"Pick up from next counter";"Pick up from next counter"
-;pickup-gross;"Pick up from next counter";"Pick up from next counter"
+;pickup-net;"Pick up from next counter";
+;pickup-gross;"Pick up from next counter";
 
 INSERT_UPDATE BaseStore2DeliveryModeRel;source(uid)[unique=true];target(code)[unique=true]
 ;electronics;pickup-gross
