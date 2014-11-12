@@ -8,11 +8,9 @@ import de.hybris.platform.commercefacades.order.OrderFacade;
 import de.hybris.platform.commercefacades.order.data.OrderData;
 import de.hybris.platform.core.model.user.UserModel;
 import de.hybris.platform.servicelayer.user.UserService;
-import de.hybris.platform.acceleratorstorefrontcommons.controllers.pages.AbstractPageController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +26,8 @@ import com.acc.core.collectorder.facade.CustomerCollectOrderFacade;
 import com.acc.facades.collectOrder.data.CollectOrderData;
 import com.acc.storefront.controllers.ControllerConstants;
 
+import de.hybris.platform.acceleratorstorefrontcommons.controllers.pages.AbstractPageController;
+
 
 /**
  * @author swarnima.gupta
@@ -39,16 +39,16 @@ import com.acc.storefront.controllers.ControllerConstants;
 public class PickInStoreOrdersListPageController extends AbstractPageController
 {
 	private static final Logger LOG = Logger.getLogger(PickInStoreOrdersListPageController.class);
-	
+
 	private static final String ACCOUNT_CMS_PAGE = "account";
 	private static final String ORDER_CODE_PATH_VARIABLE_PATTERN = "{orderCode:.*}";
-	
+
 	@Autowired
 	private CustomerCollectOrderFacade customerCollectOrderFacade;
-	
+
 	@Autowired
 	private OrderFacade orderFacade;
-	
+
 	@Autowired
 	private UserService userService;
 
@@ -67,9 +67,9 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 	public String postOrderDetails(@PathVariable("orderCode") final String orderCode, final Model model,
 			final HttpServletRequest request, final HttpServletResponse response) throws CMSItemNotFoundException
 	{
-		System.out.println("orderCode-------------->"+orderCode);
-		OrderData orderData = orderFacade.getOrderDetailsForCode(orderCode);
-		UserModel userModel = userService.getUserForUID(orderData.getUser().getUid());
+		System.out.println("orderCode-------------->" + orderCode);
+		final OrderData orderData = orderFacade.getOrderDetailsForCode(orderCode);
+		final UserModel userModel = userService.getUserForUID(orderData.getUser().getUid());
 		model.addAttribute("orderData", orderData);
 		model.addAttribute("userModel", userModel);
 		model.addAttribute("collectOrderData", customerCollectOrderFacade.getCollectOrderByOrderCode(orderCode));
@@ -90,6 +90,22 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 		storeCmsPageInModel(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
 		return ControllerConstants.Views.Pages.Account.CustomerCollectOrderPage;
+	}
+
+	@RequestMapping(value = "/ucoid", method = RequestMethod.GET ,produces = "application/json")
+	public String SearchByUCOID(@RequestParam("ucoid") final String ucoid, final Model model, final HttpServletRequest request,
+			final HttpServletResponse response) throws CMSItemNotFoundException
+
+	{
+		
+		System.out.println("In controller of ucoid1");
+		final CollectOrderData collectOrderData = customerCollectOrderFacade.getCollectOrderByUCOID(ucoid);
+		model.addAttribute("collectOrderDataByUcoid", collectOrderData);
+		System.out.println("In controller of ucoid");
+		storeCmsPageInModel(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
+		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
+		return ControllerConstants.Views.Fragments.Cart.OrderByUCOID;
+
 	}
 
 }
