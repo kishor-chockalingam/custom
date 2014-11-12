@@ -12,6 +12,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import com.acc.core.collectorder.facade.CustomerCollectOrderFacade;
 import com.acc.core.model.CollectOrderModel;
 import com.acc.core.services.collectorder.CustomerCollectOrderService;
@@ -51,13 +53,7 @@ public class CustomerCollectOrderFacadeImpl implements CustomerCollectOrderFacad
 	public List<CollectOrderData> getCollectOrders()
 	{
 		final List<CollectOrderModel> collectOrderModelsList = customerCollectOrderService.getCollectOrders();
-		final List<CollectOrderData> collectOrderDataList = new ArrayList<CollectOrderData>();
-		for (final CollectOrderModel collectOrderModel : collectOrderModelsList)
-		{
-
-			collectOrderDataList.add(collectOrderConverter.convert(collectOrderModel));
-		}
-		return collectOrderDataList;
+		return convert(collectOrderModelsList);
 	}
 
 	/*
@@ -81,8 +77,9 @@ public class CustomerCollectOrderFacadeImpl implements CustomerCollectOrderFacad
 	{
 		return collectOrderConverter.convert(customerCollectOrderService.getCollectOrderByOrderCode(orderCode));
 	}
-	
-	
+
+
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -92,16 +89,49 @@ public class CustomerCollectOrderFacadeImpl implements CustomerCollectOrderFacad
 	public List<CollectOrderData> getCustomerListOrders(final String customerID)
 	{
 		final List<CollectOrderModel> customerOrdersList = customerCollectOrderService.getCustomerListOrders(customerID);
+		return convert(customerOrdersList);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.acc.core.collectorder.facade.CustomerCollectOrderFacade#updateCollectOrder(com.acc.facades.collectOrder.data
+	 * .CollectOrderData)
+	 */
+	@Override
+	public void updateCollectOrder(final CollectOrderData collectOrderData)
+	{
+		customerCollectOrderService.updateCollectOrder(collectOrderData);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.acc.core.collectorder.facade.CustomerCollectOrderFacade#getOrderDetailsForCode(java.lang.String)
+	 */
+	@Override
+	public OrderData getOrderDetailsForCode(final String orderCode)
+	{
+		return orderConverter.convert(customerCollectOrderService.getOrderDetailsForCode(orderCode));
+	}
+
+	/**
+	 * @param collectOrderModelsList
+	 * @return List<CollectOrderData>
+	 */
+	private List<CollectOrderData> convert(final List<CollectOrderModel> collectOrderModelsList)
+	{
 		final List<CollectOrderData> collectOrderDataList = new ArrayList<CollectOrderData>();
-		if (null != customerOrdersList)
+		if (CollectionUtils.isNotEmpty(collectOrderModelsList))
 		{
-			for (final CollectOrderModel collectOrderModel : customerOrdersList)
+			for (final CollectOrderModel collectOrderModel : collectOrderModelsList)
 			{
+
 				collectOrderDataList.add(collectOrderConverter.convert(collectOrderModel));
 			}
 		}
 		return collectOrderDataList;
 	}
-
 
 }

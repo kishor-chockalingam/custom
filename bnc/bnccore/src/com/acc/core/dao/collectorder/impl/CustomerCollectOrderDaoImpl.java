@@ -3,6 +3,7 @@
  */
 package com.acc.core.dao.collectorder.impl;
 
+import de.hybris.platform.core.model.order.OrderModel;
 import de.hybris.platform.servicelayer.search.FlexibleSearchService;
 import de.hybris.platform.servicelayer.search.SearchResult;
 
@@ -74,7 +75,7 @@ public class CustomerCollectOrderDaoImpl implements CustomerCollectOrderDao
 		final SearchResult<CollectOrderModel> result = flexibleSearchService.search(query);
 		return CollectionUtils.isEmpty(result.getResult()) ? null : result.getResult().get(0);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -89,5 +90,17 @@ public class CustomerCollectOrderDaoImpl implements CustomerCollectOrderDao
 		return CollectionUtils.isEmpty(result.getResult()) ? null : result.getResult();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.acc.core.dao.collectorder.CustomerCollectOrderDao#getOrderDetailsForCode(java.lang.String)
+	 */
+	@Override
+	public OrderModel getOrderDetailsForCode(final String orderCode)
+	{
+		final String query = "SELECT {pk} from {order} where {code}='" + orderCode + "'";
+		final SearchResult<OrderModel> result = flexibleSearchService.search(query);
+		return CollectionUtils.isEmpty(result.getResult()) ? null : result.getResult().get(0);
+	}
 
 }

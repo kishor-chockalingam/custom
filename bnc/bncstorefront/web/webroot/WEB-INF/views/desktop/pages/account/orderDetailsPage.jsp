@@ -30,6 +30,25 @@
 	<div id="globalMessages">
 		<common:globalMessages/>
 	</div>
+	<div align="left"><a href="${contextPath}/orderslist/vieworders">Back</a></div>
+	<div class="column accountContentPane clearfix">
+		<div class="headline"><spring:theme code="customer.details" text="Customer Details"/></div>
+			<table class="account-profile-data">
+				<tr>
+					<td><spring:theme code="profile.firstName" text="First name"/>: </td>
+					<td>${fn:escapeXml(customerData.firstName)}</td>
+				</tr>
+				<tr>
+					<td><spring:theme code="profile.lastName" text="Last name"/>: </td>
+					<td>${fn:escapeXml(customerData.lastName)}</td>
+				</tr>
+				<tr>
+					<td><spring:theme code="profile.email" text="E-mail"/>: </td>
+					<td>${fn:escapeXml(customerData.uid)}</td>
+				</tr>
+			</table>
+	</div>
+	
 	<div class="column accountContentPane clearfix">
 		<div class="headline">Order Details</div>
 		<div class="span-19">
@@ -86,33 +105,18 @@
 					<order:accountOrderDetailsItem order="${orderData}" consignment="${consignment}" />
 				</div>
 			</c:if>
-		</c:forEach>	
-	</div>
-	
-	<div class="column accountContentPane clearfix">
-		<div class="headline"><spring:theme code="text.account.profile" text="Profile"/></div>
-			<table class="account-profile-data">
-				<tr>
-					<td><spring:theme code="profile.title" text="Title"/>: </td>
-					<td>${fn:escapeXml(title.name)}</td>
-				</tr>
-				<tr>
-					<td><spring:theme code="profile.firstName" text="First name"/>: </td>
-					<td>${fn:escapeXml(customerData.firstName)}</td>
-				</tr>
-				<tr>
-					<td><spring:theme code="profile.lastName" text="Last name"/>: </td>
-					<td>${fn:escapeXml(customerData.lastName)}</td>
-				</tr>
-				<tr>
-					<td><spring:theme code="profile.email" text="E-mail"/>: </td>
-					<td>${fn:escapeXml(customerData.displayUid)}</td>
-				</tr>
-			</table>
-			
-			<a class="button" href="update-password"><spring:theme code="text.account.profile.changePassword" text="Change password"/></a>
-			<a class="button" href="update-profile"><spring:theme code="text.account.profile.updatePersonalDetails" text="Update personal details"/></a>
-			<a class="button" href="update-email"><spring:theme code="text.account.profile.updateEmail" text="Update email"/></a>
-
+		</c:forEach>
+		
+		<br><br>
+		<c:url value="/orderslist/order/${orderData.code}" var="orderDetailsURL"></c:url>
+		<form:form action="${orderDetailsURL}" method="post" commandName="collectOrderData">
+			<label class="headline"><spring:theme code="in.store.order.status"/> </label><br>
+			<form:hidden path="pk"/>
+			<form:select path="status" onchange="javascript:collectOrderData.submit();">
+				<c:forEach items="${collectOrderStatusList}" var="stat">
+					<form:option value="${stat}">${stat}</form:option>
+				</c:forEach>
+			</form:select>
+		</form:form>
 	</div>
 </template:page>

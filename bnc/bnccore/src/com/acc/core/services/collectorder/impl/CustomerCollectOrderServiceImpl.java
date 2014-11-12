@@ -3,6 +3,8 @@
  */
 package com.acc.core.services.collectorder.impl;
 
+import de.hybris.platform.core.PK;
+import de.hybris.platform.core.model.order.OrderModel;
 import de.hybris.platform.servicelayer.exceptions.ModelSavingException;
 import de.hybris.platform.servicelayer.model.ModelService;
 
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.acc.core.dao.collectorder.CustomerCollectOrderDao;
 import com.acc.core.model.CollectOrderModel;
 import com.acc.core.services.collectorder.CustomerCollectOrderService;
+import com.acc.facades.collectOrder.data.CollectOrderData;
 
 
 
@@ -26,7 +29,7 @@ public class CustomerCollectOrderServiceImpl implements CustomerCollectOrderServ
 	private static final Logger LOG = Logger.getLogger(CustomerCollectOrderServiceImpl.class);
 	@Autowired
 	private ModelService modelService;
-	
+
 	private CustomerCollectOrderDao customerCollectOrderDao;
 
 	/*
@@ -47,9 +50,8 @@ public class CustomerCollectOrderServiceImpl implements CustomerCollectOrderServ
 		{
 			LOG.error("Customer Collect Order data saving error [" + ex.getMessage() + "].");
 		}
-
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -92,7 +94,8 @@ public class CustomerCollectOrderServiceImpl implements CustomerCollectOrderServ
 	{
 		return customerCollectOrderDao.getCollectOrderByOrderCode(orderCode);
 	}
-	
+
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -103,4 +106,32 @@ public class CustomerCollectOrderServiceImpl implements CustomerCollectOrderServ
 	{
 		return customerCollectOrderDao.getCustomerListOrders(customerID);
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.acc.core.services.collectorder.CustomerCollectOrderService#updateCollectOrder(com.acc.facades.collectOrder
+	 * .data.CollectOrderData)
+	 */
+	@Override
+	public void updateCollectOrder(final CollectOrderData collectOrderData)
+	{
+		final CollectOrderModel collectOrderModel = modelService.get(PK.fromLong((Long.valueOf(collectOrderData.getPk())
+				.longValue())));
+		collectOrderModel.setStatus(collectOrderData.getStatus().toString());
+		saveCustomerColectOrder(collectOrderModel);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.acc.core.services.collectorder.CustomerCollectOrderService#getOrderDetailsForCode(java.lang.String)
+	 */
+	@Override
+	public OrderModel getOrderDetailsForCode(final String orderCode)
+	{
+		return customerCollectOrderDao.getOrderDetailsForCode(orderCode);
+	}
+
 }

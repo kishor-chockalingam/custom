@@ -3,6 +3,8 @@
  */
 package com.acc.core.dao.collectorder;
 
+import de.hybris.platform.core.model.order.OrderModel;
+
 import java.util.List;
 
 import com.acc.core.model.CollectOrderModel;
@@ -34,5 +36,11 @@ public interface CustomerCollectOrderDao
 	 * @return
 	 */
 	public List<CollectOrderModel> getCustomerListOrders(String customerID);
+
+	/**
+	 * @param orderCode
+	 * @return OrderModel
+	 */
+	public OrderModel getOrderDetailsForCode(String orderCode);
 
 }

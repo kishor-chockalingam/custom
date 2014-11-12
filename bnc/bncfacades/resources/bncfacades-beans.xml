@@ -27,6 +27,7 @@
 	</bean>
 	
 	<bean class="com.acc.facades.collectOrder.data.CollectOrderData">
+		<property name="pk" type="String"/>
 		<property name="ucoid" type="String"/>
 		<property name="orderId" type="String"/>
 		<property name="customerId" type="String"/>
@@ -37,6 +38,7 @@
 	<enum class="com.acc.facades.collectOrder.CollectOrderStatus">
 		<value>PENDING</value>
 		<value>COMPLETED</value>
+		<value>COLLECTED</value>
 	</enum>
 	
 	<!--Start: Wishlist2EntryData -->

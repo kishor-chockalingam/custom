@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.acc.core.model.CollectOrderModel;
 import com.acc.core.services.collectorder.CustomerCollectOrderService;
-import com.acc.core.util.UCOIDUtility;
+import com.acc.core.util.BnCGenericUtil;
 import com.acc.facades.collectOrder.CollectOrderStatus;
 
 
@@ -26,7 +26,7 @@ public class BnCPrepareInterceptor implements PrepareInterceptor
 {
 	private static final String PICKUP_GROSS = "pickup-gross";
 	private static final Logger LOG = Logger.getLogger(BnCPrepareInterceptor.class);
-	
+
 	@Autowired
 	private CustomerCollectOrderService customerCollectOrderService;
 
@@ -37,8 +37,8 @@ public class BnCPrepareInterceptor implements PrepareInterceptor
 		LOG.info("## In BnCPrepareInterceptor ##");
 		if (StringUtils.isEmpty(order.getUCOID()) && PICKUP_GROSS.equals(order.getDeliveryMode().getCode()))
 		{
-			order.setUCOID(new UCOIDUtility().getUCOID(order.getCode()));
-			LOG.info("## Modified Order Number " + order.getUCOID() + " added UCOID ##");
+			order.setUCOID(new BnCGenericUtil().getUCOID(order.getCode()));
+			LOG.info("## Modified Order Number " + order.getCode() + " added UCOID ##");
 
 			saveColelctOrder(order, ctx);
 		}

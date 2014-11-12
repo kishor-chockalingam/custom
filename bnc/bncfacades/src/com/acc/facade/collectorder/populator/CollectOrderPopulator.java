@@ -30,6 +30,7 @@ public class CollectOrderPopulator implements Populator<CollectOrderModel, Colle
 	@Override
 	public void populate(final CollectOrderModel source, final CollectOrderData target)
 	{
+		target.setPk(String.valueOf(source.getPk().getLongValue()));
 		target.setUcoid(source.getUCOID());
 		target.setOrderId(source.getOID());
 		target.setCustomerId(source.getCID());

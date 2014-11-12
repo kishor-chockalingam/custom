@@ -3,9 +3,12 @@
  */
 package com.acc.core.services.collectorder;
 
+import de.hybris.platform.core.model.order.OrderModel;
+
 import java.util.List;
 
 import com.acc.core.model.CollectOrderModel;
+import com.acc.facades.collectOrder.data.CollectOrderData;
 
 
 /**
@@ -36,11 +39,24 @@ public interface CustomerCollectOrderService
 	 * @return CollectOrderModel
 	 */
 	public CollectOrderModel getCollectOrderByOrderCode(String orderCode);
-	
-		/**
+
+
+	/**
 	 * 
 	 * @param customerID
 	 * @return
 	 */
 	public List<CollectOrderModel> getCustomerListOrders(final String customerID);
+
+	/**
+	 * @param collectOrderData
+	 */
+	public void updateCollectOrder(CollectOrderData collectOrderData);
+
+	/**
+	 * @param orderCode
+	 * @return OrderModel
+	 */
+	public OrderModel getOrderDetailsForCode(String orderCode);
+
 }
