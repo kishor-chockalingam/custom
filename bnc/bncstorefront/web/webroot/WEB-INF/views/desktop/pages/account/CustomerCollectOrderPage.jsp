@@ -56,6 +56,13 @@
 					<spring:theme code="text.customer.collect.order.completed.status" text=""/>
 					</ycommerce:testId>
 								</c:when>
+								<c:when test="${CollectOrderData.status eq 'COLLECTED'}">
+									<ycommerce:testId code="orderHistory_orderDate_label">
+									<spring:theme
+									code="text.customer.collect.order.collected.status" text="" />
+									</ycommerce:testId>
+								</c:when>
+								
 								<c:otherwise>
 								<spring:theme code="text.customer.collect.order.pending.status" text=""/>									
 								</c:otherwise>
