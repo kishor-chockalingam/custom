@@ -62,7 +62,7 @@
 	<br/>
 	<br/>
 	<div class="span-24"  id="newdiv">
-		<hr>
+		<%-- <hr>
 			<div>
 				<div class="column"><h5><spring:theme code="" text="UCOID" /></h5></div>
 				<div class="column"><h5><spring:theme code="" text="Customer ID" /></h5></div>
@@ -82,10 +82,46 @@
 				</div>
 				<br/>
 			</c:forEach>
-		<br/>
+		<br/><br/>
 		<hr>
-		<br/>
-		<input type="button" value="Refresh" onclick="javascript:document.location.reload();"/>
+		<br/> --%>
+		<div class="column accountContentPane clearfix orderList">
+			<table class="orderListTable">
+				<thead>
+					<tr>
+						<th id="header1"><spring:theme code="" text="UCOID" /></th>
+						<th id="header2"><spring:theme code="" text="Customer ID" /></th>
+						<th id="header3"><spring:theme code="" text="Order ID" /></th>
+						<th id="header4"><spring:theme code="" text="Status" /></th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach items="${collectOrdersDataList}" var="CollectOrderData">
+						<c:url value="/orderslist/order/${CollectOrderData.orderId}" var="orderDetailsUrl"/>
+	
+						<tr>
+							<td headers="header1"><ycommerce:testId
+									code="orderHistory_orderNumber_link">
+									<a href="${orderDetailsUrl}">${CollectOrderData.ucoid}</a>
+								</ycommerce:testId></td>
+							<td headers="header2"><ycommerce:testId
+									code="orderHistory_orderStatus_label">
+						${CollectOrderData.customerId}
+						</ycommerce:testId></td>
+							<td headers="header3"><ycommerce:testId
+									code="orderHistory_Total_links">
+						${CollectOrderData.orderId}
+						</ycommerce:testId></td>
+							<td headers="header4"><ycommerce:testId code="orderHistory_orderDate_label">
+							${CollectOrderData.status}
+						</ycommerce:testId>
+							</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+			
+		</div>
 	</div>
 
 </template:page>
