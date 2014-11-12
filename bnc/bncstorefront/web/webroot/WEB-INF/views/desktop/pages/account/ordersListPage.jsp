@@ -11,8 +11,49 @@
 	tagdir="/WEB-INF/tags/desktop/nav/breadcrumb"%>
 <%@ taglib prefix="cms" uri="http://hybris.com/tld/cmstags"%>
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags/desktop/common"%>
+
+ <script type="text/javascript">  
+
+
+
+
+function doAjaxPost() {  
+		
+			
+var ucoid = document.getElementById('ucoid').value;  
+if(document.getElementById('ucoid').value == '') 
+{      
+alert("Please Provide Details!");
+     document.getElementById('ucoid').focus();
+return false;       
+}
+
+//alert("Adding "+ucoid);
+ $.ajax({
+  type : 'GET',  
+  url :"${contextPath}/orderslist/ucoid",  
+  
+  data : "ucoid=" + ucoid,  
+  dataType : 'json',
+
+  success : function(response) {  
+	  
+	 
+	  $("#newdiv").html(response.searchby_ucoid);
+   
+  },  
+  error : function(e) {  
+//alert('Error: ' + e);   
+  }  
+  });  
+
+
+}
+  
+</script> 
 <c:url value="/orderslist/vieworders" var="viewOrdersURL"></c:url>
 <meta http-equiv="Refresh" content="30;url=${viewOrdersURL}">
+
 <style>
 .column
 {
@@ -26,11 +67,27 @@
 	<div id="breadcrumb" class="breadcrumb"></div>
 
 	<div id="globalMessages"></div>
-	<div class="span-24">
+	<!-- <div class="span-24" id ="newdiv" > -->
 		<input type="button" value="Refresh" onclick="javascript:document.location.reload();"/>
 		<br/>
 		<br/>
+		
+	
+					
 		<h3><b>In-Store Orders</b></h3>
+		
+		
+		
+
+		<font color="green"><b>Enter UCOID : <input type="text" id="ucoid" /></b></font>
+		
+		<input type="button" name="ucoid"  value="search" onclick="javascript:doAjaxPost();"/> 
+		
+		<br/>
+		<br/>
+		<br/>					
+					
+	<div class="span-24"  id="newdiv">				
 		<hr>
 			<div>
 				<div class="column"><h5>UCOID</h5></div>
@@ -39,6 +96,7 @@
 				<div class="column"><h5>Status</h5></div>
 			</div>
 			<hr>
+			
 			<c:forEach items="${collectOrdersDataList}" var="CollectOrderData">
 				<c:url value="/orderslist/order/${CollectOrderData.orderId}" var="orderDetailsUrl"/>
 				<div>
@@ -51,10 +109,18 @@
 				</div>
 				<br/>
 			</c:forEach>
+			
+			
+			
+			
+			
 		<br/>
 		<hr>
 		<br/>
 		<input type="button" value="Refresh" onclick="javascript:document.location.reload();"/>
 	</div>
+	
+	
+
 	
 </template:page>

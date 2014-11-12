@@ -154,6 +154,7 @@ public interface ControllerConstants
 				String MiniCartErrorPanel = "fragments/cart/miniCartErrorPanel";
 				String CartPopup = "fragments/cart/cartPopup";
 				String WishlistPopup = "fragments/cart/wishlistPopup";
+				String OrderByUCOID = "fragments/cart/OrderByUCOID";
 			}
 
 			interface Account

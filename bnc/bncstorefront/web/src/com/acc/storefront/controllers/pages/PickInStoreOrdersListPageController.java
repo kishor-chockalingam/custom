@@ -91,5 +91,24 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
 		return ControllerConstants.Views.Pages.Account.CustomerCollectOrderPage;
 	}
+	
+	@RequestMapping(value = "/ucoid", method = RequestMethod.GET ,produces = "application/json")
+	public String SearchByUCOID(@RequestParam("ucoid") final String ucoid, final Model model, final HttpServletRequest request,
+			final HttpServletResponse response) throws CMSItemNotFoundException
+
+	{
+		
+		LOG.info("In controller of ucoid1");
+		final CollectOrderData collectOrderData = customerCollectOrderFacade.getCollectOrderByUCOID(ucoid);
+		model.addAttribute("collectOrderDataByUcoid", collectOrderData);
+		LOG.info("In controller of ucoid");
+		storeCmsPageInModel(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
+		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
+		return ControllerConstants.Views.Fragments.Cart.OrderByUCOID;
+
+	}
+
+	
+	
 
 }
