@@ -84,25 +84,25 @@
 								code="orderHistory_orderStatus_label">
 								${CollectOrderData.customerId}
 								</ycommerce:testId></td>
-									<td headers="header3"><ycommerce:testId
+							<td headers="header3"><ycommerce:testId
 											code="orderHistory_Total_links">
 								${CollectOrderData.orderId}
 								</ycommerce:testId></td>
-									<td headers="header4"><ycommerce:testId code="orderHistory_orderDate_label">
-									${CollectOrderData.status}
+							<td headers="header4">
+								<ycommerce:testId code="orderHistory_orderDate_label">
+									<form action="${viewOrdersURL}" method="GET">
+										<input type="hidden" name="pk" value="${CollectOrderData.pk}"/>
+										<select name="status" onchange="this.form.submit();">
+											<c:forEach items="${collectOrderStatusList}" var="stat">
+											<c:set var="selected" value="" />
+											<c:if test="${stat eq  CollectOrderData.status}">
+												<c:set var="selected" value="selected='true'" />
+											</c:if>
+												<option value="${stat}" ${selected}>${stat}</option>
+											</c:forEach>
+										</select>
+									</form>
 								</ycommerce:testId>
-								<form action="${viewOrdersURL}" method="GET">
-									<input type="hidden" name="pk" value="${CollectOrderData.pk}"/>
-									<select name="status" onchange="this.form.submit();">
-										<c:forEach items="${collectOrderStatusList}" var="stat">
-										<c:set var="selected" value="" />
-										<c:if test="${stat eq  CollectOrderData.status}">
-											<c:set var="selected" value="selected='true'" />
-										</c:if>
-											<option value="${stat}" ${selected}>${stat}</option>
-										</c:forEach>
-									</select>
-								</form>
 							</td>
 						</tr>
 					</c:forEach>
@@ -111,7 +111,5 @@
 			
 		</div>
 	</div>
-	
-	
 
 </template:page>
