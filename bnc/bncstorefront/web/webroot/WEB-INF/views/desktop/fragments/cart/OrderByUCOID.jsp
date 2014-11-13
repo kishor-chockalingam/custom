@@ -14,7 +14,7 @@
 					<table class="orderListTable">
 						<thead>
 							<tr>
-								<th id="header1"><spring:theme code="" text="UCOID" />vfdvf</th>
+								<th id="header1"><spring:theme code="" text="UCOID" /></th>
 								<th id="header2"><spring:theme code="" text="Customer ID" /></th>
 								<th id="header3"><spring:theme code="" text="Order ID" /></th>
 								<th id="header4"><spring:theme code="" text="Status" /></th>

@@ -19,8 +19,7 @@
 			alert("Please enter the UCOID!");
 				document.getElementById('ucoid').focus();
 				return false;
-				}
-			 
+			}
 			//alert("Adding "+ucoid);
 			$.ajax({
 				type : 'GET',
@@ -34,7 +33,7 @@
 					//$("#invalidUCOID").append("Please enter the valid UCOID");
 				}
 			});
-						}
+		}
 	</script> 
 <c:url value="/orderslist/vieworders" var="viewOrdersURL"></c:url>
 <meta http-equiv="Refresh" content="30;url=${viewOrdersURL}">
@@ -51,7 +50,6 @@
 	<div id="breadcrumb" class="breadcrumb"></div>
 
 	<div id="globalMessages"></div>
-<!-- 	<div class="span-24"> -->
 	<input type="button" value="Refresh" onclick="javascript:document.location.reload();"/>
 	<br/>
 	<br/>
@@ -62,36 +60,7 @@
 	
 	<br/>
 	<br/>
-	<div id="invalidUCOID">
-	
-	</div>
-	<br/>
-	<br/>
-	
 	<div class="span-24"  id="newdiv">
-		<%-- <hr>
-			<div>
-				<div class="column"><h5><spring:theme code="" text="UCOID" /></h5></div>
-				<div class="column"><h5><spring:theme code="" text="Customer ID" /></h5></div>
-				<div class="column"><h5><spring:theme code="" text="Order ID" /></h5></div>
-				<div class="column"><h5><spring:theme code="" text="Status" /></h5></div>
-			</div>
-			<hr>
-			<c:forEach items="${collectOrdersDataList}" var="CollectOrderData">
-				<c:url value="/orderslist/order/${CollectOrderData.orderId}" var="orderDetailsUrl"/>
-				<div>
-					<div class="column">
-						<a href="${orderDetailsUrl}">${CollectOrderData.ucoid}</a>
-					</div>
-					<div class="column">${CollectOrderData.customerId}</div>
-					<div class="column">${CollectOrderData.orderId}</div>
-					<div class="column">${CollectOrderData.status}</div>
-				</div>
-				<br/>
-			</c:forEach>
-		<br/><br/>
-		<hr>
-		<br/> --%>
 		<div class="column accountContentPane clearfix orderList">
 			<table class="orderListTable">
 				<thead>
@@ -112,16 +81,28 @@
 									<a href="${orderDetailsUrl}">${CollectOrderData.ucoid}</a>
 								</ycommerce:testId></td>
 							<td headers="header2"><ycommerce:testId
-									code="orderHistory_orderStatus_label">
-						${CollectOrderData.customerId}
-						</ycommerce:testId></td>
-							<td headers="header3"><ycommerce:testId
-									code="orderHistory_Total_links">
-						${CollectOrderData.orderId}
-						</ycommerce:testId></td>
-							<td headers="header4"><ycommerce:testId code="orderHistory_orderDate_label">
-							${CollectOrderData.status}
-						</ycommerce:testId>
+								code="orderHistory_orderStatus_label">
+								${CollectOrderData.customerId}
+								</ycommerce:testId></td>
+									<td headers="header3"><ycommerce:testId
+											code="orderHistory_Total_links">
+								${CollectOrderData.orderId}
+								</ycommerce:testId></td>
+									<td headers="header4"><ycommerce:testId code="orderHistory_orderDate_label">
+									${CollectOrderData.status}
+								</ycommerce:testId>
+								<form action="${viewOrdersURL}" method="GET">
+									<input type="hidden" name="pk" value="${CollectOrderData.pk}"/>
+									<select name="status" onchange="this.form.submit();">
+										<c:forEach items="${collectOrderStatusList}" var="stat">
+										<c:set var="selected" value="" />
+										<c:if test="${stat eq  CollectOrderData.status}">
+											<c:set var="selected" value="selected='true'" />
+										</c:if>
+											<option value="${stat}" ${selected}>${stat}</option>
+										</c:forEach>
+									</select>
+								</form>
 							</td>
 						</tr>
 					</c:forEach>
