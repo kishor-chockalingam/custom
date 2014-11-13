@@ -15,11 +15,12 @@
  <script type="text/javascript">  
 		function doAjaxPost() {
 			var ucoid = document.getElementById('ucoid').value;
-			if (document.getElementById('ucoid').value == '') {
-				alert("Please Provide Details!");
+			 if (document.getElementById('ucoid').value =='' ) { 
+			alert("Please enter the UCOID!");
 				document.getElementById('ucoid').focus();
 				return false;
-			}
+				}
+			 
 			//alert("Adding "+ucoid);
 			$.ajax({
 				type : 'GET',
@@ -27,13 +28,13 @@
 				data : "ucoid=" + ucoid,
 				dataType : 'json',
 				success : function(response) {
-					$("#newdiv").html(response.searchby_ucoid);
+				$("#newdiv").html(response.searchby_ucoid);
 				},
 				error : function(e) {
-					//alert('Error: ' + e);   
+					//$("#invalidUCOID").append("Please enter the valid UCOID");
 				}
 			});
-		}
+						}
 	</script> 
 <c:url value="/orderslist/vieworders" var="viewOrdersURL"></c:url>
 <meta http-equiv="Refresh" content="30;url=${viewOrdersURL}">
@@ -61,6 +62,12 @@
 	
 	<br/>
 	<br/>
+	<div id="invalidUCOID">
+	
+	</div>
+	<br/>
+	<br/>
+	
 	<div class="span-24"  id="newdiv">
 		<%-- <hr>
 			<div>
@@ -123,5 +130,7 @@
 			
 		</div>
 	</div>
+	
+	
 
 </template:page>
