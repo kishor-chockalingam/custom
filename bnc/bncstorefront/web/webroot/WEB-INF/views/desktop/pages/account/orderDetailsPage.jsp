@@ -55,10 +55,6 @@
 			<div class="span-7">
 				<spring:theme code="text.account.order.orderNumber" arguments="${orderData.code}"/><br />
 				<spring:theme code="text.account.order.orderPlaced" arguments="${orderData.created}"/><br />
-				<c:if test="${not empty orderData.statusDisplay}">
-					<spring:theme code="text.account.order.status.display.${orderData.statusDisplay}" var="orderStatus"/>
-					<spring:theme code="text.account.order.orderStatus" arguments="${orderStatus}"/><br />
-				</c:if>	
 			</div>	
 	
 			<div class="span-5">&nbsp;
