@@ -33,6 +33,12 @@
 					</c:if>
 					<li><spring:theme code="text.account.order.orderPlaced" text="Placed on {0}" arguments="${orderData.created}"/></li>
 				</ul>
+				<c:if test="${not empty UCOID}">
+				<div><spring:theme code="text.account.order.UCOID" text="UCOID is {0}" arguments="${UCOID}"/> 
+			<font size="1" color="red"><b>	<spring:theme code="text.account.order.secretUCOIDMessage" /></b></font>
+				</div>
+				
+				</c:if>
 			</div>
 			<div class="span-20 last" data-theme="b">
 				<div data-theme="d">
@@ -45,6 +51,7 @@
 					<order:deliveryMethodItem order="${orderData}"/>
 					<order:paymentMethodItem order="${orderData}"/>
 				</div>
+				
 				<div class="orderOverviewItems">
 					<h6 class="descriptionHeadline">
 						<spring:theme code="text.headline.orderitems" text="All information about your order items"/>
