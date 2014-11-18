@@ -4,6 +4,8 @@
 package com.acc.core.collectorder.facade;
 
 import de.hybris.platform.commercefacades.order.data.OrderData;
+import de.hybris.platform.commerceservices.search.pagedata.PageableData;
+import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
 
 import java.util.List;
 
@@ -16,7 +18,7 @@ import com.acc.facades.collectOrder.data.CollectOrderData;
  */
 public interface CustomerCollectOrderFacade
 {
-	public List<CollectOrderData> getCollectOrders();
+	public SearchPageData<CollectOrderData> getCollectOrders(PageableData pageableData);
 
 	/**
 	 * @param ucoid

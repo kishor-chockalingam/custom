@@ -3,6 +3,8 @@
  */
 package com.acc.core.services.collectorder;
 
+import de.hybris.platform.commerceservices.search.pagedata.PageableData;
+import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
 import de.hybris.platform.core.model.order.OrderModel;
 
 import java.util.List;
@@ -25,8 +27,8 @@ public interface CustomerCollectOrderService
 	 *           Indicates Customer collect Order details.
 	 */
 	public void saveCustomerColectOrder(CollectOrderModel collectOrderModel);
-	
-	public List<CollectOrderModel> getCollectOrders();
+
+	public SearchPageData<CollectOrderModel> getCollectOrders(PageableData pageableData);
 
 	/**
 	 * @param ucoid

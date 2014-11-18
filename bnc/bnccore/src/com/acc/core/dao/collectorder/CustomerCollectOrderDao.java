@@ -3,10 +3,12 @@
  */
 package com.acc.core.dao.collectorder;
 
+import de.hybris.platform.commerceservices.search.pagedata.PageableData;
 import de.hybris.platform.core.model.order.OrderModel;
 
 import java.util.List;
 
+import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
 import com.acc.core.model.CollectOrderModel;
 
 
@@ -16,7 +18,7 @@ import com.acc.core.model.CollectOrderModel;
  */
 public interface CustomerCollectOrderDao
 {
-	public List<CollectOrderModel> getCollectOrders();
+	public SearchPageData<CollectOrderModel> getCollectOrders(final PageableData pageableData);
 
 	/**
 	 * @param ucoid
@@ -29,7 +31,7 @@ public interface CustomerCollectOrderDao
 	 * @return CollectOrderModel
 	 */
 	public CollectOrderModel getCollectOrderByOrderCode(String orderCode);
-	
+
 	/**
 	 * 
 	 * @param customerID

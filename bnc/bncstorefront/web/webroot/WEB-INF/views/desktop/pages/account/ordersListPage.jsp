@@ -11,6 +11,7 @@
 	tagdir="/WEB-INF/tags/desktop/nav/breadcrumb"%>
 <%@ taglib prefix="cms" uri="http://hybris.com/tld/cmstags"%>
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags/desktop/common"%>
+<%@ taglib prefix="nav" tagdir="/WEB-INF/tags/desktop/nav" %>
 
  <script type="text/javascript">  
 		function doAjaxPost() {
@@ -61,7 +62,10 @@
 	<br/>
 	<br/>
 	<div class="span-24"  id="newdiv">
+	<c:if test="${not empty searchPageData.results}">
 		<div class="column accountContentPane clearfix orderList">
+		
+		<nav:pagination top="true"  supportShowPaged="${isShowPageAllowed}"  supportShowAll="${isShowAllAllowed}"  searchPageData="${searchPageData}" searchUrl="/orderslist/vieworders?sort=${searchPageData.pagination.sort}" msgKey="text.csr.view.orders.page"  numberPagesShown="${numberPagesShown}"/>
 			<table class="orderListTable">
 				<thead>
 					<tr>
@@ -72,7 +76,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${collectOrdersDataList}" var="CollectOrderData">
+					<c:forEach items="${searchPageData.results}" var="CollectOrderData">
 						<c:url value="/orderslist/order/${CollectOrderData.orderId}" var="orderDetailsUrl"/>
 	
 						<tr>
@@ -109,7 +113,12 @@
 				</tbody>
 			</table>
 			
+						<nav:pagination top="false" supportShowPaged="${isShowPageAllowed}"  supportShowAll="${isShowAllAllowed}" searchPageData="${searchPageData}" searchUrl="/orderslist/vieworders?sort=${searchPageData.pagination.sort}" msgKey="text.csr.view.orders.page"  numberPagesShown="${numberPagesShown}"/>
+			
+			
+			
 		</div>
+		</c:if>
 	</div>
 
 </template:page>

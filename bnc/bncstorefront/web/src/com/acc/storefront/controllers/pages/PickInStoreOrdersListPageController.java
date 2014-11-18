@@ -6,6 +6,8 @@ package com.acc.storefront.controllers.pages;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.order.data.OrderData;
 import de.hybris.platform.commercefacades.user.data.CustomerData;
+import de.hybris.platform.commerceservices.search.pagedata.PageableData;
+import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
 import de.hybris.platform.core.model.user.UserModel;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
 import de.hybris.platform.servicelayer.user.UserService;
@@ -32,8 +34,9 @@ import com.acc.core.util.BnCGenericUtil;
 import com.acc.facades.collectOrder.CollectOrderStatus;
 import com.acc.facades.collectOrder.data.CollectOrderData;
 import com.acc.storefront.controllers.ControllerConstants;
+import com.acc.storefront.controllers.pages.AbstractSearchPageController;
 
-import de.hybris.platform.acceleratorstorefrontcommons.controllers.pages.AbstractPageController;
+//import de.hybris.platform.acceleratorstorefrontcommons.controllers.pages.AbstractPageController;
 
 /**
  * @author swarnima.gupta
@@ -42,7 +45,7 @@ import de.hybris.platform.acceleratorstorefrontcommons.controllers.pages.Abstrac
 @Controller
 @Scope("tenant")
 @RequestMapping(value = "/orderslist")
-public class PickInStoreOrdersListPageController extends AbstractPageController
+public class PickInStoreOrdersListPageController extends AbstractSearchPageController
 {
 	private static final Logger LOG = Logger.getLogger(PickInStoreOrdersListPageController.class);
 
@@ -53,6 +56,8 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 	private static final String CUSTOMERPICKUPORDERS = "/customerpickuporders";
 	private static final String UCOID = "/ucoid";
 	private static final String ORDER = "/order/";
+	public static final int MAX_PAGE_LIMIT = 100; // should be configured
+	private static final String PAGINATION_NUMBER_OF_RESULTS_COUNT = "pagination.number.results.count";
 
 	@Autowired
 	private CustomerCollectOrderFacade customerCollectOrderFacade;
@@ -62,9 +67,17 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 
 	@Autowired
 	private Converter<UserModel, CustomerData> customerConverter;
+	
+	public static enum ShowMode
+	{
+		Page, All
+	}
+
 
 	@RequestMapping(value = VIEWORDERS, method = RequestMethod.GET)
-	public String getOrdersList(final Model model, final HttpServletRequest request, final HttpServletResponse response)
+	public String getOrdersList(@RequestParam(value = "page", defaultValue = "0") final int page,
+         @RequestParam(value = "show", defaultValue = "Page") final ShowMode showMode,
+         @RequestParam(value = "sort", required = false) final String sortCode,final Model model, final HttpServletRequest request, final HttpServletResponse response)
 			throws CMSItemNotFoundException
 	{
 		if(StringUtils.isNotEmpty(request.getParameter("pk")) && StringUtils.isNotEmpty(request.getParameter("status")))
@@ -74,7 +87,12 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 			collectOrderData.setStatus(CollectOrderStatus.valueOf(request.getParameter("status")));
 			customerCollectOrderFacade.updateCollectOrder(collectOrderData);
 		}
-		model.addAttribute("collectOrdersDataList", customerCollectOrderFacade.getCollectOrders());
+		final PageableData pageableData = createPageableData(page, 5, sortCode, showMode);
+		final SearchPageData<CollectOrderData> searchPageData=customerCollectOrderFacade.getCollectOrders(pageableData);
+		
+		//model.addAttribute("collectOrdersDataList",searchPageData);
+		populateModel(model, searchPageData, showMode);
+
 		model.addAttribute("collectOrderStatusList", BnCGenericUtil.getStatusList());
 		storeCmsPageInModel(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
 		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
@@ -131,4 +149,51 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 		customerCollectOrderFacade.updateCollectOrder(collectOrderData);
 		return REDIRECT_TO_ORDER_DETAILS_PAGE;
 	}
+	
+	protected PageableData createPageableData(final int pageNumber, final int pageSize, final String sortCode,
+			final ShowMode showMode)
+	{
+		final PageableData pageableData = new PageableData();
+		pageableData.setCurrentPage(pageNumber);
+		pageableData.setSort(sortCode);
+
+		if (ShowMode.All == showMode)
+		{
+			pageableData.setPageSize(MAX_PAGE_LIMIT);
+		}
+		else
+		{
+			pageableData.setPageSize(pageSize);
+		}
+		return pageableData;
+	}
+	
+	protected void populateModel(final Model model, final SearchPageData<?> searchPageData, final ShowMode showMode)
+	{
+		final int numberPagesShown = getSiteConfigService().getInt(PAGINATION_NUMBER_OF_RESULTS_COUNT, 5);
+		
+
+		model.addAttribute("numberPagesShown", numberPagesShown);
+		model.addAttribute("searchPageData", searchPageData);
+		model.addAttribute("isShowAllAllowed", calculateShowAll(searchPageData, showMode));
+		model.addAttribute("isShowPageAllowed", calculateShowPaged(searchPageData, showMode));
+	
+	}
+	protected Boolean calculateShowAll(final SearchPageData<?> searchPageData, final ShowMode showMode)
+	{
+		return Boolean.valueOf((showMode != ShowMode.All && //
+				searchPageData.getPagination().getTotalNumberOfResults() > searchPageData.getPagination().getPageSize())
+				&& isShowAllAllowed(searchPageData));
+	}
+
+	protected Boolean calculateShowPaged(final SearchPageData<?> searchPageData, final ShowMode showMode)
+	{
+		
+	return Boolean
+				.valueOf(showMode == ShowMode.All
+						&& (searchPageData.getPagination().getNumberOfPages() > 1 || searchPageData.getPagination().getPageSize() == getMaxSearchPageSize()));
+	}
+	
+
+
 }
