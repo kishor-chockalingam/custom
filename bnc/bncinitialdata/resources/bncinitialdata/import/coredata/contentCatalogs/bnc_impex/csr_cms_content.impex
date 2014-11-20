@@ -1,0 +1,41 @@
+#
+# Import the CMS content for the site
+#
+$contentCatalog=electronicsContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$jarResourceCms=jar:com.acc.core.setup.CoreSystemSetup&/bnccore/import/cockpits/cmscockpit
+
+# Create PageTemplates
+# These define the layout for pages
+# "FrontendTemplateName" is used to define the JSP that should be used to render the page for pages with multiple possible layouts.
+# "RestrictedPageTypes" is used to restrict templates to page types
+INSERT_UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];name;frontendTemplateName;restrictedPageTypes(code);active[default=true]
+;;CSROrdersLandingTemplate;CSR Orders Landing Layout Template;layout/csrOrdersLandingPage;ContentPage
+
+# Add Velocity templates that are in the CMS Cockpit. These give a better layout for editing pages
+# The FileLoaderValueTranslator loads a File into a String property. The templates could also be inserted in-line in this file.
+UPDATE PageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;CSROrdersLandingTemplate	;$jarResourceCms/structure-view/structure_csr_ordersTemplate.vm
+
+# Simple Content Page Templates
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='CSROrdersLandingTemplate'];validComponentTypes(code);compTypeGroup(code)
+;HeaderLinks;;;headerlinks
+;NavigationBar;;;navigation
+;SearchTimeBar;;;wide
+;OrdersList;;;wide
+;OrderDetails;;;wide
+
+# Create Content Slots
+INSERT_UPDATE ContentSlot;$contentCV[unique=true];uid[unique=true];name;active
+;;HeaderLinksSlot;Header links;true
+;;NavigationBarSlot;Navigation Bar;true
+#;;SearchTimeBarSlot;Search Time Bar;true
+#;;OrdersListSlot;Orders List;true
+#;;OrderDetailsSlot;Order Details;true
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='CSROrdersLandingTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;HeaderLinks-CSROrders;HeaderLinks;;HeaderLinksSlot;true
+;;NavigationBar-CSROrders;NavigationBar;;NavigationBarSlot;true
+#;;SearchTimeBar-CSROrders;SearchTimeBar;;SearchTimeBarSlot;true
+#;;OrdersList-CSROrders;OrdersList;;OrdersListSlot;true
+#;;OrderDetails-CSROrders;OrderDetails;;OrderDetailsSlot;true
