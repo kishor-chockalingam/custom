@@ -1,0 +1,119 @@
+@charset "utf-8";
+/* CSS Document */
+body{font-family:Arial, Helvetica, sans-serif; background:#f6f7f9; margin:0px;}
+img{border:0}
+#main_wrapper {margin-left: auto; margin-right: auto; max-width: 1024px;}
+.clearboth{ clear:both;}
+/*----------------------Header Css Starts Here---------------------------*/
+#head{ display:block; }
+#head .contain_block{height:100px; float:left; width:100%; background:#333333}
+#head #menu_top{float:left;padding:40px 0 0; margin-left:20px; width:30px;height:23px;display:none; position:absolute; z-index:999; display:block!important}
+#head #menu_top a{display:block;background:url(../bnc_images/mobile_nav.png) 0 0 no-repeat;width:34px;height:28px;text-indent:-9999px;}
+#head .contain_block .sitename {color:#fff; display:block; float:left; font:bold 23px arial; padding-top:40px; text-align:center; width:85%; position:absolute; z-index:1;}
+#head .contain_block .username_blk {float:right;height:70px;width: 30%; padding-top:30px;}
+#head .contain_block .username_blk .reminder{ height:100px; float:left }
+#head .contain_block .username_blk .divider{border-right: 1px solid #a4a4a4; float: left; height: 40px; width: 2px;margin:0 10% 0 10%}
+#head .contain_block .username_blk .bell{background:url(../bnc_images/bell.png) no-repeat left 6px; height:60px; width:30px}
+#head .contain_block .username_blk .reminder .bell .remind_round { border-radius:20px;-moz-border-radius:20px; -webkit-border-radius:20px; background:#F00; height:20px; width:20px; 
+display:block; text-align:center; margin-left:10px; font:normal 16px Arial, Helvetica, sans-serif; color:#ffffff; float:left}
+#head .contain_block .username_blk .userblock{ float:left;}
+#head .contain_block .username_blk .userblock .user_photo{ float:left}
+#head .contain_block .username_blk .userblock .username{ float:left; font:normal 16px Arial, Helvetica, sans-serif; color:#ffffff; padding-top:10px; margin-left:20px}
+/*----------------------Header Css Ends Here---------------------------*/
+
+
+/*----------------------Content Css Starts Here---------------------------*/
+#main_content_blk{ background:#FFF;}
+#main_content_blk .top_banner{height:auto;}
+#main_content_blk .top_banner .chart_block{ background:#fbfbfb; border-bottom:2px solid #f3f3f3; float:left; width:100%; padding:0;}
+#main_content_blk .top_banner .chart_block .diagram{ margin-left:12%;}
+#main_content_blk .top_banner .chart_block .diagram_block{ width:9.9%; float:left; margin:3% 7.5% 0; padding-bottom:3.5%}
+#main_content_blk .top_banner .chart_block .diagramcurrent{ border-bottom:5px solid #b9e753;}
+#main_content_blk .top_banner .chart_block .diagram_block .digram_txt{ text-align:center; color:#6f6f6f; font:normal 18px Arial, Helvetica, sans-serif; margin-top:10px;}
+
+#main_content_blk .top_banner .datetime_block{ background:#ffffff; border-bottom:2px solid #f3f3f3; height:55px; padding:3.5% 0 0 0;}
+#main_content_blk .top_banner .datetime_block .date_block{ float:left; margin-left:6%}
+#main_content_blk .top_banner .datetime_block .date_block ul{ margin:0px; padding:0px;}
+#main_content_blk .top_banner .datetime_block .date_block ul li{list-style:none; float:left; padding-right:10px;}
+#main_content_blk .top_banner .datetime_block .date_block ul li input{ border:none; background:#f3f3f3; height:30px; width:130px; margin-top:-5px; 
+font:normal 18px Arial, Helvetica, sans-serif; text-align:center; color:#6f6f6f;}
+#main_content_blk .top_banner .datetime_block .date_block ul li input.disable{ color:#d7d7d7}
+#main_content_blk .top_banner .datetime_block .date_block ul li img{ margin:-5px 5px 0 0}
+
+#main_content_blk .top_banner .datetime_block .time_block{float:left; margin-left:6%}
+#main_content_blk .top_banner .datetime_block .time_block ul{ margin:0px; padding:0px;}
+#main_content_blk .top_banner .datetime_block .time_block ul li{list-style:none; float:left; padding-right:10px;}
+#main_content_blk .top_banner .datetime_block .time_block ul li input{ border:none;background:#f3f3f3; height:30px; width:130px; margin-top:-5px;
+font:normal 18px Arial, Helvetica, sans-serif; text-align:center; color:#6f6f6f;}
+#main_content_blk .top_banner .datetime_block .time_block ul li input.disable{ color:#d7d7d7}
+#main_content_blk .top_banner .datetime_block .time_block ul li img{ margin:-5px 5px 0 0}
+
+
+#main_content_blk .top_banner img{ max-width: 100%;	height: auto;}
+#main_content_blk .inner_content_blk{}
+
+/*----------------------Content Css Ends Here---------------------------*/
+
+
+/*----------------------Left Block Order number menu Css Starts Here---------------------------*/
+#main_content_blk .inner_content_blk .left_block{ width:20%; float:left; background:#13ccde;}
+#main_content_blk .inner_content_blk .left_block #order_menu {width: 100%;padding: 0 0 0 0;background-color: #13ccde;color: #ffffff;}
+#main_content_blk .inner_content_blk .left_block #order_menu ul {list-style: none;margin: 0;padding: 0;border: none;}
+#main_content_blk .inner_content_blk .left_block #order_menu li {margin: 0px;width: auto;	border-bottom: 2px solid #1dc3d3;}
+#main_content_blk .inner_content_blk .left_block #order_menu li.search_padding{ padding:8% 6%;}
+#main_content_blk .inner_content_blk .left_block #order_menu li a {display: block;padding:25px 25px 25px 20px;background-color: #13ccde;color: #ffffff;font: bold 16px Arial, Helvetica, sans-serif;text-decoration: none;width: auto;}
+#main_content_blk .inner_content_blk .left_block #order_menu li a span{color: #ffffff;font: normal 14px Arial, Helvetica, sans-serif;}
+#main_content_blk .inner_content_blk .left_block #order_menu li a:hover {color: #b9e753;padding:25px 25px 25px 12px;border:8px solid #b9e753;border-bottom:none;border-right:none;border-top:none;}
+#main_content_blk .inner_content_blk .left_block #order_menu li a.current {color: #b9e753;padding:25px 25px 25px 12px;border:8px solid #b9e753;border-bottom:none;border-right:none;border-top:none;}
+#main_content_blk .inner_content_blk .left_block #order_menu li input.search-text { background:#77e4ef  url(../bnc_images/icon-search.png) no-repeat 95% center; border: medium none; border-radius: 20px; color:#fff; font:normal 14px Arial, Helvetica, sans-serif;padding: 12px 40px 12px 10px; vertical-align: middle; width: 70%;}
+/*----------------------Left Block  Order number menu Css Ends Here---------------------------*/
+
+
+/*----------------------Right Block Order number menu Css Starts Here---------------------------*/
+#main_content_blk .inner_content_blk .right_block{ float:left; width:72%; padding:0 4% 0 4%;}
+#main_content_blk .inner_content_blk .right_block img{max-width: 100%;	height: auto;}
+#main_content_blk .inner_content_blk .right_block .tab_menu_block{ border-bottom:2px solid #f4f4f4; float:left; width:100%}
+#main_content_blk .inner_content_blk .right_block .tab_menu_block .tab_menu{ margin:2% 0px 2% 0px; float:left; width:100% }
+#main_content_blk .inner_content_blk .right_block .tab_menu_block .tab_menu ul{ margin:0px;  padding:0px;}
+#main_content_blk .inner_content_blk .right_block .tab_menu_block .tab_menu ul li{ margin:0px; padding:1% 0px 1% 0px; list-style:none; float:left; margin-right:5%; color:#6f6f6f; font:normal 18px Arial, Helvetica, sans-serif;}
+#main_content_blk .inner_content_blk .right_block .tab_menu_block .tab_menu ul li a{color:#6f6f6f; text-decoration:none;}
+#main_content_blk .inner_content_blk .right_block .tab_menu_block .tab_menu ul li a:hover{ color:#13ccde;}
+#main_content_blk .inner_content_blk .right_block .tab_menu_block .tab_menu ul li a.tabmenuselect{ color:#13ccde;}
+#main_content_blk .inner_content_blk .right_block .tab_menu_block .tab_menu ul li.divider{ border-right:1px solid #f7f5f5; height:20px;}
+
+
+#main_content_blk .inner_content_blk .right_block .tab_menu_block .tab_button{ float:right;}
+/*----------------------Right Block  Order number menu Css Ends Here---------------------------*/
+
+
+
+
+/*----------------------Global left menu Css Starts Here---------------------------*/
+
+#head .contain_block .mobile_leftnav{-webkit-box-shadow:inset -45px 1px 30px -5px rgba(50, 50, 50, 0.57);-moz-box-shadow:inset -45px 1px 30px -5px rgba(50, 50, 50, 0.57);
+box-shadow:inset -45px 1px 30px -5px rgba(50, 50, 50, 0.57);}
+#head nav{display:block;width:250px;float:left; height:auto;}
+#head nav ol{margin:0;padding:100px 0 0 0; }
+#head nav ol li{display:inline;float:none;width:10%!important;border:0;text-align:left}
+#head nav ol li img{ float:left;}
+#head nav ol li a{display:block;border:0;color:#fff;text-decoration:none;background:0;border-bottom:1px solid #494949;font:normal 16px Arial, Helvetica, sans-serif;padding:40px 0px 0 35px !important; text-align:left!important; height:80px;}
+#head nav ol li a:hover, a.select{ border-left:4px solid #13ccde; padding-left:31px!important;}
+#head nav ol li a.select{ border-left:4px solid #13ccde; padding-left:31px!important;}
+#head nav ol li a span{ display:inline-block; margin-left:15px;}
+#head nav ol li a span.singleline{ margin-top:10px;}
+/*----------------------Global left menu Css Ends Here---------------------------*/
+
+
+
+
+@media all and (min-width: 768px) and (max-width: 768px) {
+#main_content_blk .top_banner .datetime_block .date_block{ float:left; margin-left:3%}
+#main_content_blk .top_banner .datetime_block .date_block ul li input{ border:none; background:#f3f3f3; height:30px; width:100px; margin-top:-5px}
+#main_content_blk .top_banner .datetime_block .time_block{float:left; margin-left:3%}
+#main_content_blk .top_banner .datetime_block .time_block ul li input{ border:none;background:#f3f3f3; height:30px; width:100px; margin-top:-5px}
+#main_content_blk .top_banner .chart_block .diagram_block .digram_txt{ width:100%;}
+#main_content_blk .top_banner .datetime_block{padding:5% 0 0 0;}
+#order_menu li.search_padding{ padding:8% 15% 8% 6%;}
+#order_menu li input.search-text{ background-position:91% center;}
+#main_content_blk .top_banner .chart_block .diagram_block{ width:12.9%; margin:3% 5.8% 0;}
+}
