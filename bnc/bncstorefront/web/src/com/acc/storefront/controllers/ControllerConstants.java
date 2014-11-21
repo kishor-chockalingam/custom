@@ -155,6 +155,7 @@ public interface ControllerConstants
 				String CartPopup = "fragments/cart/cartPopup";
 				String WishlistPopup = "fragments/cart/wishlistPopup";
 				String OrderByUCOID = "fragments/cart/OrderByUCOID";
+				String csrOrderDetails = "fragments/cart/csrOrderDetails";
 			}
 
 			interface Account

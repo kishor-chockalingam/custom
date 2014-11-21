@@ -83,4 +83,25 @@
 			}
 		});
 	}
+	
+	function OrderDetailsByOrderID(orderId) {
+					
+					alert(orderId);
+						$.ajax({
+							type : 'GET',
+							url : "${contextPath}/orderslist/order/orderCode",
+							
+							
+							data: "orderCode="+orderId,
+							dataType : 'json',
+							success : function(response) {
+								alert("success");
+								
+								$('#CSROrderDetails').html(response.CSROrder_Details);
+							},
+							error : function(e) {
+							}
+						});
+					}
+				
 </script>

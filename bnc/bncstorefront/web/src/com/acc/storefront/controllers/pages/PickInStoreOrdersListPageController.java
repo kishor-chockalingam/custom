@@ -89,8 +89,8 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 		return ControllerConstants.Views.Pages.Account.ordersListPage;
 	}
 
-	@RequestMapping(value = ORDER + ORDER_CODE_PATH_VARIABLE_PATTERN, method = RequestMethod.GET)
-	public String postOrderDetails(@PathVariable("orderCode") final String orderCode, final Model model,
+	@RequestMapping(value = ORDER + ORDER_CODE_PATH_VARIABLE_PATTERN, method = RequestMethod.GET,produces = "application/json")
+	public String postOrderDetails(@RequestParam("orderCode") final String orderCode, final Model model,
 			final HttpServletRequest request, final HttpServletResponse response) throws CMSItemNotFoundException
 	{
 		final OrderData orderData = customerCollectOrderFacade.getOrderDetailsForCode(orderCode);
@@ -99,9 +99,7 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 		model.addAttribute("customerData", customerData);
 		model.addAttribute("collectOrderData", customerCollectOrderFacade.getCollectOrderByOrderCode(orderCode));
 		model.addAttribute("collectOrderStatusList", BnCGenericUtil.getStatusList());
-		storeCmsPageInModel(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
-		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
-		return ControllerConstants.Views.Pages.Account.orderDetailsPage;
+			return ControllerConstants.Views.Fragments.Cart.csrOrderDetails;
 	}
 
 
