@@ -60,6 +60,8 @@ import com.acc.product.data.SuggestionDataList;
 import com.acc.util.ws.SearchQueryCodec;
 import com.acc.validator.CustomValidationException;
 import com.acc.validator.ReviewDataValidator;
+import org.springframework.beans.factory.annotation.Autowired;
+import de.hybris.platform.site.BaseSiteService;
 
 
 /**
@@ -97,6 +99,8 @@ public class ProductsController extends BaseController
 	private ProductExpressUpdateQueue productExpressUpdateQueue;
 	@Resource(name = "catalogFacade")
 	private CatalogFacade catalogFacade;
+	@Autowired
+	private BaseSiteService baseSiteService;
 
 	/**
 	 * Web service handler for search. Implementation has to catch up once the SearchFacade exists.
@@ -118,6 +122,7 @@ public class ProductsController extends BaseController
 			@RequestParam(required = false, defaultValue = "20") final int pageSize,
 			@RequestParam(required = false) final String sort)
 	{
+		baseSiteService.setCurrentBaseSite("electronics", true);
 		final SolrSearchQueryData searchQueryData = searchQueryCodec.decodeQuery(query);
 		final PageableData pageable = new PageableData();
 		pageable.setCurrentPage(currentPage);
