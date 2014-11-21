@@ -133,7 +133,7 @@
 								<li class="search_padding">
 									<input type="text" placeholder="Search " name="q" class="search-text placeholder" id="ucoid" onblur="javascript:doAjaxPost();">
 								</li>
-								<c:forEach items="${collectOrdersDataList}" var="CollectOrderData" varStatus="counter">
+								<c:forEach items="${searchPageData.results}" var="CollectOrderData" varStatus=counter>
 									<c:url value="/orderslist/order/${CollectOrderData.orderId}" var="orderDetailsUrl"/>
 									<c:set var="currentClass" value=''/>
 									<c:if test="${counter.count==1}">
@@ -141,7 +141,7 @@
 									</c:if>
 									<li>
 										<a href="${orderDetailsUrl}" ${currentClass}>
-											${CollectOrderData.orderId}<br />
+											{CollectOrderData.orderId}<br />
 											<span>HH:MM AM/PM</span>
 										</a>
 									</li>
