@@ -33,6 +33,7 @@
 		<property name="customerId" type="String"/>
 		<property name="pId" type="String"/>
 		<property name="status" type="com.acc.facades.collectOrder.CollectOrderStatus"/>
+		<property name="createdTS" type="java.util.Date"/>
 	</bean>
 	
 	<enum class="com.acc.facades.collectOrder.CollectOrderStatus">

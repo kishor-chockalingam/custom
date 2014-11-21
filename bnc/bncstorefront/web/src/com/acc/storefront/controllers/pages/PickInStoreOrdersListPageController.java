@@ -8,9 +8,11 @@ import de.hybris.platform.commercefacades.order.data.OrderData;
 import de.hybris.platform.commercefacades.user.data.CustomerData;
 import de.hybris.platform.core.model.user.UserModel;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
+import de.hybris.platform.servicelayer.session.SessionService;
 import de.hybris.platform.servicelayer.user.UserService;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,22 +64,28 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 
 	@Autowired
 	private Converter<UserModel, CustomerData> customerConverter;
+	@Autowired
+	private SessionService sessionService;
 
+	@SuppressWarnings("boxing")
 	@RequestMapping(value = VIEWORDERS, method = RequestMethod.GET)
 	public String getOrdersList(final Model model, final HttpServletRequest request, final HttpServletResponse response)
 			throws CMSItemNotFoundException
 	{
-		if(StringUtils.isNotEmpty(request.getParameter("pk")) && StringUtils.isNotEmpty(request.getParameter("status")))
-		{
-			final CollectOrderData collectOrderData = new CollectOrderData();
-			collectOrderData.setPk(request.getParameter("pk"));
-			collectOrderData.setStatus(CollectOrderStatus.valueOf(request.getParameter("status")));
-			customerCollectOrderFacade.updateCollectOrder(collectOrderData);
-		}
-		model.addAttribute("collectOrdersDataList", customerCollectOrderFacade.getCollectOrders());
-		model.addAttribute("collectOrderStatusList", BnCGenericUtil.getStatusList());
-		//storeCmsPageInModel(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
-		//setUpMetaDataForContentPage(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
+//		if(StringUtils.isNotEmpty(request.getParameter("pk")) && StringUtils.isNotEmpty(request.getParameter("status")))
+//		{
+//			final CollectOrderData collectOrderData = new CollectOrderData();
+//			collectOrderData.setPk(request.getParameter("pk"));
+//			collectOrderData.setStatus(CollectOrderStatus.valueOf(request.getParameter("status")));
+//			customerCollectOrderFacade.updateCollectOrder(collectOrderData);
+//		}
+		List<CollectOrderData> collectOrderDataList = customerCollectOrderFacade.getCollectOrders();
+		model.addAttribute("Queued", getStatusCount(collectOrderDataList, CollectOrderStatus.PENDING));
+		model.addAttribute("Active", getStatusCount(collectOrderDataList, CollectOrderStatus.COMPLETED));
+		model.addAttribute("Serviced", getStatusCount(collectOrderDataList, CollectOrderStatus.COLLECTED));
+		model.addAttribute("CSR_USER", sessionService.getAttribute("CSR_USER"));
+		model.addAttribute("collectOrdersDataList", collectOrderDataList);
+		//model.addAttribute("collectOrderStatusList", BnCGenericUtil.getStatusList());
 		return ControllerConstants.Views.Pages.Account.ordersListPage;
 	}
 
@@ -119,8 +127,6 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 		final CollectOrderData collectOrderData = customerCollectOrderFacade.getCollectOrderByUCOID(ucoid);
 		model.addAttribute("collectOrderDataByUcoid", collectOrderData);
 		LOG.info("In controller of ucoid");
-		//storeCmsPageInModel(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
-		//setUpMetaDataForContentPage(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
 		return ControllerConstants.Views.Fragments.Cart.OrderByUCOID;
 	}
 
@@ -130,5 +136,21 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 	{
 		customerCollectOrderFacade.updateCollectOrder(collectOrderData);
 		return REDIRECT_TO_ORDER_DETAILS_PAGE;
+	}
+	
+	/**
+	 * @param collectOrderDataList
+	 */
+	private int getStatusCount(List<CollectOrderData> collectOrderDataList, CollectOrderStatus status)
+	{
+		int statusCount = 0;
+		for(CollectOrderData collectOrderData : collectOrderDataList)
+		{
+			if(status.equals(collectOrderData.getStatus()))
+			{
+				statusCount++;
+			}
+		}
+		return statusCount;
 	}
 }

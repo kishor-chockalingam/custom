@@ -38,6 +38,7 @@ public class CollectOrderPopulator implements Populator<CollectOrderModel, Colle
 			target.setCustomerId(source.getCID());
 			target.setPId(source.getPID());
 			target.setStatus(CollectOrderStatus.valueOf(source.getStatus()));
+			target.setCreatedTS(source.getCreationtime());
 		}
 	}
 
