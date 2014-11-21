@@ -3,8 +3,6 @@
  */
 package com.acc.core.services.collectorder.impl;
 
-import de.hybris.platform.commerceservices.search.pagedata.PageableData;
-import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
 import de.hybris.platform.core.PK;
 import de.hybris.platform.core.model.order.OrderModel;
 import de.hybris.platform.servicelayer.exceptions.ModelSavingException;
@@ -60,10 +58,10 @@ public class CustomerCollectOrderServiceImpl implements CustomerCollectOrderServ
 	 * @see com.acc.core.services.collectorder.CustomerCollectOrderService#getCollectOrders()
 	 */
 	@Override
-	public SearchPageData<CollectOrderModel> getCollectOrders(final PageableData pageableData)
+	public List<CollectOrderModel> getCollectOrders()
 	{
 		LOG.info("## In CustomerCollectOrderServiceImpl getCollectOrders ##");
-		return customerCollectOrderDao.getCollectOrders(pageableData);
+		return customerCollectOrderDao.getCollectOrders();
 	}
 
 	/**

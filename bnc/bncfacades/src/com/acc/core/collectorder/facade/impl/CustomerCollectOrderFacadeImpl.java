@@ -4,9 +4,6 @@
 package com.acc.core.collectorder.facade.impl;
 
 import de.hybris.platform.commercefacades.order.data.OrderData;
-import de.hybris.platform.commerceservices.search.pagedata.PageableData;
-import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
-import de.hybris.platform.converters.Converters;
 import de.hybris.platform.core.model.order.OrderModel;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
 
@@ -47,26 +44,16 @@ public class CustomerCollectOrderFacadeImpl implements CustomerCollectOrderFacad
 		this.customerCollectOrderService = customerCollectOrderService;
 	}
 
-	protected <S, T> SearchPageData<T> convertPageData(final SearchPageData<S> source, final Converter<S, T> converter)
-	{
-		final SearchPageData<T> result = new SearchPageData<T>();
-		result.setPagination(source.getPagination());
-		result.setSorts(source.getSorts());
-		result.setResults(Converters.convertAll(source.getResults(), converter));
-		return result;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see com.acc.core.collectorder.facade.CustomerCollectOrderFacade#getCollectOrders()
 	 */
 	@Override
-	public SearchPageData<CollectOrderData> getCollectOrders(final PageableData pageableData)
-
+	public List<CollectOrderData> getCollectOrders()
 	{
-		final SearchPageData<CollectOrderModel> collectOrderModelsList = customerCollectOrderService.getCollectOrders(pageableData);
-		return convertPageData(collectOrderModelsList, collectOrderConverter);
+		final List<CollectOrderModel> collectOrderModelsList = customerCollectOrderService.getCollectOrders();
+		return convert(collectOrderModelsList);
 	}
 
 	/*
@@ -146,7 +133,5 @@ public class CustomerCollectOrderFacadeImpl implements CustomerCollectOrderFacad
 		}
 		return collectOrderDataList;
 	}
-
-
 
 }

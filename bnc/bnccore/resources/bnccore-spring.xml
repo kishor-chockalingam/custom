@@ -472,7 +472,6 @@
 	
 	<bean id="customerCollectOrderDao" class="com.acc.core.dao.collectorder.impl.CustomerCollectOrderDaoImpl" >
 		<property name="flexibleSearchService" ref="flexibleSearchService"/>
-		<property name="pagedFlexibleSearchService" ref="pagedFlexibleSearchService" />
 	</bean>
 	
 	<alias name="customerCollectOrderServiceImpl" alias="customerCollectOrderService" />
@@ -480,4 +479,5 @@
 		class="com.acc.core.services.collectorder.impl.CustomerCollectOrderServiceImpl">
 		<property name="customerCollectOrderDao" ref="customerCollectOrderDao"/>
 	</bean>
+	
 </beans>
