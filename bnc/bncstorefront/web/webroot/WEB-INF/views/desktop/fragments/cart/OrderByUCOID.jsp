@@ -11,7 +11,7 @@
 			</li>
 			<li>
 				<a href="${orderDetailsUrl}" class="current">
-					{collectOrderDataByUcoid.orderId}<br />
+					${collectOrderDataByUcoid.orderId}<br />
 					<span>HH:MM AM/PM</span>
 				</a>
 			</li>
