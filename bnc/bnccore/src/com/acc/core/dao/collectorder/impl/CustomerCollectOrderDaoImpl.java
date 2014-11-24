@@ -4,7 +4,7 @@
 package com.acc.core.dao.collectorder.impl;
 
 import de.hybris.platform.core.model.order.OrderModel;
-import de.hybris.platform.servicelayer.search.FlexibleSearchService;
+import de.hybris.platform.servicelayer.internal.dao.AbstractItemDao;
 import de.hybris.platform.servicelayer.search.SearchResult;
 
 import java.util.List;
@@ -21,21 +21,11 @@ import com.acc.core.services.collectorder.impl.CustomerCollectOrderServiceImpl;
  * @author swarnima.gupta
  * 
  */
-public class CustomerCollectOrderDaoImpl implements CustomerCollectOrderDao
+public class CustomerCollectOrderDaoImpl extends AbstractItemDao implements CustomerCollectOrderDao
 {
 
+	@SuppressWarnings("unused")
 	private static final Logger LOG = Logger.getLogger(CustomerCollectOrderServiceImpl.class);
-
-	private FlexibleSearchService flexibleSearchService;
-
-	/**
-	 * @param flexibleSearchService
-	 *           the flexibleSearchService to set
-	 */
-	public void setFlexibleSearchService(final FlexibleSearchService flexibleSearchService)
-	{
-		this.flexibleSearchService = flexibleSearchService;
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -46,7 +36,7 @@ public class CustomerCollectOrderDaoImpl implements CustomerCollectOrderDao
 	public List<CollectOrderModel> getCollectOrders()
 	{
 		final String query = "SELECT {pk} from {collectOrder}";
-		final SearchResult<CollectOrderModel> result = flexibleSearchService.search(query);
+		final SearchResult<CollectOrderModel> result = getFlexibleSearchService().search(query);
 		return CollectionUtils.isEmpty(result.getResult()) ? null : result.getResult();
 	}
 
@@ -59,7 +49,7 @@ public class CustomerCollectOrderDaoImpl implements CustomerCollectOrderDao
 	public CollectOrderModel getCollectOrderByUCOID(final String ucoid)
 	{
 		final String query = "SELECT {pk} from {collectOrder} where {ucoid}='" + ucoid + "'";
-		final SearchResult<CollectOrderModel> result = flexibleSearchService.search(query);
+		final SearchResult<CollectOrderModel> result = getFlexibleSearchService().search(query);
 		return CollectionUtils.isEmpty(result.getResult()) ? null : result.getResult().get(0);
 	}
 
@@ -72,7 +62,7 @@ public class CustomerCollectOrderDaoImpl implements CustomerCollectOrderDao
 	public CollectOrderModel getCollectOrderByOrderCode(final String orderCode)
 	{
 		final String query = "SELECT {pk} from {collectOrder} where {oid}='" + orderCode + "'";
-		final SearchResult<CollectOrderModel> result = flexibleSearchService.search(query);
+		final SearchResult<CollectOrderModel> result = getFlexibleSearchService().search(query);
 		return CollectionUtils.isEmpty(result.getResult()) ? null : result.getResult().get(0);
 	}
 
@@ -86,7 +76,7 @@ public class CustomerCollectOrderDaoImpl implements CustomerCollectOrderDao
 	{
 		final String query = "SELECT {PK} from {collectOrder} where {cid}='" + customerID + "'";
 		//+ "' AND {status} IN ('PENDING','COMPLETED')";
-		final SearchResult<CollectOrderModel> result = flexibleSearchService.search(query);
+		final SearchResult<CollectOrderModel> result = getFlexibleSearchService().search(query);
 		return CollectionUtils.isEmpty(result.getResult()) ? null : result.getResult();
 	}
 
@@ -99,7 +89,7 @@ public class CustomerCollectOrderDaoImpl implements CustomerCollectOrderDao
 	public OrderModel getOrderDetailsForCode(final String orderCode)
 	{
 		final String query = "SELECT {pk} from {order} where {code}='" + orderCode + "'";
-		final SearchResult<OrderModel> result = flexibleSearchService.search(query);
+		final SearchResult<OrderModel> result = getFlexibleSearchService().search(query);
 		return CollectionUtils.isEmpty(result.getResult()) ? null : result.getResult().get(0);
 	}
 

@@ -470,8 +470,7 @@
 	    <property name="order" value="5000"/>
 	</bean>
 	
-	<bean id="customerCollectOrderDao" class="com.acc.core.dao.collectorder.impl.CustomerCollectOrderDaoImpl" >
-		<property name="flexibleSearchService" ref="flexibleSearchService"/>
+	<bean id="customerCollectOrderDao" class="com.acc.core.dao.collectorder.impl.CustomerCollectOrderDaoImpl" parent="abstractItemDao">
 	</bean>
 	
 	<alias name="customerCollectOrderServiceImpl" alias="customerCollectOrderService" />
