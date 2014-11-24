@@ -11,13 +11,12 @@ import de.hybris.platform.servicelayer.dto.converter.Converter;
 import de.hybris.platform.servicelayer.session.SessionService;
 import de.hybris.platform.servicelayer.user.UserService;
 
-import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -37,6 +36,8 @@ import com.acc.storefront.controllers.ControllerConstants;
 
 import de.hybris.platform.acceleratorstorefrontcommons.controllers.pages.AbstractPageController;
 
+
+
 /**
  * @author swarnima.gupta
  * 
@@ -46,12 +47,12 @@ import de.hybris.platform.acceleratorstorefrontcommons.controllers.pages.Abstrac
 @RequestMapping(value = "/orderslist")
 public class PickInStoreOrdersListPageController extends AbstractPageController
 {
+	private static final String ORDERS = "/orders";
 	private static final Logger LOG = Logger.getLogger(PickInStoreOrdersListPageController.class);
-
 	private static final String ACCOUNT_CMS_PAGE = "account";
 	private static final String ORDER_CODE_PATH_VARIABLE_PATTERN = "{orderCode:.*}";
 	private static final String VIEWORDERS = "/vieworders";
-	private static final String REDIRECT_TO_ORDER_DETAILS_PAGE = REDIRECT_PREFIX + "/orderslist"+VIEWORDERS;
+	private static final String REDIRECT_TO_ORDER_DETAILS_PAGE = REDIRECT_PREFIX + "/orderslist" + VIEWORDERS;
 	private static final String CUSTOMERPICKUPORDERS = "/customerpickuporders";
 	private static final String UCOID = "/ucoid";
 	private static final String ORDER = "/order/";
@@ -72,22 +73,35 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 	public String getOrdersList(final Model model, final HttpServletRequest request, final HttpServletResponse response)
 			throws CMSItemNotFoundException
 	{
-//		if(StringUtils.isNotEmpty(request.getParameter("pk")) && StringUtils.isNotEmpty(request.getParameter("status")))
-//		{
-//			final CollectOrderData collectOrderData = new CollectOrderData();
-//			collectOrderData.setPk(request.getParameter("pk"));
-//			collectOrderData.setStatus(CollectOrderStatus.valueOf(request.getParameter("status")));
-//			customerCollectOrderFacade.updateCollectOrder(collectOrderData);
-//		}
-		List<CollectOrderData> collectOrderDataList = customerCollectOrderFacade.getCollectOrders();
+		//		if(StringUtils.isNotEmpty(request.getParameter("pk")) && StringUtils.isNotEmpty(request.getParameter("status")))
+		//		{
+		//			final CollectOrderData collectOrderData = new CollectOrderData();
+		//			collectOrderData.setPk(request.getParameter("pk"));
+		//			collectOrderData.setStatus(CollectOrderStatus.valueOf(request.getParameter("status")));
+		//			customerCollectOrderFacade.updateCollectOrder(collectOrderData);
+		//		}
+		final List<CollectOrderData> collectOrderDataList = customerCollectOrderFacade.getCollectOrders();
 		model.addAttribute("Queued", getStatusCount(collectOrderDataList, CollectOrderStatus.PENDING));
 		model.addAttribute("Active", getStatusCount(collectOrderDataList, CollectOrderStatus.COMPLETED));
 		model.addAttribute("Serviced", getStatusCount(collectOrderDataList, CollectOrderStatus.COLLECTED));
 		model.addAttribute("CSR_USER", sessionService.getAttribute("CSR_USER"));
 		model.addAttribute("collectOrdersDataList", collectOrderDataList);
-		//model.addAttribute("collectOrderStatusList", BnCGenericUtil.getStatusList());
 		return ControllerConstants.Views.Pages.Account.ordersListPage;
 	}
+
+	@SuppressWarnings("boxing")
+	@RequestMapping(value = ORDERS, method = RequestMethod.GET, produces = "application/json")
+	public String getAjaxOrdersList(final Model model, final HttpServletRequest request, final HttpServletResponse response)
+			throws CMSItemNotFoundException
+	{
+		final List<CollectOrderData> collectOrderDataList = customerCollectOrderFacade.getCollectOrders();
+		model.addAttribute("Queued", getStatusCount(collectOrderDataList, CollectOrderStatus.PENDING));
+		model.addAttribute("Active", getStatusCount(collectOrderDataList, CollectOrderStatus.COMPLETED));
+		model.addAttribute("Serviced", getStatusCount(collectOrderDataList, CollectOrderStatus.COLLECTED));
+		model.addAttribute("collectOrdersDataList", collectOrderDataList);
+		return ControllerConstants.Views.Fragments.Cart.OrdersListFragmentPage;
+	}
+
 
 	@RequestMapping(value = ORDER + ORDER_CODE_PATH_VARIABLE_PATTERN, method = RequestMethod.GET,produces = "application/json")
 	public String postOrderDetails(@RequestParam("orderCode") final String orderCode, final Model model,
@@ -99,7 +113,7 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 		model.addAttribute("customerData", customerData);
 		model.addAttribute("collectOrderData", customerCollectOrderFacade.getCollectOrderByOrderCode(orderCode));
 		model.addAttribute("collectOrderStatusList", BnCGenericUtil.getStatusList());
-			return ControllerConstants.Views.Fragments.Cart.csrOrderDetails;
+		return ControllerConstants.Views.Fragments.Cart.csrOrderDetails;
 	}
 
 
@@ -135,16 +149,16 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 		customerCollectOrderFacade.updateCollectOrder(collectOrderData);
 		return REDIRECT_TO_ORDER_DETAILS_PAGE;
 	}
-	
+
 	/**
 	 * @param collectOrderDataList
 	 */
-	private int getStatusCount(List<CollectOrderData> collectOrderDataList, CollectOrderStatus status)
+	private int getStatusCount(final List<CollectOrderData> collectOrderDataList, final CollectOrderStatus status)
 	{
 		int statusCount = 0;
-		for(CollectOrderData collectOrderData : collectOrderDataList)
+		for (final CollectOrderData collectOrderData : collectOrderDataList)
 		{
-			if(status.equals(collectOrderData.getStatus()))
+			if (status.equals(collectOrderData.getStatus()))
 			{
 				statusCount++;
 			}

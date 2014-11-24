@@ -1,15 +1,19 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <div id="head">
 	<div class="contain_block">
 		<div id="menu_top"><a href="javascript:void(0);" class="mClose">Menu</a></div>
 		<div class="sitename">CSR Dashboard</div>
 		<div class="username_blk">
 			<div class="reminder">
-				<div class="bell"> <span class="remind_round">1</span> </div>
+				<div class="bell"> <span class="remind_round" id="bell_number">1</span> </div>
 			</div>
 			<div class="divider"></div>
 			<div class="userblock">
 				<div class="user_photo"><img src="${commonResourcePath}/bnc_images/user_photo.png" alt=""/></div>
+				<c:if test="${CSR_USER eq null or CSR_USER eq ''}">
+					<c:redirect url="/login/csrLogin"/>
+				</c:if>
 				<div class="username">${fn:toUpperCase(CSR_USER)}</div>
 			</div>
 		</div>

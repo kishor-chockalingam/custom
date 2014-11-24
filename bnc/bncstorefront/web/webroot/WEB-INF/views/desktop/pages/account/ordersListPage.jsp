@@ -9,10 +9,60 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-		<c:url value="/orderslist/vieworders" var="viewOrdersURL"></c:url>
-		<meta http-equiv="Refresh" content="30;url=${viewOrdersURL}">
 		<title>CSR Dashboard</title>
 		<link type="text/css" rel="stylesheet" href="${commonResourcePath}/bnc_css/style.css" />
+		<script type="text/javascript">
+			setTimeout(function () { 
+				$.ajax({
+					type : 'GET',
+					url : "${contextPath}/orderslist/orders",
+					data : "size="+${fn:length(collectOrdersDataList)},
+					dataType : 'json',
+					success : function(response) {
+						$("#main_content_blk").html(response.orders_list);
+						$('#diagram-id-1').diagram({ 
+							size: "60",
+							borderWidth: "8",
+							bgFill: "#efefef",
+							frFill: "#13ccde",
+							textSize: 20,
+							textColor: '#626262'
+						});
+						
+						$('#diagram-id-2').diagram({ 
+							size: "60",
+							borderWidth: "8",
+							bgFill: "#efefef",
+							frFill: "#13ccde",
+							textSize: 20,
+							textColor: '#626262'
+						});
+						
+						$('#diagram-id-3').diagram({ 
+							size: "60",
+							borderWidth: "8",
+							bgFill: "#efefef",
+							frFill: "#13ccde",
+							textSize: 20,
+							textColor: '#626262'
+						});
+						
+						$('#diagram-id-4').diagram({ 
+							size: "60",
+							borderWidth: "8",
+							bgFill: "#efefef",
+							frFill: "#ffd200",
+							textSize: 20,
+							textColor: '#626262'
+						});
+					},
+					error : function(e) {
+						//$("#invalidUCOID").append("Please enter the valid UCOID");
+					}
+				});
+			}, 30000);
+			
+		</script> 
 	</head>
 	<body>
 		<div id="main_wrapper" style="position:relative"> 
@@ -43,7 +93,7 @@
 							</div>
 						  <div class="tab_button"></div>
 						</div>
-					  <div><img src="${commonResourcePath}/bnc_images/right_blk.png"/></div>
+					  <div id="CSROrderDetails"><img src="${commonResourcePath}/bnc_images/right_blk.png"/></div>
 					</div>
 					<div class="clearboth"></div>
 				</div>
