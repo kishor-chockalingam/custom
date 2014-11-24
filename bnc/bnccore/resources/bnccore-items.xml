@@ -195,6 +195,12 @@
 							optional="true" />
 						<persistence type="property" />
 					</attribute>
+					<attribute qualifier="UUID" type="java.lang.String">
+						<description>Customer universally unique id for a device </description>
+						<modifiers read="true" write="true" search="true"
+							optional="true" />
+						<persistence type="property" />
+					</attribute>
 				</attributes>
 			</itemtype>
 			

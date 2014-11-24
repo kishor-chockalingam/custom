@@ -251,6 +251,12 @@
 	<bean id="storeLoginService" class="com.acc.services.impl.StoreLoginServiceImpl">
 		
 	</bean>
+	<alias name="storeLoginDaoImpl" alias="storeLoginDao"/>
+	<bean id="storeLoginDaoImpl"
+			class="com.acc.dao.impl.StoreLoginDaoImpl" parent="abstractItemDao">			   
+		<property name="flexibleSearchService" ref="flexibleSearchService"/>
+		<property name="modelService" ref="modelService"/>
+		</bean>
 	
   <!--End of beans needed for sample data used in groovy tests  -->
   
