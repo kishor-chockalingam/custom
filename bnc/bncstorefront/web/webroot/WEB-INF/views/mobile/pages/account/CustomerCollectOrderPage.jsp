@@ -13,15 +13,12 @@
 	tagdir="/WEB-INF/tags/mobile/nav/breadcrumb"%>
 
 <template:page pageTitle="${pageTitle}">
-
-	<div id="breadcrumb" class="breadcrumb">
-		<breadcrumb:breadcrumb breadcrumbs="${breadcrumbs}" />
-	</div>
-	<div id="globalMessages">
-		<common:globalMessages />
-	</div>
-	<nav:accountNav selected="customerpickuporders" />
-	<div class="column accountContentPane clearfix orderList">
+<jsp:body>
+<nav:myaccountNav/>
+	<div data-theme="e" class="item_container_holder account-order-history">
+	<div id="globalMessages" data-theme="e">
+				<common:globalMessages />
+			</div>
 		<table class="orderListTable">
 			<thead>
 				<tr>
@@ -65,7 +62,7 @@
 			</tbody>
 		</table>
 	</div>
-
+</jsp:body>
 
 
 </template:page>
