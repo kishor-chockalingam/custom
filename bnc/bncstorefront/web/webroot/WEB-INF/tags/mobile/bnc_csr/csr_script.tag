@@ -110,10 +110,6 @@
 		var tdate = document.getElementById('searchTimeBarToDate').value;
 		var ftime = document.getElementById('searchTimeBarFromTime').value;
 		var ttime = document.getElementById('searchTimeBarToTime').value;
-		alert(fdate);
-		alert(tdate);
-		alert(ftime);
-		alert(ttime);
 		if (fdate =='' ) 
 		{ 
 			alert("Please enter the from Date!");
