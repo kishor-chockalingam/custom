@@ -26,10 +26,12 @@
 				<c:url value="/my-account/address-book" var="addressBookUrl" />
 				<c:url value="/my-account/payment-details" var="paymentDetailsUrl" />
 				<c:url value="/my-account/orders" var="orderHistoryUrl" />
+				<c:url value="/orderslist/customerpickuporders" var="customercollectorderHistoryUrl" />
 				<li><a href="${myAccountUrl}/profile"><spring:theme code="text.account.profile" text="Profile" /></a></li>
 				<li><a href="${addressBookUrl}"><spring:theme code="text.account.addressBook" text="Address Book" /></a></li>
 				<li><a href="${paymentDetailsUrl}"><spring:theme code="text.account.paymentDetails" text="Payment Details" /></a></li>
 				<li><a href="${orderHistoryUrl}"><spring:theme code="text.account.orderHistory" text="Order History" /></a></li>
+				<li><a href="${customercollectorderHistoryUrl}"><spring:theme code="text.account.collectedOrder" text="Collect Order" /></a></li>
 			</ul>
 		</div>
 		<cms:pageSlot position="BottomContent" var="feature" element="div" id="bottom-disp-img" class="home-disp-img">
