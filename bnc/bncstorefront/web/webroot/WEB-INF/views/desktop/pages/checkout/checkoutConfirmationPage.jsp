@@ -45,6 +45,9 @@
 				<div><spring:theme code="text.account.order.UCOID" text="UCOID is {0}" arguments="${UCOID}"/> 
 			<font size="1" color="red"><b>	<spring:theme code="text.account.order.secretUCOIDMessage" /></b></font>
 				</div>
+				<div>
+				<b>	<spring:theme code="text.customer.collect.order.completed.status" /></b>
+				</div>
 				
 				</c:if>
 			</c:if>
