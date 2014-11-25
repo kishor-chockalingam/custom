@@ -26,6 +26,10 @@ public interface CustomerCollectOrderService
 	 */
 	public void saveCustomerColectOrder(CollectOrderModel collectOrderModel);
 
+	/**
+	 * 
+	 * @return List<CollectOrderModel>
+	 */
 	public List<CollectOrderModel> getCollectOrders();
 
 	/**
@@ -58,5 +62,20 @@ public interface CustomerCollectOrderService
 	 * @return OrderModel
 	 */
 	public OrderModel getOrderDetailsForCode(String orderCode);
+
+	/**
+	 * @param fromDate
+	 * @param toDate
+	 * @param fromTime
+	 * @param toTime
+	 * @return List<CollectOrderModel>
+	 */
+	public List<CollectOrderModel> getCollectOrderByDateAndTime(String fromDate, String toDate, String fromTime, String toTime);
+
+	/**
+	 * @param status
+	 * @return List<CollectOrderModel>
+	 */
+	public List<CollectOrderModel> getCollectOrdersByStatus(String status);
 
 }

@@ -134,4 +134,28 @@ public class CustomerCollectOrderServiceImpl implements CustomerCollectOrderServ
 		return customerCollectOrderDao.getOrderDetailsForCode(orderCode);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.acc.core.services.collectorder.CustomerCollectOrderService#getCollectOrderByDateAndTime(java.lang.String,
+	 * java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<CollectOrderModel> getCollectOrderByDateAndTime(final String fromDate, final String toDate, final String fromTime,
+			final String toTime)
+	{
+		return customerCollectOrderDao.getCollectOrderByDateAndTime(fromDate, toDate, fromTime, toTime);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.acc.core.services.collectorder.CustomerCollectOrderService#getCollectOrdersByStatus(java.lang.String)
+	 */
+	@Override
+	public List<CollectOrderModel> getCollectOrdersByStatus(final String status)
+	{
+		return customerCollectOrderDao.getCollectOrdersByStatus(status);
+	}
+
 }

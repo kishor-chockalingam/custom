@@ -15,7 +15,7 @@
 				<a onclick="javascript:OrderDetailsByOrderID('${CollectOrderData.orderId}');" ${currentClass}>
 					${CollectOrderData.orderId}<br />
 					<span>
-						<fmt:formatDate type="time" value="${CollectOrderData.createdTS}" pattern="hh:mm aa"/><br />
+						<fmt:formatDate type="time" value="${CollectOrderData.createdTS}" pattern="MM/dd/yyyy hh:mm aa"/><br />
 					</span>
 				</a>
 			</li>

@@ -7,6 +7,9 @@ import de.hybris.platform.core.model.order.OrderModel;
 import de.hybris.platform.servicelayer.internal.dao.AbstractItemDao;
 import de.hybris.platform.servicelayer.search.SearchResult;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -35,7 +38,9 @@ public class CustomerCollectOrderDaoImpl extends AbstractItemDao implements Cust
 	@Override
 	public List<CollectOrderModel> getCollectOrders()
 	{
-		final String query = "SELECT {pk} from {collectOrder}";
+		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		final String todayDate = sdf.format(new Date());
+		final String query = "SELECT {pk} from {collectOrder} WHERE {creationtime} like '" + todayDate + "%'";
 		final SearchResult<CollectOrderModel> result = getFlexibleSearchService().search(query);
 		return CollectionUtils.isEmpty(result.getResult()) ? null : result.getResult();
 	}
@@ -91,6 +96,51 @@ public class CustomerCollectOrderDaoImpl extends AbstractItemDao implements Cust
 		final String query = "SELECT {pk} from {order} where {code}='" + orderCode + "'";
 		final SearchResult<OrderModel> result = getFlexibleSearchService().search(query);
 		return CollectionUtils.isEmpty(result.getResult()) ? null : result.getResult().get(0);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.acc.core.dao.collectorder.CustomerCollectOrderDao#getCollectOrderByDateAndTime(java.lang.String,
+	 * java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<CollectOrderModel> getCollectOrderByDateAndTime(final String fromDate, final String toDate, final String fromTime,
+			final String toTime)
+	{
+		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		final SimpleDateFormat sdf1 = new SimpleDateFormat("dd.MM.yyyy hh:mm aa");
+		String fDate = null;
+		String tDate = null;
+		try
+		{
+			fDate = sdf.format(sdf1.parse(fromDate + " " + fromTime));
+			tDate = sdf.format(sdf1.parse(toDate + " " + toTime));
+		}
+		catch (final ParseException e)
+		{
+			e.printStackTrace();
+		}
+
+		final String query = "SELECT {pk} from {collectOrder} WHERE {creationtime} BETWEEN '" + fDate + "' AND '" + tDate + "'";
+		final SearchResult<CollectOrderModel> result = getFlexibleSearchService().search(query);
+		return CollectionUtils.isEmpty(result.getResult()) ? null : result.getResult();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.acc.core.dao.collectorder.CustomerCollectOrderDao#getCollectOrdersByStatus(java.lang.String)
+	 */
+	@Override
+	public List<CollectOrderModel> getCollectOrdersByStatus(final String status)
+	{
+		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		final String todayDate = sdf.format(new Date());
+		final String query = "SELECT {pk} from {collectOrder} WHERE {status} IN ('" + status + "') AND {creationtime} like '"
+				+ todayDate + "%'";
+		final SearchResult<CollectOrderModel> result = getFlexibleSearchService().search(query);
+		return CollectionUtils.isEmpty(result.getResult()) ? null : result.getResult();
 	}
 
 }

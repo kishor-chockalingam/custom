@@ -16,6 +16,10 @@ import com.acc.facades.collectOrder.data.CollectOrderData;
  */
 public interface CustomerCollectOrderFacade
 {
+	/**
+	 * 
+	 * @return List<CollectOrderData>
+	 */
 	public List<CollectOrderData> getCollectOrders();
 
 	/**
@@ -47,5 +51,20 @@ public interface CustomerCollectOrderFacade
 	 * @return OrderData
 	 */
 	public OrderData getOrderDetailsForCode(String orderCode);
+
+	/**
+	 * @param fromDate
+	 * @param toDate
+	 * @param fromTime
+	 * @param toTime
+	 * @return List<CollectOrderData>
+	 */
+	public List<CollectOrderData> getCollectOrderByDateAndTime(String fromDate, String toDate, String fromTime, String toTime);
+
+	/**
+	 * @param string
+	 * @return List<CollectOrderData>
+	 */
+	public List<CollectOrderData> getCollectOrdersByStatus(String string);
 
 }

@@ -6,7 +6,7 @@
 		<div class="sitename">CSR Dashboard</div>
 		<div class="username_blk">
 			<div class="reminder">
-				<div class="bell"> <span class="remind_round" id="bell_number">1</span> </div>
+				<div class="bell"> <span class="remind_round" id="bell_number">${Queued}</span> </div>
 			</div>
 			<div class="divider"></div>
 			<div class="userblock">

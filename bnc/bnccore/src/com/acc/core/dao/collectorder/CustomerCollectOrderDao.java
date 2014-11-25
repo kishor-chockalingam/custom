@@ -43,4 +43,19 @@ public interface CustomerCollectOrderDao
 	 */
 	public OrderModel getOrderDetailsForCode(String orderCode);
 
+	/**
+	 * @param fromDate
+	 * @param toDate
+	 * @param fromTime
+	 * @param toTime
+	 * @return List<CollectOrderModel>
+	 */
+	public List<CollectOrderModel> getCollectOrderByDateAndTime(String fromDate, String toDate, String fromTime, String toTime);
+
+	/**
+	 * @param status
+	 * @return List<CollectOrderModel>
+	 */
+	public List<CollectOrderModel> getCollectOrdersByStatus(String status);
+
 }

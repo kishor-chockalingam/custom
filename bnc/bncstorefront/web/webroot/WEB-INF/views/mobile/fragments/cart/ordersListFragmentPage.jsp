@@ -60,12 +60,10 @@
 		<c:set var="orderListSizeNew" value="${fn:length(collectOrdersDataList)}"/>
 		<c:if test="${orderListSizeNew!=param.size}">
 			<script type="text/javascript">
-				var bellCount = document.getElementById("bell_number").innerHTML;
 				var audio = {};
 				audio["walk"] = new Audio();
 				audio["walk"].src = '${commonResourcePath}'+"/bnc_audio/bellring01.mp3"			
 				audio["walk"].play();
-				document.getElementById("bell_number").innerHTML = ${orderListSizeNew-param.size}+Number(bellCount);
 			</script>
 		</c:if>
 		<div class="top_banner">

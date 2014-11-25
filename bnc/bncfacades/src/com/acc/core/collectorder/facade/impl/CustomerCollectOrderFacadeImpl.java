@@ -134,4 +134,27 @@ public class CustomerCollectOrderFacadeImpl implements CustomerCollectOrderFacad
 		return collectOrderDataList;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.acc.core.collectorder.facade.CustomerCollectOrderFacade#getCollectOrderByDateAndTime(java.lang.String,
+	 * java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<CollectOrderData> getCollectOrderByDateAndTime(final String fromDate, final String toDate, final String fromTime,
+			final String toTime)
+	{
+		return convert(customerCollectOrderService.getCollectOrderByDateAndTime(fromDate, toDate, fromTime, toTime));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.acc.core.collectorder.facade.CustomerCollectOrderFacade#getCollectOrdersByStatus(java.lang.String)
+	 */
+	@Override
+	public List<CollectOrderData> getCollectOrdersByStatus(final String status)
+	{
+		return convert(customerCollectOrderService.getCollectOrdersByStatus(status));
+	}
 }
