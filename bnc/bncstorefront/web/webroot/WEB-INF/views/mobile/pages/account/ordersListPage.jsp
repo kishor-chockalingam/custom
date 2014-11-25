@@ -100,6 +100,9 @@
 			</div>
 			<!--Content Ends here--> 
 		</div>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
+		<script src="${commonResourcePath}/bnc_js/jquery.diagram.js"></script> 
+		<script src="${commonResourcePath}/bnc_js/script.js"></script>
 		<bnc:csr_script />
 	</body>
 </html>
