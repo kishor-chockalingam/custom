@@ -64,6 +64,7 @@
 				audio["walk"] = new Audio();
 				audio["walk"].src = '${commonResourcePath}'+"/bnc_audio/bellring01.mp3"			
 				audio["walk"].play();
+				document.getElementById("bell_number").innerHTML = ${orderListSizeNew};
 			</script>
 		</c:if>
 		<div class="top_banner">
