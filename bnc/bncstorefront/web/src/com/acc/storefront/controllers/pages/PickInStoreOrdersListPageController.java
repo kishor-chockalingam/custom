@@ -150,7 +150,7 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 		final List<CollectOrderData> collectOrderDataList = customerCollectOrderFacade.getCollectOrderByDateAndTime(fromDate,
 				toDate, fromTime, toTime);
 		model.addAttribute("collectOrderDataByUcoid", collectOrderDataList);
-		return ControllerConstants.Views.Fragments.Cart.OrderByUCOID;
+		return ControllerConstants.Views.Fragments.Cart.OrderByDateTime;
 	}
 
 	/**

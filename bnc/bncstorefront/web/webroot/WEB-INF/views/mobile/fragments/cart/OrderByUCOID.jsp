@@ -9,21 +9,15 @@
 			<li class="search_padding">
 				<input type="text" placeholder="Search " name="q" class="search-text placeholder" id="ucoid" onblur="javascript:doAjaxPost();">
 			</li>
-			<c:forEach items="${collectOrderDataByUcoid}" var="CollectOrderData" varStatus="counter">
-				<c:url value="/orderslist/order/${CollectOrderData.orderId}" var="orderDetailsUrl"/>
-				<c:set var="currentClass" value=''/>
-				<c:if test="${counter.count==1}">
-					<c:set var="currentClass" value='class="current"'/>
-				</c:if>
-				<li>
-					<a onclick="javascript:OrderDetailsByOrderID('${CollectOrderData.orderId}');" ${currentClass}>
-						${CollectOrderData.orderId}<br />
-						<span>
-							<fmt:formatDate type="time" value="${CollectOrderData.createdTS}" pattern="MM/dd/yyyy hh:mm aa"/><br />
-						</span>
-					</a>
-				</li>
-			</c:forEach>
+			<c:url value="/orderslist/order/${collectOrderDataByUcoid.orderId}" var="orderDetailsUrl"/>
+			<li>
+				<a onclick="javascript:OrderDetailsByOrderID('${collectOrderDataByUcoid.orderId}');" class="current">
+					${collectOrderDataByUcoid.orderId}<br />
+					<span>
+						<fmt:formatDate type="time" value="${collectOrderDataByUcoid.createdTS}" pattern="MM/dd/yyyy hh:mm aa"/><br />
+					</span>
+				</a>
+			</li>
 		</ul>
 	</json:property>
 </json:object>
