@@ -1,5 +1,3 @@
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
-<script src="${commonResourcePath}/bnc_js/jquery.diagram.js"></script> 
 <script>
 function doAjaxPost() {
 	var ucoid = document.getElementById('ucoid').value;
@@ -24,24 +22,19 @@ function doAjaxPost() {
 }
 
 function OrderDetailsByOrderID(orderId) {
-	
-	alert(orderId);
 		$.ajax({
 			type : 'GET',
 			url : "${contextPath}/orderslist/order/orderCode",
-			
-			
 			data: "orderCode="+orderId,
 			dataType : 'json',
 			success : function(response) {
-				alert("success");
-				
 				$('#CSROrderDetails').html(response.CSROrder_Details);
 			},
 			error : function(e) {
 			}
 		});
 	}
+
 
 function getOrdersByFromDate()
 {
@@ -87,7 +80,20 @@ function getOrdersByFromDate()
 	});
 }
 	
-	
+function PersonalDetailsByUserID(uid, orderCode) {
+	 $.ajax({
+		type : 'GET',
+		url : "${contextPath}/orderslist/personaldetails",
+		data: "uid="+uid+"&code="+orderCode,
+		dataType : 'json',
+		success : function(response) {
+			$('#CSROrderDetails').html(response.Personal_Details);
+		},
+		error : function(e) {
+			alert("error"+e);
+		}
+	}); 
+}	
 	
 
 </script>

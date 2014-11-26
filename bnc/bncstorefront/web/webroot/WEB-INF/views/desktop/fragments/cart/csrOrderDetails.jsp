@@ -1,80 +1,99 @@
-<%@ page trimDirectiveWhitespaces="true"%>
+	  <%@ page trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="formElement"
 	tagdir="/WEB-INF/tags/desktop/formElement"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib prefix="theme" tagdir="/WEB-INF/tags/shared/theme"%>
-<%@ taglib prefix="ycommerce" uri="http://hybris.com/tld/ycommercetags"%>
-<%@ taglib prefix="template" tagdir="/WEB-INF/tags/desktop/template"%>
 <%@ taglib prefix="breadcrumb"
 	tagdir="/WEB-INF/tags/desktop/nav/breadcrumb"%>
 <%@ taglib prefix="cms" uri="http://hybris.com/tld/cmstags"%>
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags/desktop/common"%>
-<%@ taglib prefix="nav" tagdir="/WEB-INF/tags/desktop/nav" %>
-<%@ taglib prefix="order" tagdir="/WEB-INF/tags/desktop/order" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="product" tagdir="/WEB-INF/tags/desktop/product" %>
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 <%@ taglib prefix="format" tagdir="/WEB-INF/tags/shared/format" %>
 
 <json:object>
 	<json:property name="CSROrder_Details" escapeXml="false">
-	<div class="orderList">
-<%-- 	<c:set var="headingWasShown" value="false"/>
-		<c:forEach items="${orderData.consignments}" var="consignment">
-			<c:if test="${consignment.status.code eq 'WAITING' or consignment.status.code eq 'PICKPACK' or consignment.status.code eq 'READY'}">
-					<c:if test="${not headingWasShown}">
-					<c:set var="headingWasShown" value="true"/>
-					<h2><spring:theme code="text.account.order.title.inProgressItems"/></h2>
-				</c:if>
-				<div class="productItemListHolder fulfilment-states-${consignment.status.code}">
-					<order:accountOrderDetailsItem order="${orderData}" consignment="${consignment}" inProgress="true"/>
-				</div>
-			</c:if>
-		</c:forEach>	
-		
-		<c:forEach items="${orderData.consignments}" var="consignment">
-			<c:if test="${consignment.status.code ne 'WAITING' and consignment.status.code ne 'PICKPACK' and consignment.status.code ne 'READY'}">
-				<div class="productItemListHolder fulfilment-states-${consignment.status.code}">
-					<order:accountOrderDetailsItem order="${orderData}" consignment="${consignment}" />
-				</div>
-			</c:if>
-		</c:forEach> --%>
-
-		<table class="orderListTable">
-			<c:forEach items="${orderData.consignments}" var="consignment">
-
-				<c:forEach items="${consignment.entries}" var="entry">
-
-					<c:url value="${entry.orderEntry.product.url}" var="productUrl" />
-
-					<tr>
-						<td class="product_image"><a href="${productUrl}"> <product:productPrimaryImage
-									product="${entry.orderEntry.product}" format="thumbnail" />
-						</a></td>
-
-						<td><ycommerce:testId
-								code="orderDetails_productQuantity_label">${entry.quantity}</ycommerce:testId>
-						</td>
-
-						<td><ycommerce:testId
-								code="orderDetails_productItemPrice_label">
-								<format:price priceData="${entry.orderEntry.basePrice}"
-									displayFreeForZero="true" />
-							</ycommerce:testId></td>
-
-						<td><ycommerce:testId
-								code="orderDetails_productTotalPrice_label">${entry.quantity * entry.orderEntry.basePrice.value}</ycommerce:testId>
-						</td>
-
-					</tr>
-
-				</c:forEach>
-			</c:forEach>
-
-		</table>
-</div>
+	  <script type="text/javascript">
+	  	document.getElementById("personalDetails").innerHTML = 
+		  "<a onclick='javascript:PersonalDetailsByUserID(\"${orderData.user.uid}\", \"${orderData.code}\");'>Personal Details</a>"; 
+		  document.getElementById("orderDetailsTab").innerHTML = 
+			  "<a href='#' class='tabmenuselect'>Order Details</a>";
+	  </script>
+ 		<!--------Order Details Tabel Starts Here-------->
+          <div class="order_details_tabel">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td width="62%" class="order_number">${orderData.code}</td>
+                      <td width="27%"><span style="float:left">Status:</span>
+                        <div class="styled-select">
+                          <c:url value="/orderslist/order/${orderData.code}" var="orderDetailsURL"></c:url>
+							<form:form action="${orderDetailsURL}" method="post" commandName="collectOrderData">
+								<form:hidden path="pk"/>
+								<form:select path="status" onchange="javascript:collectOrderData.submit();">
+									<c:forEach items="${collectOrderStatusList}" var="stat">
+										<form:option value="${stat}">${stat}</form:option>
+									</c:forEach>
+								</form:select>
+							</form:form>
+                        </div></td>
+                      <td width="11%">&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td colspan="3">&nbsp;</td>
+                    </tr>
+                  </table></td>
+              </tr>
+              <tr>
+                <td><table width="100%" border="0" cellspacing="0" cellpadding="0" class="orderitemtabel">
+                	<c:forEach items="${orderData.consignments}" var="consignment">
+						<c:forEach items="${consignment.entries}" var="entry">
+							<c:url value="${entry.orderEntry.product.url}" var="productUrl" />
+							<tr>
+		                      <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+		                          <tr>
+		                            <td width="8%"><product:productPrimaryImage	product="${entry.orderEntry.product}" format="thumbnail" /></td>
+		                            <td width="2%"></td>
+		                            <td width="32%">${entry.orderEntry.product.name}</td>
+		                            <td width="12%">${entry.quantity}</td>
+		                            <td width="11%"><format:price priceData="${entry.orderEntry.basePrice}"	displayFreeForZero="true" /></td>
+		                            <td width="21%">$${entry.quantity * entry.orderEntry.basePrice.value}</td>
+		                            <td width="11%" align="right"><img src="${commonResourcePath}/bnc_images/check_box.jpg" alt=""/></td>
+		                            <td width="3%">&nbsp;</td>
+		                          </tr>
+		                        </table></td>
+		                    </tr>
+		                    <tr>
+		                      <td height="10"></td>
+		                    </tr>
+						</c:forEach>
+					</c:forEach>
+                  </table></td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td class="order_number"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td width="9%">Total</td>
+                      <td width="91%">$${orderData.totalPrice.value}</td>
+                    </tr>
+                  </table></td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td>
+              </tr>
+            </table>
+          </div>
+          <!--------Order Details Tabel Ends Here-------->      
 	</json:property>
-						</json:object>
-						
+</json:object>

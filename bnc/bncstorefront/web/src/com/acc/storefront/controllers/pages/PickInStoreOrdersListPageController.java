@@ -5,12 +5,25 @@ package com.acc.storefront.controllers.pages;
 
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.order.data.OrderData;
+import de.hybris.platform.commercefacades.product.ProductFacade;
+import de.hybris.platform.commercefacades.product.ProductOption;
+import de.hybris.platform.commercefacades.product.data.ProductData;
 import de.hybris.platform.commercefacades.user.data.CustomerData;
+import de.hybris.platform.core.model.product.ProductModel;
+import de.hybris.platform.core.model.user.AddressModel;
+import de.hybris.platform.core.model.user.CustomerModel;
 import de.hybris.platform.core.model.user.UserModel;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
 import de.hybris.platform.servicelayer.session.SessionService;
 import de.hybris.platform.servicelayer.user.UserService;
+import de.hybris.platform.wishlist2.Wishlist2Service;
+import de.hybris.platform.wishlist2.model.Wishlist2EntryModel;
+import de.hybris.platform.wishlist2.model.Wishlist2Model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,8 +44,10 @@ import com.acc.core.collectorder.facade.CustomerCollectOrderFacade;
 import com.acc.core.util.BnCGenericUtil;
 import com.acc.facades.collectOrder.CollectOrderStatus;
 import com.acc.facades.collectOrder.data.CollectOrderData;
+import com.acc.facades.storecustomer.StoreCustomerFacade;
+import com.acc.facades.wishlist.data.Wishlist2Data;
 import com.acc.storefront.controllers.ControllerConstants;
-
+import com.acc.storefront.util.StoreCustomerData;
 import de.hybris.platform.acceleratorstorefrontcommons.controllers.pages.AbstractPageController;
 
 /**
@@ -53,12 +68,22 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 	private static final String CUSTOMERPICKUPORDERS = "/customerpickuporders";
 	private static final String UCOID = "/ucoid";
 	private static final String ORDER = "/order/";
+	private static final List<ProductOption> PRODUCT_OPTIONS = Arrays.asList(ProductOption.BASIC, ProductOption.PRICE);
 
 	@Autowired
 	private CustomerCollectOrderFacade customerCollectOrderFacade;
 
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private Wishlist2Service wishlistService;
+	@Resource(name = "productFacade")
+	private ProductFacade productFacade;
+	@Autowired
+	private Converter<Wishlist2Model, Wishlist2Data> Wishlist2Converter;
+
+	@Autowired
+	private StoreCustomerFacade storeCustomerFacade;
 
 	@Autowired
 	private Converter<UserModel, CustomerData> customerConverter;
@@ -77,6 +102,10 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 		model.addAttribute("Serviced", getStatusCount(collectOrderDataList, CollectOrderStatus.COLLECTED));
 		model.addAttribute("CSR_USER", sessionService.getAttribute("CSR_USER"));
 		model.addAttribute("collectOrdersDataList", collectOrderDataForStatusList);
+		final OrderData orderData = customerCollectOrderFacade.getOrderDetailsForCode(collectOrderDataList.get(0).getOrderId());
+		model.addAttribute("orderData", orderData);
+		model.addAttribute("collectOrderStatusList", BnCGenericUtil.getStatusList());
+		model.addAttribute("collectOrderData", customerCollectOrderFacade.getCollectOrderByOrderCode(collectOrderDataList.get(0).getOrderId()));
 		return ControllerConstants.Views.Pages.Account.ordersListPage;
 	}
 
@@ -90,6 +119,10 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 		model.addAttribute("Active", getStatusCount(collectOrderDataList, CollectOrderStatus.COMPLETED));
 		model.addAttribute("Serviced", getStatusCount(collectOrderDataList, CollectOrderStatus.COLLECTED));
 		model.addAttribute("collectOrdersDataList", collectOrderDataList);
+		final OrderData orderData = customerCollectOrderFacade.getOrderDetailsForCode(collectOrderDataList.get(0).getOrderId());
+		model.addAttribute("orderData", orderData);
+		model.addAttribute("collectOrderStatusList", BnCGenericUtil.getStatusList());
+		model.addAttribute("collectOrderData", customerCollectOrderFacade.getCollectOrderByOrderCode(collectOrderDataList.get(0).getOrderId()));
 		return ControllerConstants.Views.Fragments.Cart.OrdersListFragmentPage;
 	}
 
@@ -168,4 +201,86 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 		}
 		return statusCount;
 	}
+
+	@RequestMapping(value = "/personaldetails", method = RequestMethod.GET, produces = "application/json")
+	public String getPersonalDetails(@RequestParam("code") final String orderCode, @RequestParam("uid") final String uid,
+			final Model model, final HttpServletRequest request, final HttpServletResponse response) throws CMSItemNotFoundException
+	{
+
+		System.out.println("inside getcustomer details");
+		//final List<CSRCustomerDetailsModel> csrCustomerDetailsList = storeCustomerFacade.getCSRCustomerDetails();
+		String profilePictureURL = "";
+		final UserModel userModel = userService.getUserForUID(uid);
+		final Wishlist2Model wishlistModel = wishlistService.getDefaultWishlist(userModel);
+		final List<Wishlist2EntryModel> wishlistEnteries = wishlistModel.getEntries();
+		Wishlist2Data wishlistData = null;
+		final String contextPath = "/bncstorefront/_ui/desktop/common/images/Dummy.jpg";
+		final CustomerModel customerModel = (CustomerModel) userModel;
+		if (null != userModel && userModel instanceof CustomerModel)
+		{
+			profilePictureURL = (null == customerModel.getProfilePicture() ? contextPath : customerModel.getProfilePicture()
+					.getURL2());
+		}
+		final StoreCustomerData storecustomerData = new StoreCustomerData();
+		storecustomerData.setProfilePictureURL((null == customerModel.getProfilePicture() ? contextPath : customerModel
+				.getProfilePicture().getURL2()));
+		storecustomerData.setCustomerId(customerModel.getUid());
+		storecustomerData.setCustomerName(customerModel.getDisplayName());
+		storecustomerData.setStoreCustomerPK(customerModel.getPk().getLongValueAsString());
+		customerModel.getUid();
+		final Collection<AddressModel> address = customerModel.getAddresses();
+		for (final AddressModel userAddress : address)
+		{
+			userAddress.getContactAddress();
+			userAddress.getDateOfBirth();
+			userAddress.getEmail();
+			userAddress.getLine1();
+			userAddress.getLine2();
+			userAddress.getTown();
+			userAddress.getCountry();
+			userAddress.getPostalcode();
+			model.addAttribute("useraddress", userAddress);
+			System.out.println("useraddress" + userAddress);
+			if (null != userAddress)
+			{
+				System.out.println("######################useraddress#########" + userAddress.getFirstname());
+			}
+		}
+		storecustomerData.setProfilePictureURL(profilePictureURL);
+		System.out.println("inside getcustomer details" + storecustomerData);
+		if (null != storecustomerData)
+		{
+			System.out.println("profile picture" + storecustomerData.getProfilePictureURL());
+			System.out.println("profile picture" + storecustomerData.getCustomerName());
+
+		}
+		System.out.println("########customer model" + customerModel);
+		model.addAttribute("storeCustomerData", storecustomerData);
+		model.addAttribute("customerModel", customerModel);
+
+		final List<ProductData> products = new ArrayList<ProductData>();
+		if (userModel instanceof CustomerModel)
+		{
+			if (null != wishlistEnteries)
+			{
+				wishlistData = Wishlist2Converter.convert(wishlistModel);
+
+			}
+			if (null != customerModel.getRecentlyviewedproducts())
+			{
+				for (final ProductModel productModel : customerModel.getRecentlyviewedproducts())
+				{
+					products.add(productFacade.getProductForOptions(productModel, PRODUCT_OPTIONS));
+				}
+			}
+		}
+		Collections.reverse(products);
+		model.addAttribute("wishlist", wishlistData);
+		System.out.println("#############wishlist data" + wishlistData.getEntries());
+		model.addAttribute("productData", products);
+		System.out.println("#############recetly viewed data" + products);
+		model.addAttribute("orderCode", orderCode);
+		return ControllerConstants.Views.Fragments.Cart.PersonalDetails;
+	}
+
 }
