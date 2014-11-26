@@ -48,10 +48,10 @@ $('#menu_top a').click(function() {
         }, "slow" );        
     } else if($(this).hasClass("mClose")) {console.log("asd");
         $( ".mobile_leftnav" ).animate({
-            left: "-250"
+            left: "0"
         }, "slow" );
         $( "#main_wrapper" ).animate({
-            left: "250"
+            left: "0"
         }, "slow" );        
         $(this).addClass("mOpen");
         $(this).removeClass("mClose");
@@ -62,6 +62,4 @@ $('#menu_top a').click(function() {
 
 $.event.add(window,"resize",$.alignMiddle);
 	});
-
-
-
+	

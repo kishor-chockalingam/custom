@@ -152,7 +152,7 @@ padding:0px 2px 4px 0px; overflow:hidden }
 #head .contain_block .mobile_leftnav{-webkit-box-shadow:inset -45px 1px 30px -5px rgba(50, 50, 50, 0.57);-moz-box-shadow:inset -45px 1px 30px -5px rgba(50, 50, 50, 0.57);
 box-shadow:inset -45px 1px 30px -5px rgba(50, 50, 50, 0.57);}
 #head nav{display:block;width:250px;float:left; height:auto;}
-#head nav ol{margin:0;padding:100px 0 0 0; }
+#head nav ol{margin:0;padding:0; }
 #head nav ol li{display:inline;float:none;width:10%!important;border:0;text-align:left}
 #head nav ol li img{ float:left;}
 #head nav ol li a{display:block;border:0;color:#fff;text-decoration:none;background:0;border-bottom:1px solid #494949;font:normal 16px Arial, Helvetica, sans-serif;padding:40px 0px 0 35px !important; text-align:left!important; height:80px;}
@@ -162,7 +162,9 @@ box-shadow:inset -45px 1px 30px -5px rgba(50, 50, 50, 0.57);}
 #head nav ol li a span.singleline{ margin-top:10px;}
 /*----------------------Global left menu Css Ends Here---------------------------*/
 
-
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+ #main_content_blk .top_banner .datetime_block .date_block{ margin-left:2%!important}
+}
 
 
 @media all and (min-width: 768px) and (max-width: 768px) {

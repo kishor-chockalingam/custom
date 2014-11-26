@@ -17,7 +17,7 @@
 				<div class="username">${fn:toUpperCase(CSR_USER)}</div>
 			</div>
 		</div>
-		<div class="mobile_leftnav" style="position:absolute;left:-250px; height:100%; top:0; background:#333333">
+		<div class="mobile_leftnav" style="position:absolute;left:-250px; height:100%; z-index:9999; margin-top:100px; top:0; background:#333333">
 			<nav class="main-nav">
 				<ol>
 					<li>
