@@ -36,11 +36,16 @@ public class StoreLoginDaoImpl extends AbstractItemDao implements StoreLoginDao
 	@Override
 	public CustomerModel isCustomerFound(final String customerID)
 	{
-
 		CustomerModel customerModelResult = null;
-
-		final FlexibleSearchQuery flexibleQuery = new FlexibleSearchQuery("select {pk} from {customer} where {uid} like '"
-				+ customerID + "%'");
+		FlexibleSearchQuery flexibleQuery = null;
+		if (customerID.contains("@"))
+		{
+			flexibleQuery = new FlexibleSearchQuery("select {pk} from {customer} where {uid} like '" + customerID + "%'");
+		}
+		else
+		{
+			flexibleQuery = new FlexibleSearchQuery("select {pk} from {customer} where {uuid} like '%#" + customerID + "#%'");
+		}
 
 		final SearchResult<CustomerModel> result = getFlexibleSearchService().search(flexibleQuery);
 		final List<CustomerModel> customerList = result.getResult();
@@ -51,6 +56,7 @@ public class StoreLoginDaoImpl extends AbstractItemDao implements StoreLoginDao
 		}
 		LOG.info("customerModelResult :::::" + customerModelResult);
 		return customerModelResult;
+	
 	}
 
 	/*
