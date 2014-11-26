@@ -11,6 +11,7 @@
 	tagdir="/WEB-INF/tags/desktop/nav/breadcrumb"%>
 <%@ taglib prefix="cms" uri="http://hybris.com/tld/cmstags"%>
 <%@ taglib prefix="common" tagdir="/WEB-INF/tags/desktop/common"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 
 <script type="text/javascript">
@@ -52,6 +53,34 @@
 	};
 //-->
 </script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
+<script type="text/javascript">
+function executeQuery() {
+    $.ajax({
+      url: '${contextPath}/customerlist/customerdeatils',
+      data : "size="+${fn:length(customerLoggedInDataList)},
+      success: function(data) {
+       var size = '${param.size}';
+       var listSize = ${fn:length(customerLoggedInDataList)};
+       if(size!=0 && size!='' && size!=listSize)
+       {
+    	   var audio = {};
+			audio["walk"] = new Audio();
+			audio["walk"].src = '${commonResourcePath}'+"/bnc_audio/bellring01.mp3"			
+			audio["walk"].play();
+			alert("hey");
+       }
+       window.location = "${contextPath}/customerlist/customerdeatils?size="+${fn:length(customerLoggedInDataList)};
+      }
+    });
+    setTimeout(executeQuery, 10000);
+  }
+
+  $(document).ready(function() {
+    // run the first time; all subsequent calls will take care of themselves
+    setTimeout(executeQuery, 10000);
+  });
+</script> 
 
 <template:page pageTitle="${pageTitle}">
 
@@ -63,7 +92,7 @@
 		<div align="right"><a href="${contextPath}/customerlist/csrlogout">Exit</a></div>
 	<div class="span-24">
 			<div class="span-8">
-			<div class="userRegister">
+			<div class="userRegister" id="refresh-this-div">
 				<div class="headline">Waiting For Assistance</div>
 				<table id="loggedIn_customers" class="bnctable">
 					<c:forEach items="${customerLoggedInDataList}" var="logedInUser">
