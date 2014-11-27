@@ -2,7 +2,24 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <div class="chart_block">
-	<div class="diagram_block diagramcurrent">
+	<c:choose>
+		<c:when test="${param.status=='COMPLETED'}">
+			<c:set var="queuedCurrent" value=""/>
+			<c:set var="activeCurrent" value=" diagramcurrent"/>
+			<c:set var="servicedCurrent" value=""/>
+		</c:when>
+		<c:when test="${param.status=='COLLECTED'}">
+			<c:set var="queuedCurrent" value=""/>
+			<c:set var="activeCurrent" value=""/>
+			<c:set var="servicedCurrent" value=" diagramcurrent"/>
+		</c:when>
+		<c:otherwise>
+			<c:set var="queuedCurrent" value=" diagramcurrent"/>
+			<c:set var="activeCurrent" value=""/>
+			<c:set var="servicedCurrent" value=""/>
+		</c:otherwise>
+	</c:choose>
+	<div class="diagram_block${queuedCurrent}">
 		<div id="diagram-id-1" class="diagram" data-percent="${Queued}"></div>
 		<div class="digram_txt">
 			<c:url value="/orderslist/vieworders" var="queuedURL">
@@ -11,7 +28,7 @@
 			<a href="${queuedURL}"  style="text-decoration: none;color:#6f6f6f;">Queued</a>
 		</div>
 	</div>
-	<div class="diagram_block">
+	<div class="diagram_block${activeCurrent}">
 		<div id="diagram-id-2" class="diagram" data-percent="${Active}"></div>
 		<div class="digram_txt">
 			<c:url value="/orderslist/vieworders" var="activeURL">
@@ -20,7 +37,7 @@
 			<a href="${activeURL}" style="text-decoration: none;color:#6f6f6f;">Active</a>
 		</div>
 	</div>
-	<div class="diagram_block">
+	<div class="diagram_block${servicedCurrent}">
 		<div id="diagram-id-3" class="diagram" data-percent="${Serviced}"></div>
 		<div class="digram_txt">
 			<c:url value="/orderslist/vieworders" var="servicedURL">
