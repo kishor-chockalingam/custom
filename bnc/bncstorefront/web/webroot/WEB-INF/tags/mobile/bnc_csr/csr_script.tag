@@ -13,7 +13,7 @@ function doAjaxPost() {
 		data : "ucoid=" + ucoid,
 		dataType : 'json',
 		success : function(response) {
-		$("#order_menu").html(response.searchby_ucoid);
+		$("#ordersDivId").html(response.searchby_ucoid);
 		},
 		error : function(e) {
 			alert("Please enter correct UCOID");
@@ -72,7 +72,7 @@ function getOrdersByFromDate()
 		data : "fdate=" + fdate+"&tdate="+tdate+"&ftime="+ftime+"&ttime="+ttime,
 		dataType : 'json',
 		success : function(response) {
-			$("#order_menu").html(response.searchby_ucoid);
+			$("#ordersDivId").html(response.searchby_ucoid);
 		},
 		error : function(e) {
 			alert("Please enter dates in proper format! Dates as DD.MM.YYYY and Time as HH:MM AM/PM!!");

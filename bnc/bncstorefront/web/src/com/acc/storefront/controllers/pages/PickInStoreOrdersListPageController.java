@@ -166,6 +166,11 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 		final CollectOrderData collectOrderData = customerCollectOrderFacade.getCollectOrderByUCOID(ucoid);
 		model.addAttribute("collectOrderDataByUcoid", collectOrderData);
 		LOG.info("In controller of ucoid");
+		
+		final OrderData orderData = customerCollectOrderFacade.getOrderDetailsForCode(collectOrderData.getOrderId());
+		model.addAttribute("orderData", orderData);
+		model.addAttribute("collectOrderStatusList", BnCGenericUtil.getStatusList());
+		model.addAttribute("collectOrderData", collectOrderData);
 		return ControllerConstants.Views.Fragments.Cart.OrderByUCOID;
 	}
 
@@ -186,6 +191,12 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 		final List<CollectOrderData> collectOrderDataList = customerCollectOrderFacade.getCollectOrderByDateAndTime(fromDate,
 				toDate, fromTime, toTime);
 		model.addAttribute("collectOrderDataByUcoid", collectOrderDataList);
+		final OrderData orderData = CollectionUtils.isEmpty(collectOrderDataList)?new OrderData()
+				:customerCollectOrderFacade.getOrderDetailsForCode(collectOrderDataList.get(0).getOrderId());
+		model.addAttribute("orderData", orderData);
+		model.addAttribute("collectOrderStatusList", BnCGenericUtil.getStatusList());
+		model.addAttribute("collectOrderData", CollectionUtils.isEmpty(collectOrderDataList)?
+					new CollectOrderData() : customerCollectOrderFacade.getCollectOrderByOrderCode(collectOrderDataList.get(0).getOrderId()));
 		return ControllerConstants.Views.Fragments.Cart.OrderByDateTime;
 	}
 
