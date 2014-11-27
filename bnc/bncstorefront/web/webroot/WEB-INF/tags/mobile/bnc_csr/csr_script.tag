@@ -28,6 +28,8 @@ function OrderDetailsByOrderID(orderId) {
 			data: "orderCode="+orderId,
 			dataType : 'json',
 			success : function(response) {
+				$("a").removeClass("current");
+				$("#"+orderId).addClass("current");
 				$('#CSROrderDetails').html(response.CSROrder_Details);
 			},
 			error : function(e) {

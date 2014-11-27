@@ -20,7 +20,7 @@
 								<c:set var="currentClass" value='class="current"'/>
 							</c:if>
 							<li>
-								<a onclick="javascript:OrderDetailsByOrderID('${CollectOrderData.orderId}');" ${currentClass}>
+								<a id="${CollectOrderData.orderId}" onclick="javascript:OrderDetailsByOrderID('${CollectOrderData.orderId}');" ${currentClass}>
 									${CollectOrderData.orderId}<br />
 									<span>
 										<fmt:formatDate type="time" value="${CollectOrderData.createdTS}" pattern="MM/dd/yyyy hh:mm aa"/><br />

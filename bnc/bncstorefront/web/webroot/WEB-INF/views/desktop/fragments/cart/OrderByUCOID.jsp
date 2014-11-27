@@ -16,7 +16,7 @@
 						</li>
 						<c:url value="/orderslist/order/${collectOrderDataByUcoid.orderId}" var="orderDetailsUrl"/>
 						<li>
-							<a onclick="javascript:OrderDetailsByOrderID('${collectOrderDataByUcoid.orderId}');" class="current">
+							<a id="${collectOrderDataByUcoid.orderId}" onclick="javascript:OrderDetailsByOrderID('${collectOrderDataByUcoid.orderId}');" class="current">
 								${collectOrderDataByUcoid.orderId}<br />
 								<span>
 									<fmt:formatDate type="time" value="${collectOrderDataByUcoid.createdTS}" pattern="MM/dd/yyyy hh:mm aa"/><br />
