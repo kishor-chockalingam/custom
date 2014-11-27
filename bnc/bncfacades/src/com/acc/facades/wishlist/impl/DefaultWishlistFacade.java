@@ -49,21 +49,8 @@ public class DefaultWishlistFacade implements WishlistFacade
 
 	/*
 	 * @Resource(name = "wishlist2EntryConverter") private Converter<Wishlist2EntryModel, Wishlist2EntryData>
-	 * wishlist2EntryConverter;
+	 * wishlist2EntryConverter; private Wishlist2EntryPopulator wishlist2EntryPopulator;
 	 */
-
-
-	/* private Wishlist2EntryPopulator wishlist2EntryPopulator; */
-
-
-
-
-
-
-
-
-
-
 	/*
 	 * @Override public Wishlist2Model CreateWishlist(final ProductModel model) { final UserModel userModel =
 	 * userService.getCurrentUser();
@@ -84,7 +71,7 @@ public class DefaultWishlistFacade implements WishlistFacade
 
 		if (wishlistService.hasDefaultWishlist(userModel) == false)
 		{
-			wishlistEntry = wishlistService.createDefaultWishlist(userModel, "swapnil", "she is a very good girl");
+			wishlistEntry = wishlistService.createDefaultWishlist(userModel, "wishlist", "add to wishlist fuunctionality");
 
 			System.out.println("inside create deafultwishlist");
 		}
@@ -111,20 +98,12 @@ public class DefaultWishlistFacade implements WishlistFacade
 		for (final Wishlist2EntryModel entry : entries)
 		{
 			System.out.println("inside for loop" + entries);
-
-
 			if (entry.getProduct().getCode().equals(model.getCode()))
-
 			{
-
 				System.out.println("inside if loop" + wishLists);
-
-
 				flag = true;
 				break;
-
 			}
-
 		}
 
 
@@ -137,22 +116,11 @@ public class DefaultWishlistFacade implements WishlistFacade
 			productEnteries.setAddedDate(new Date());
 
 			wishlistService.addWishlistEntry(wishLists, productEnteries);
-
-
-
-
 			System.out.println("inside if loop" + wishLists.getEntries());
-
-
-
-
 		}
 
 		return Wishlist2Converter.convert(wishLists);
-
-
 	}
-
 
 	@Override
 	public Wishlist2Data RemoveWishlistData(final ProductModel model)
@@ -166,8 +134,6 @@ public class DefaultWishlistFacade implements WishlistFacade
 		productEnteries.setAddedDate(new Date());
 		wishlistService.removeWishlistEntryForProduct(productModel, wishLists);
 		//wishlistService.removeWishlistEntry(wishLists, productEnteries);
-
-
 		return Wishlist2Converter.convert(wishLists);
 	}
 
