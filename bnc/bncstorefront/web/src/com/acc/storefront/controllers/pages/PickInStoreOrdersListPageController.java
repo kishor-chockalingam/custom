@@ -35,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -77,7 +78,7 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 	private UserService userService;
 	@Autowired
 	private Wishlist2Service wishlistService;
-	@Resource(name = "productFacade")
+	@Autowired
 	private ProductFacade productFacade;
 	@Autowired
 	private Converter<Wishlist2Model, Wishlist2Data> Wishlist2Converter;
@@ -102,10 +103,10 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 		model.addAttribute("Serviced", getStatusCount(collectOrderDataList, CollectOrderStatus.COLLECTED));
 		model.addAttribute("CSR_USER", sessionService.getAttribute("CSR_USER"));
 		model.addAttribute("collectOrdersDataList", collectOrderDataForStatusList);
-		final OrderData orderData = customerCollectOrderFacade.getOrderDetailsForCode(collectOrderDataList.get(0).getOrderId());
+		final OrderData orderData = CollectionUtils.isEmpty(collectOrderDataForStatusList)?new OrderData():customerCollectOrderFacade.getOrderDetailsForCode(collectOrderDataForStatusList.get(0).getOrderId());
 		model.addAttribute("orderData", orderData);
 		model.addAttribute("collectOrderStatusList", BnCGenericUtil.getStatusList());
-		model.addAttribute("collectOrderData", customerCollectOrderFacade.getCollectOrderByOrderCode(collectOrderDataList.get(0).getOrderId()));
+		model.addAttribute("collectOrderData", CollectionUtils.isEmpty(collectOrderDataForStatusList)? new CollectOrderData() : customerCollectOrderFacade.getCollectOrderByOrderCode(collectOrderDataForStatusList.get(0).getOrderId()));
 		return ControllerConstants.Views.Pages.Account.ordersListPage;
 	}
 
@@ -118,11 +119,13 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 		model.addAttribute("Queued", getStatusCount(collectOrderDataList, CollectOrderStatus.PENDING));
 		model.addAttribute("Active", getStatusCount(collectOrderDataList, CollectOrderStatus.COMPLETED));
 		model.addAttribute("Serviced", getStatusCount(collectOrderDataList, CollectOrderStatus.COLLECTED));
-		model.addAttribute("collectOrdersDataList", collectOrderDataList);
-		final OrderData orderData = customerCollectOrderFacade.getOrderDetailsForCode(collectOrderDataList.get(0).getOrderId());
+		String status = request.getParameter("status");
+		final List<CollectOrderData> collectOrderDataForStatusList = customerCollectOrderFacade.getCollectOrdersByStatus(StringUtils.isNotEmpty(status) ? status : CollectOrderStatus.PENDING.toString());
+		model.addAttribute("collectOrdersDataList", collectOrderDataForStatusList);
+		final OrderData orderData = CollectionUtils.isEmpty(collectOrderDataForStatusList)?new OrderData():customerCollectOrderFacade.getOrderDetailsForCode(collectOrderDataForStatusList.get(0).getOrderId());
 		model.addAttribute("orderData", orderData);
 		model.addAttribute("collectOrderStatusList", BnCGenericUtil.getStatusList());
-		model.addAttribute("collectOrderData", customerCollectOrderFacade.getCollectOrderByOrderCode(collectOrderDataList.get(0).getOrderId()));
+		model.addAttribute("collectOrderData", CollectionUtils.isEmpty(collectOrderDataForStatusList)? new CollectOrderData() : customerCollectOrderFacade.getCollectOrderByOrderCode(collectOrderDataForStatusList.get(0).getOrderId()));
 		return ControllerConstants.Views.Fragments.Cart.OrdersListFragmentPage;
 	}
 
