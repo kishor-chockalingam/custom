@@ -38,11 +38,11 @@
               <td colspan="2"><table width="100%" border="0" cellspacing="0" cellpadding="0">
                   <tr>
                       <td width="43%" class="graytext">UID</td>
-                      <td width="57%" class="graytext">Date Of Birth</td>
+                     <!--  <td width="57%" class="graytext">Date Of Birth</td> -->
                     </tr>
                     <tr>
                       <td class="bluetext">${customerModel.uid}</td>
-                      <td class="bluetext">${useraddress.dateOfBirth}</td>
+                    <%--   <td class="bluetext">${dob}</td> --%>
                     </tr>
                 </table></td>
             </tr>
