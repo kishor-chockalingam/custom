@@ -228,15 +228,15 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 		final Wishlist2Model wishlistModel = wishlistService.getDefaultWishlist(userModel);
 		final List<Wishlist2EntryModel> wishlistEnteries = wishlistModel.getEntries();
 		Wishlist2Data wishlistData = null;
-		final String contextPath = "/bncstorefront/_ui/desktop/common/images/Dummy.jpg";
+		final String profileImage = "/bncstorefront/_ui/desktop/common/bnc_images/personal_photos/person1.jpg";
 		final CustomerModel customerModel = (CustomerModel) userModel;
 		if (null != userModel && userModel instanceof CustomerModel)
 		{
-			profilePictureURL = (null == customerModel.getProfilePicture() ? contextPath : customerModel.getProfilePicture()
+			profilePictureURL = (null == customerModel.getProfilePicture() ? profileImage : customerModel.getProfilePicture()
 					.getURL2());
 		}
 		final StoreCustomerData storecustomerData = new StoreCustomerData();
-		storecustomerData.setProfilePictureURL((null == customerModel.getProfilePicture() ? contextPath : customerModel
+		storecustomerData.setProfilePictureURL((null == customerModel.getProfilePicture() ? profileImage : customerModel
 				.getProfilePicture().getURL2()));
 		storecustomerData.setCustomerId(customerModel.getUid());
 		storecustomerData.setCustomerName(customerModel.getDisplayName());
