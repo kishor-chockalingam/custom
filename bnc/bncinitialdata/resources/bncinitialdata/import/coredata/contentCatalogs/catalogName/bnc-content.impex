@@ -48,29 +48,33 @@ insert_update ContentSlotForPage;catalogVersion(catalog(id),version)[unique=true
 
 ################### Electronics site Customer for BNC ##############################
 
-INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpeg'];altText;folder(qualifier)[default='images']
-;;HemantProfilePic;Hemant.jpg;$siteResource/images/Hemant.jpg;;Hemant Sharma;;
-;;JalajProfilePic;Jalaj.jpg;$siteResource/images/Jalaj.jpg;;Jalaj Sharma;;
-;;VinayProfilePic;Vinay.jpg;$siteResource/images/Vinay.jpg;;Vinay Sutrave;;
+##INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpeg'];altText;folder(qualifier)[default='images']
+##;;HemantProfilePic;Hemant.jpg;$siteResource/images/Hemant.jpg;;Hemant Sharma;;
+##;;JalajProfilePic;Jalaj.jpg;$siteResource/images/Jalaj.jpg;;Jalaj Sharma;;
+##;;VinayProfilePic;Vinay.jpg;$siteResource/images/Vinay.jpg;;Vinay Sutrave;;
 
+
+REMOVE Customer;uid[unique=true]
+;akash.saluja1@xyz.com
+;hemant.sharma@xyz.com
+;jalaj.sharma@accenture.com
+;vinay.sutrave@xyz.com
+;sankar.sundar@xyz.com
+;naresh.khanduri@accenture.com 
 
 INSERT_UPDATE Customer;groups(uid);uid[unique=true];name;$setPassword;customerId;profilePicture(catalogVersion(catalog(id),version),code);&userId;UUID
-;"customergroup";"akash.saluja1@xyz.com";"Akash Saluja";;eda4b92b-07ab-4ca4-8ecd-43d53123bd98;;akashSalujaID;eda4b92b-07ab-4ca4-8ecd-43d53123bd98
-;"customergroup";"hemant.sharma@xyz.com";"Hemant Sharma";;9644f07f-d1b3-4e91-ac18-d5ed89bd2f77;electronicsContentCatalog:Staged:HemantProfilePic;hemantSharmaID;9644f07f-d1b3-4e91-ac18-d5ed89bd2f77
-;"customergroup";"jalaj.sharma@xyz.com";"Jalaj Sharma";;06f6d800-8cbd-454b-8370-5646a3e156e3;electronicsContentCatalog:Staged:JalajProfilePic;jalajSharmaID;06f6d800-8cbd-454b-8370-5646a3e156e3
-;"customergroup";"vinay.sutrave@xyz.com";"Vinay Sutrave";;1ba2e297-13b4-4ae0-91ab-212467f400f6;electronicsContentCatalog:Staged:VinayProfilePic;vinaySutraveID;1ba2e297-13b4-4ae0-91ab-212467f400f6
-;"customergroup";"sankar.sundar@xyz.com";"Shankar Sundar";;98373e92-2c28-4abc-b002-b2d9a4615e6d;;shankarSundarID;98373e92-2c28-4abc-b002-b2d9a4615e6d
-;"customergroup";"naresh.khanduri@xyz.com";"Naresh Khanduri Sundar";;8ed6cf9d-1c78-4849-a988-ff0f7abe7261;;nareshKhanduriID;8ed6cf9d-1c78-4849-a988-ff0f7abe7261
+;"customergroup";"xiaodong.b.zhang@accenture.com";"Zhang xiaodong";;C795E236-574F-4B6D-B257-15AE9904962D;;zhangID;#C795E236-574F-4B6D-B257-15AE9904962D#
+;"customergroup";"bin.a.liu@accenture.com";"Liu bin";;650B5451-2C9A-4709-A209-744165793164;;liuBinID;#650B5451-2C9A-4709-A209-744165793164#
+;"customergroup";"neeraj.a.shah@accenture.com";"Neeraj Shah";;06f6d800-8cbd-454b-8370-5646a3e156e3;;neerajShahID;#06f6d800-8cbd-454b-8370-5646a3e156e3#
+;"customergroup";"kishor.chockalingam@accenture.com";"Kishore Chockalingam";;8ed6cf9d-1c78-4849-a988-ff0f7abe7261;;kishoreID;#8ed6cf9d-1c78-4849-a988-ff0f7abe7261#
 
  
 
 INSERT_UPDATE Address;&addId;owner(&userId);streetname[unique=true];postalcode[unique=true];duplicate[unique=true];town;country(isocode);billingAddress;contactAddress;shippingAddress;unloadingAddress;firstname;lastname;email;gender(code);middlename;phone1;title(code);url;company;fax;department;appartment;dateOfBirth[dateformat=MM/dd/yyyy]
-;AkashAddressID;akashSalujaID;300 BOYLSTON AVE E;98102;false;BOYLSTON;US;false;true;false;false;Akash;Saluja;Akash.saluja1@xyz.com;MALE;;+44 1234567;mr;;Hybris;;;Birla Appartment;05/11/1981
-;HemantAddressID;hemantSharmaID;100 MAIN ST;98104;false;SEATTLE WA;US;false;true;false;false;Hemant;Sharma;Hemant.sharma@xyz.com;MALE;;+44 1234567;mr;;Hybris;;;ABC Appartment;02/13/1982
-;JalajAddressID;jalajSharmaID;BITBOOST;85728;false;TUCSON AZ;US;false;true;false;false;Jalaj;Sharma;Jalaj.sharma@xyz.com;MALE;;+44 1234567;mr;;Hybris;;;Panchkula Appartment;09/18/1983
-;VinayAddressID;vinaySutraveID;799 E DRAGRAM;85705;false;TUCSON;US;false;true;false;false;Vinay;Sutrave;Vinay.sutrave@xyz.com;MALE;;+44 1234567;mr;;Hybris;;;Panchkula Appartment Banglore;09/18/1978
-;ShankarAddressID;shankarSundarID;200 E MAIN ST;85123;false;PHOENIX AZ;US;false;true;false;false;Shankar;Sundar;Sankar.sundar@xyz.com;MALE;;+44 1234567;mr;;Hybris;;;Navi Appartment;09/18/1985
-;NareshAddressID;nareshKhanduriID;421 E DRACHMAN;85705-7598;false;TUCSON AZ;US;false;true;false;false;Naresh;Khanduri;Naresh.khanduri@xyz.com;MALE;;+44 1234567;mr;;Hybris;;;Lal Villa Appartment;02/14/1976
+;ZhangAddressID;zhangID;300 BOYLSTON AVE E;98102;false;BOYLSTON;US;false;true;false;false;Zhang;xiaodong;xiaodong.b.zhang@accenture.com;MALE;;+44 1234567;mr;;Hybris;;;Birla Appartment;05/11/1981
+;LiuBinAddressID;liuBinID;100 MAIN ST;98104;false;SEATTLE WA;US;false;true;false;false;Liu;Bin;bin.a.liu@accenture.com;MALE;;+44 1234567;mr;;Hybris;;;ABC Appartment;02/13/1982
+;NeerajAddressID;neerajShahID;BITBOOST;85728;false;TUCSON AZ;US;false;true;false;false;Neeraj;Shah;neeraj.a.shah@accenture.com;MALE;;+44 1234567;mr;;Hybris;;;Panchkula Appartment;09/18/1983
+;KishoreAddressID;kishoreID;421 E DRACHMAN;85705-7598;false;TUCSON AZ;US;false;true;false;false;Kishore;Chockalingam;kishor.chockalingam@accenture.com;MALE;;+44 1234567;mr;;Hybris;;;Lal Villa Appartment;02/14/1976
 
 
 
