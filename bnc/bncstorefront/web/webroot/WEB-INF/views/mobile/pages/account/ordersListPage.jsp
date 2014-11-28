@@ -23,7 +23,7 @@
 				$.ajax({
 					type : 'GET',
 					url : "${contextPath}/orderslist/orders",
-					data : "size="+${fn:length(collectOrdersDataList)},
+					data : "size="+${Queued}+"&status="+'${param.status}',
 					dataType : 'json',
 					success : function(response) {
 						$("#main_content_blk").html(response.orders_list);
@@ -100,7 +100,9 @@
 							</div>
 						  <div class="tab_button"></div>
 						</div>
+					<c:if test="${not empty orderData.code}">
 					  <bnc:orderDetails />
+					  </c:if>
 					</div>
 					<div class="clearboth"></div>
 				</div>

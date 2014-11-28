@@ -16,7 +16,7 @@
 				$.ajax({
 					type : 'GET',
 					url : "${contextPath}/orderslist/orders",
-					data : "size="+${fn:length(collectOrdersDataList)},
+					data : "size="+${Queued}+"&status="+'${param.status}',
 					dataType : 'json',
 					success : function(response) {
 						$("#main_content_blk").html(response.orders_list);
@@ -63,13 +63,13 @@
 			}, 30000);
 		</script> 
 		<c:set var="orderListSizeNew" value="${fn:length(collectOrdersDataList)}"/>
-		<c:if test="${orderListSizeNew!=param.size}">
+		<c:if test="${Queued!=param.size}">
 			<script type="text/javascript">
 				var audio = {};
 				audio["walk"] = new Audio();
 				audio["walk"].src = '${commonResourcePath}'+"/bnc_audio/bellring01.mp3"			
 				audio["walk"].play();
-				document.getElementById("bell_number").innerHTML = ${orderListSizeNew};
+				document.getElementById("bell_number").innerHTML = ${Queued};
 			</script>
 		</c:if>
 		<div class="top_banner">
@@ -78,7 +78,7 @@
 			<bnc:dateTime />
 		</div>
 		<div class="clearboth"></div>
-		<div class="inner_content_blk">
+		<div class="inner_content_blk" id="ordersDivId">
 			<div class="left_block">
 				<bnc:ordersList />
 			</div>
@@ -94,6 +94,7 @@
 				  <div class="tab_button"></div>
 				</div>
 			  	<div class="content_tabel" id="CSROrderDetails">
+			  		<c:if test="${not empty orderData.code}">
 					 		<!--------Order Details Tabel Starts Here-------->
 					          <div class="order_details_tabel">
 					            <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -168,7 +169,7 @@
 					              </tr>
 					            </table>
 					          </div>
-					 
+					 	</c:if>
 					  </div>
 			</div>
 			<div class="clearboth"></div>
