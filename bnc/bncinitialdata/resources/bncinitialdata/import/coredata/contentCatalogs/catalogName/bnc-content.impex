@@ -33,19 +33,6 @@ insert_update ContentSlotForPage;catalogVersion(catalog(id),version)[unique=true
 ;electronicsContentCatalog:Staged;electronicsContentCatalog:Staged:RecentlySlots;electronicsContentCatalog:Staged:account;recentlyViewed;recentlyViewedCFP
 
 
-######changes for wishlist####################
-insert_update ViewWishlistComponent;catalogVersion(catalog(id),version)[unique=true,allownull=true];name;onlyOneRestrictionMustApply[allownull=true];uid[unique=true,allownull=true];visible[allownull=true]
-;electronicsContentCatalog:Staged;ViewWishlistComponent;true;ViewWishlistComponent;true
-
-insert_update ContentSlot;active[allownull=true];catalogVersion(catalog(id),version)[unique=true,allownull=true];name;uid[unique=true,allownull=true];cmsComponents(uid[unique=true,allownull=true])
-;true;electronicsContentCatalog:Staged;WishlistSlots;WishlistSlots;ViewWishlistComponent
-
-insert_update ContentSlotForPage;catalogVersion(catalog(id),version)[unique=true,allownull=true];contentSlot(catalogVersion(catalog(id),version),uid)[allownull=true];page(catalogVersion(catalog(id),version),uid)[allownull=true];position[allownull=true];uid[unique=true,allownull=true]
-;electronicsContentCatalog:Staged;electronicsContentCatalog:Staged:WishlistSlots;electronicsContentCatalog:Staged:account;wishlist;wishlistCFP
-
-
-
-
 ################### Electronics site Customer for BNC ##############################
 
 ##INSERT_UPDATE Media;$contentCV[unique=true];code[unique=true];realfilename;@media[translator=de.hybris.platform.impex.jalo.media.MediaDataTranslator];mime[default='image/jpeg'];altText;folder(qualifier)[default='images']
@@ -67,7 +54,7 @@ INSERT_UPDATE Customer;groups(uid);uid[unique=true];name;$setPassword;customerId
 ;"customergroup";"bin.a.liu@accenture.com";"Liu bin";;650B5451-2C9A-4709-A209-744165793164;;liuBinID;#650B5451-2C9A-4709-A209-744165793164#
 ;"customergroup";"neeraj.a.shah@accenture.com";"Neeraj Shah";;06f6d800-8cbd-454b-8370-5646a3e156e3;;neerajShahID;#06f6d800-8cbd-454b-8370-5646a3e156e3#
 ;"customergroup";"kishor.chockalingam@accenture.com";"Kishore Chockalingam";;8ed6cf9d-1c78-4849-a988-ff0f7abe7261;;kishoreID;#8ed6cf9d-1c78-4849-a988-ff0f7abe7261#
-
+;"customergroup";"vijayanand.hongal@accenture.com";"vijayanand hongal";;f158bc6c-5879-3efb-8c36-62e9bcb2147d;;vijayanandID;#f158bc6c-5879-3efb-8c36-62e9bcb2147d#
  
 
 INSERT_UPDATE Address;&addId;owner(&userId);streetname[unique=true];postalcode[unique=true];duplicate[unique=true];town;country(isocode);billingAddress;contactAddress;shippingAddress;unloadingAddress;firstname;lastname;email;gender(code);middlename;phone1;title(code);url;company;fax;department;appartment;dateOfBirth[dateformat=MM/dd/yyyy]
@@ -75,7 +62,7 @@ INSERT_UPDATE Address;&addId;owner(&userId);streetname[unique=true];postalcode[u
 ;LiuBinAddressID;liuBinID;100 MAIN ST;98104;false;SEATTLE WA;US;false;true;false;false;Liu;Bin;bin.a.liu@accenture.com;MALE;;+44 1234567;mr;;Hybris;;;ABC Appartment;02/13/1982
 ;NeerajAddressID;neerajShahID;BITBOOST;85728;false;TUCSON AZ;US;false;true;false;false;Neeraj;Shah;neeraj.a.shah@accenture.com;MALE;;+44 1234567;mr;;Hybris;;;Panchkula Appartment;09/18/1983
 ;KishoreAddressID;kishoreID;421 E DRACHMAN;85705-7598;false;TUCSON AZ;US;false;true;false;false;Kishore;Chockalingam;kishor.chockalingam@accenture.com;MALE;;+44 1234567;mr;;Hybris;;;Lal Villa Appartment;02/14/1976
-
+;VijayanandAddressID;vijayanandID;421 E DRACHMAN;85705-7598;false;TUCSON AZ;US;false;true;false;false;Vijayanand;Hongal;vijayanand.hongal@accenture.co;MALE;;+44 1234567;mr;;Hybris;;;Silver Stone Appartment;02/14/1979
 
 
 
@@ -93,3 +80,15 @@ INSERT_UPDATE Customer;uid[unique=true];name;description;groups(uid);password
 
 INSERT_UPDATE config;ValueHolder[unique=true]
 ;10;
+
+
+######changes for wishlist####################
+insert_update ViewWishlistComponent;catalogVersion(catalog(id),version)[unique=true,allownull=true];name;onlyOneRestrictionMustApply[allownull=true];uid[unique=true,allownull=true];visible[allownull=true]
+;electronicsContentCatalog:Staged;ViewWishlistComponent;true;ViewWishlistComponent;true
+
+insert_update ContentSlot;active[allownull=true];catalogVersion(catalog(id),version)[unique=true,allownull=true];name;uid[unique=true,allownull=true];cmsComponents(uid[unique=true,allownull=true])
+;true;electronicsContentCatalog:Staged;WishlistSlots;WishlistSlots;ViewWishlistComponent
+
+insert_update ContentSlotForPage;catalogVersion(catalog(id),version)[unique=true,allownull=true];contentSlot(catalogVersion(catalog(id),version),uid)[allownull=true];page(catalogVersion(catalog(id),version),uid)[allownull=true];position[allownull=true];uid[unique=true,allownull=true]
+;electronicsContentCatalog:Staged;electronicsContentCatalog:Staged:WishlistSlots;electronicsContentCatalog:Staged:account;wishlist;wishlistCFP
+
