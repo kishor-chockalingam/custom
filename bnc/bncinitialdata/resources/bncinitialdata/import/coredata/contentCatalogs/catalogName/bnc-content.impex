@@ -54,7 +54,7 @@ INSERT_UPDATE Customer;groups(uid);uid[unique=true];name;$setPassword;customerId
 ;"customergroup";"bin.a.liu@accenture.com";"Liu bin";;650B5451-2C9A-4709-A209-744165793164;;liuBinID;#650B5451-2C9A-4709-A209-744165793164#
 ;"customergroup";"neeraj.a.shah@accenture.com";"Neeraj Shah";;06f6d800-8cbd-454b-8370-5646a3e156e3;;neerajShahID;#06f6d800-8cbd-454b-8370-5646a3e156e3#
 ;"customergroup";"kishor.chockalingam@accenture.com";"Kishore Chockalingam";;8ed6cf9d-1c78-4849-a988-ff0f7abe7261;;kishoreID;#8ed6cf9d-1c78-4849-a988-ff0f7abe7261#
-;"customergroup";"vijayanand.hongal@accenture.com";"vijayanand hongal";;f158bc6c-5879-3efb-8c36-62e9bcb2147d;;vijayanandID;#f158bc6c-5879-3efb-8c36-62e9bcb2147d#
+;"customergroup";"vijayanand.hongal@accenture.com";"vijayanand hongal";;047d4ba1-6f1e-3753-be8a-530f41a3e908;;vijayanandID;#047d4ba1-6f1e-3753-be8a-530f41a3e908#
  
 
 INSERT_UPDATE Address;&addId;owner(&userId);streetname[unique=true];postalcode[unique=true];duplicate[unique=true];town;country(isocode);billingAddress;contactAddress;shippingAddress;unloadingAddress;firstname;lastname;email;gender(code);middlename;phone1;title(code);url;company;fax;department;appartment;dateOfBirth[dateformat=MM/dd/yyyy]
