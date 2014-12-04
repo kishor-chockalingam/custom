@@ -10,10 +10,25 @@
 			<li>
 				<input type="text" value="${nowDate}" id="searchTimeBarFromDate" onblur="javascript:getOrdersByFromDate();">
 			</li>
+			<c:choose>
+			
+		<c:when test="${param.status=='PENDING'}"> 
+		
 			<li>To :</li>
 			<li>
 				<input type="text" disabled value="${nowDate}" id="searchTimeBarToDate" class="disable" onblur="javascript:getOrdersByFromDate();">
 			</li>
+			</c:when>
+			
+			<c:otherwise> 
+			<li>To :</li>
+			<li>
+				<input type="text"  value="${nowDate}" id="searchTimeBarToDate"  onblur="javascript:getOrdersByFromDate();">
+			</li> 
+			
+			</c:otherwise>
+			</c:choose> 
+		
 		</ul>
 	</div>
 	<div class="time_block">
