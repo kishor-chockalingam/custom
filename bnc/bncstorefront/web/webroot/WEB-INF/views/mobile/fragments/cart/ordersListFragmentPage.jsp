@@ -60,7 +60,7 @@
 						//$("#invalidUCOID").append("Please enter the valid UCOID");
 					}
 				});
-			}, 30000);
+			}, 60000);
 		</script> 
 		<c:set var="orderListSizeNew" value="${fn:length(collectOrdersDataList)}"/>
 		<c:if test="${Queued!=param.size}">

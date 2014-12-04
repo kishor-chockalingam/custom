@@ -67,7 +67,7 @@
 						//$("#invalidUCOID").append("Please enter the valid UCOID");
 					}
 				});
-			}, 30000);
+			}, 60000);
 			
 		</script> 
 	</head>
