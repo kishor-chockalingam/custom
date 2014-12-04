@@ -60,7 +60,7 @@
 		                            <td width="12%">${entry.quantity}</td>
 		                            <td width="11%"><format:price priceData="${entry.orderEntry.basePrice}"	displayFreeForZero="true" /></td>
 		                            <td width="21%">$${entry.quantity * entry.orderEntry.basePrice.value}</td>
-		                            <td width="11%" align="right"><img src="${commonResourcePath}/bnc_images/check_box.jpg" alt=""/></td>
+<%-- 		                            <td width="11%" align="right"><img src="${commonResourcePath}/bnc_images/check_box.jpg" alt=""/></td> --%>
 		                            <td width="3%">&nbsp;</td>
 		                          </tr>
 		                        </table></td>
