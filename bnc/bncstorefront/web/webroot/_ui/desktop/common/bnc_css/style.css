@@ -108,7 +108,7 @@ font:normal 18px Arial, Helvetica, sans-serif; text-align:center; color:#6f6f6f;
 /*----------------------Right Block  Order details Css Starts Here---------------------------*/
 #main_content_blk .inner_content_blk .right_block .order_details_tabel{border-bottom:2px solid #f4f4f4; width:100%; float:left; margin-top:25px;}
 #main_content_blk .inner_content_blk .right_block .order_details_tabel .styled-select { background: url(../bnc_images/drop_arrow.png) no-repeat scroll right 7px rgba(0, 0, 0, 0);
- overflow: hidden; width:50%;}
+ overflow: hidden; width:62%;}
 #main_content_blk .inner_content_blk .right_block .order_details_tabel .styled-select select {background: none repeat scroll 0 0 transparent; border: 0 none; border-radius: 0;
 font-size: 16px; padding:0px 5px;width: 200px; color:#02c479;}
 #main_content_blk .inner_content_blk .right_block .order_details_tabel .order_number{ color:#6f6f6f;}
