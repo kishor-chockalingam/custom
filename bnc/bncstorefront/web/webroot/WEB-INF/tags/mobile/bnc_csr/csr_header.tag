@@ -3,10 +3,13 @@
 
 
  <script type="text/javascript">
-    function redirect()
+    function redirectToOrdersDashboard()
     {
-  
-    window.location.href="/bncstorefront/electronics/en/orderslist/vieworders";
+    	window.location.href="/bncstorefront/electronics/en/orderslist/vieworders";
+    }
+    function redirectToCustomersDashboard()
+    {
+    	window.location.href="/bncstorefront/electronics/en/customerlist/customerdeatils";
     }
     </script>
 <div id="head">
@@ -31,13 +34,13 @@
 		<nav class="main-nav">
 			<ol>
 				<li>
-					<a href="#" style="border-top:1px solid #494949"   >
+					<a href="#" onClick="redirectToCustomersDashboard()" style="border-top:1px solid #494949"   >
 						<img src="${commonResourcePath}/bnc_images/dashboard_icon.png" alt=""/>
 						<span>Customers<br>Dashboard</span>
 					</a>
 				</li>
 				<li>
-					<a href="#" onClick="redirect()" class="select" >
+					<a href="#" onClick="redirectToOrdersDashboard()" class="select" >
 						<img src="${commonResourcePath}/bnc_images/dashboard_icon.png" alt="" />
 						<span>Orders<br>Dashboard</span>
 					</a>
