@@ -26,50 +26,49 @@
 				<div class="username">${fn:toUpperCase(CSR_USER)}</div>
 			</div>
 		</div>
-		<div class="mobile_leftnav" style="position:absolute;left:-250px; height:100%; z-index:9999; margin-top:100px; top:0; background:#333333">
-			<nav class="main-nav">
-			
-				<ol>
-					<li>
-						<a href="#" style="border-top:1px solid #494949"   >
-							<img src="${commonResourcePath}/bnc_images/dashboard_icon.png" alt=""/>
-							<span>Customers<br>Dashboard</span>
-						</a>
-					</li>
-					<li>
-						<a href="#" onClick="redirect()" class="select" >
-							<img src="${commonResourcePath}/bnc_images/dashboard_icon.png" alt="" />
-							<span>Orders<br>Dashboard</span>
-						</a>
-					</li>
-					<div class="rest_nav" style="opacity:.4;display:block; ">
-					<li>
-						<a href="#">
-							<img src="${commonResourcePath}/bnc_images/search_icon.png" alt=""/>
-							<span class="singleline">Search</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="${commonResourcePath}/bnc_images/notification_icon.png" alt=""/>
-							<span class="singleline">Notifications</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="${commonResourcePath}/bnc_images/myteam_icon.png" alt=""/>
-							<span class="singleline">My Team</span>
-						</a>
-					</li>
-					<li>
-						<a href="#">
-							<img src="${commonResourcePath}/bnc_images/mytargets_icon.png" alt=""/>
-							<span>My Targets <br>&amp; Performance</span>
-						</a>
-					</li>
-					</div>
-				</ol>
-			</nav>
-		</div>
+	</div>
+	<div class="mobile_leftnav">
+		<nav class="main-nav">
+			<ol>
+				<li>
+					<a href="#" style="border-top:1px solid #494949"   >
+						<img src="${commonResourcePath}/bnc_images/dashboard_icon.png" alt=""/>
+						<span>Customers<br>Dashboard</span>
+					</a>
+				</li>
+				<li>
+					<a href="#" onClick="redirect()" class="select" >
+						<img src="${commonResourcePath}/bnc_images/dashboard_icon.png" alt="" />
+						<span>Orders<br>Dashboard</span>
+					</a>
+				</li>
+				<div class="rest_nav" style="opacity:.4;display:block; ">
+				<li>
+					<a href="#">
+						<img src="${commonResourcePath}/bnc_images/search_icon.png" alt=""/>
+						<span class="singleline">Search</span>
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<img src="${commonResourcePath}/bnc_images/notification_icon.png" alt=""/>
+						<span class="singleline">Notifications</span>
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<img src="${commonResourcePath}/bnc_images/myteam_icon.png" alt=""/>
+						<span class="singleline">My Team</span>
+					</a>
+				</li>
+				<li>
+					<a href="#">
+						<img src="${commonResourcePath}/bnc_images/mytargets_icon.png" alt=""/>
+						<span>My Targets <br>&amp; Performance</span>
+					</a>
+				</li>
+				</div>
+			</ol>
+		</nav>
 	</div>
 </div>
