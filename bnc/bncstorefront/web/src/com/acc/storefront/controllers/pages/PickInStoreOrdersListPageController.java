@@ -220,13 +220,32 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 	public String getPersonalDetails(@RequestParam("code") final String orderCode, @RequestParam("uid") final String uid,
 			final Model model, final HttpServletRequest request, final HttpServletResponse response) throws CMSItemNotFoundException
 	{
+		
+	 Wishlist2Model wishlistModel = null;
+	 List<Wishlist2EntryModel> wishlistEnteries=null;
+	
 
 		System.out.println("inside getcustomer details");
 		//final List<CSRCustomerDetailsModel> csrCustomerDetailsList = storeCustomerFacade.getCSRCustomerDetails();
 		String profilePictureURL = "";
 		final UserModel userModel = userService.getUserForUID(uid);
-		final Wishlist2Model wishlistModel = wishlistService.getDefaultWishlist(userModel);
-		final List<Wishlist2EntryModel> wishlistEnteries = wishlistModel.getEntries();
+		if (wishlistService.hasDefaultWishlist(userModel) == false)
+		{
+		 wishlistService.createDefaultWishlist(userModel, "wishlist", "add to wishlist fuunctionality");
+
+			System.out.println("inside create deafultwishlist");
+			wishlistModel = wishlistService.getDefaultWishlist(userModel);
+			 wishlistEnteries = wishlistModel.getEntries();
+		
+		}
+		else
+		{
+			wishlistModel = wishlistService.getDefaultWishlist(userModel);
+			wishlistEnteries = wishlistModel.getEntries();
+		}
+
+		
+		
 		Wishlist2Data wishlistData = null;
 		final String profileImage = "/bncstorefront/_ui/desktop/common/bnc_images/personal_photos/person1.jpg";
 		final CustomerModel customerModel = (CustomerModel) userModel;
@@ -290,7 +309,7 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 		}
 		Collections.reverse(products);
 		model.addAttribute("wishlist", wishlistData);
-		System.out.println("#############wishlist data" + wishlistData.getEntries());
+		System.out.println("#############wishlist data" + wishlistData);
 		model.addAttribute("productData", products);
 		System.out.println("#############recetly viewed data" + products);
 		model.addAttribute("orderCode", orderCode);

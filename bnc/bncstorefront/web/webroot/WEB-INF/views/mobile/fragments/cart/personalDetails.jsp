@@ -142,6 +142,7 @@
               <td>&nbsp;</td>
               <td>&nbsp;</td>
             </tr>
+            <c:if test="${not empty productData}">
             <tr>
               <td colspan="2" class="grayheading">Recently Viewed</td>
             </tr>
@@ -188,6 +189,7 @@
 				 </div>
                </td>
             </tr>
+            </c:if>
             <tr>
               <td>&nbsp;</td>
               <td>&nbsp;</td>
@@ -200,6 +202,7 @@
               <td>&nbsp;</td>
               <td>&nbsp;</td>
             </tr>
+             <c:if test="${not empty wishlist.entries}">
             <tr>
               <td colspan="2" class="grayheading">Wishlist</td>
             </tr>
@@ -234,6 +237,7 @@
                   <div class="right_arrow"><a href="#"><img src="${commonResourcePath}/bnc_images/arrow_right.png" alt=""  border="0"/></a></div>
                 </div></td>
             </tr>
+            </c:if>
              <tr>
               <td>&nbsp;</td>
               <td>&nbsp;</td>
