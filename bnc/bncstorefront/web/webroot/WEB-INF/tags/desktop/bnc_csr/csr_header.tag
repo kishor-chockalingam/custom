@@ -6,7 +6,7 @@
     function redirect()
     {
   
-    window.location.href="/bncstorefront/en/orderslist/vieworders";
+    window.location.href="/bncstorefront/electronics/en/orderslist/vieworders";
     }
     </script>
 <div id="head">
