@@ -1,5 +1,14 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+
+ <script type="text/javascript">
+    function redirect()
+    {
+  
+    window.location.href="/bncstorefront/en/orderslist/vieworders";
+    }
+    </script>
 <div id="head">
 	<div class="contain_block">
 		<div id="menu_top"><a href="javascript:void(0);" class="mClose">Menu</a></div>
@@ -19,19 +28,21 @@
 		</div>
 		<div class="mobile_leftnav" style="position:absolute;left:-250px; height:100%; z-index:9999; margin-top:100px; top:0; background:#333333">
 			<nav class="main-nav">
+			
 				<ol>
 					<li>
-						<a href="#" style="border-top:1px solid #494949" class="select">
+						<a href="#" style="border-top:1px solid #494949"   >
 							<img src="${commonResourcePath}/bnc_images/dashboard_icon.png" alt=""/>
 							<span>Customers<br>Dashboard</span>
 						</a>
 					</li>
 					<li>
-						<a href="#">
-							<img src="${commonResourcePath}/bnc_images/dashboard_icon.png" alt=""/>
+						<a href="#" onClick="redirect()" class="select" >
+							<img src="${commonResourcePath}/bnc_images/dashboard_icon.png" alt="" />
 							<span>Orders<br>Dashboard</span>
 						</a>
 					</li>
+					<div class="rest_nav" style="opacity:.4;display:block; ">
 					<li>
 						<a href="#">
 							<img src="${commonResourcePath}/bnc_images/search_icon.png" alt=""/>
@@ -56,6 +67,7 @@
 							<span>My Targets <br>&amp; Performance</span>
 						</a>
 					</li>
+					</div>
 				</ol>
 			</nav>
 		</div>
