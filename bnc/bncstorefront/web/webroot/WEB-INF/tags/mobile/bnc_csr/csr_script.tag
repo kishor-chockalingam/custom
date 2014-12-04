@@ -77,7 +77,7 @@ function getOrdersByFromDate()
 			$("#ordersDivId").html(response.searchby_ucoid);
 		},
 		error : function(e) {
-			alert("Please enter dates in proper format! Dates as DD.MM.YYYY and Time as HH:MM AM/PM!!");
+			alert("Please enter dates in proper format! Dates as DD.MM.YYYY and Time as HH:MM AM/PM!!\n\n FromDate should be before ToDate!!");
 		}
 	});
 }
