@@ -49,6 +49,7 @@ import com.acc.facades.storecustomer.StoreCustomerFacade;
 import com.acc.facades.wishlist.data.Wishlist2Data;
 import com.acc.storefront.controllers.ControllerConstants;
 import com.acc.storefront.util.StoreCustomerData;
+
 import de.hybris.platform.acceleratorstorefrontcommons.controllers.pages.AbstractPageController;
 
 /**
@@ -219,6 +220,8 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 	@RequestMapping(value = "/personaldetails", method = RequestMethod.GET, produces = "application/json")
 	public String getPersonalDetails(@RequestParam("code") final String orderCode, @RequestParam("uid") final String uid,
 			final Model model, final HttpServletRequest request, final HttpServletResponse response) throws CMSItemNotFoundException
+			
+			
 	{
 		
 	 Wishlist2Model wishlistModel = null;
@@ -273,14 +276,14 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 			userAddress.getCountry();
 			userAddress.getPostalcode();
 			model.addAttribute("useraddress", userAddress);
-			System.out.println("useraddress" + userAddress);
+			LOG.info("useraddress" + userAddress);
 			if (null != userAddress)
 			{
 				System.out.println("######################useraddress#########" + userAddress.getFirstname());
 			}
 		}
 		storecustomerData.setProfilePictureURL(profilePictureURL);
-		System.out.println("inside getcustomer details" + storecustomerData);
+		LOG.info("inside getcustomer details" + storecustomerData);
 		if (null != storecustomerData)
 		{
 			System.out.println("profile picture" + storecustomerData.getProfilePictureURL());
@@ -309,9 +312,9 @@ public class PickInStoreOrdersListPageController extends AbstractPageController
 		}
 		Collections.reverse(products);
 		model.addAttribute("wishlist", wishlistData);
-		System.out.println("#############wishlist data" + wishlistData);
+		LOG.info("#############wishlist data" + wishlistData);
 		model.addAttribute("productData", products);
-		System.out.println("#############recetly viewed data" + products);
+		LOG.info("#############recetly viewed data" + products);
 		model.addAttribute("orderCode", orderCode);
 		return ControllerConstants.Views.Fragments.Cart.PersonalDetails;
 	}
