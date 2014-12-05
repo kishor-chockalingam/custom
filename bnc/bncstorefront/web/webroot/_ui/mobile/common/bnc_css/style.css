@@ -5,6 +5,9 @@ body{font-family:Arial, Helvetica, sans-serif; margin:0px; background:#f4f4f4}
 img{border:0}
 #main_wrapper {margin-left: auto; margin-right: auto; max-width: 1024px;}
 .clearboth{ clear:both;}
+* {
+    outline: none;
+}
 /*----------------------Header Css Starts Here---------------------------*/
 #head{ display:block; }
 #head .contain_block{height:100px; float:left; width:100%; background:#333333; position:relative; z-index:99999}
@@ -178,7 +181,15 @@ padding:0px 2px 4px 0px; overflow:hidden }
 
 /*----------------------Global left menu Css Starts Here---------------------------*/
 
-#head .mobile_leftnav{ position:absolute; z-index:2;left:-1000px; height:100%; z-index:9999;top:0; background:#333333}
+#head .mobile_leftnav{ position:absolute; z-index:2;left:-250px; height:100%; z-index:9999;top:0; background:#333333}
+#head .hide_menu_block{background: none repeat scroll 0 0 #f4f4f4;
+    float: left;
+    height: 100%;
+    left: -250px !important;
+    position: absolute;
+    top: 0;
+    width: 250px;
+    z-index: 999999;}
 #head nav{display:block;width:250px;float:left; height:auto; margin-top:100px}
 #head nav ol{margin:0;padding:0; }
 #head nav ol li{display:inline;float:none;width:10%!important;border:0;text-align:left}

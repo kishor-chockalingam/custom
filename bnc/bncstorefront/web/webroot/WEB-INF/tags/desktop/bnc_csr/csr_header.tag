@@ -30,6 +30,7 @@
 			</div>
 		</div>
 		</div>
+		<div class="hide_menu_block"></div>
 		<div class="mobile_leftnav">
 			<nav class="main-nav">
 				<ol>
