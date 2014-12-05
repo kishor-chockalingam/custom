@@ -39,9 +39,10 @@ public class CustomerCollectOrderDaoImpl extends AbstractItemDao implements Cust
 	@Override
 	public List<CollectOrderModel> getCollectOrders()
 	{
-		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		final String todayDate = sdf.format(new Date());
-		final String query = "SELECT {pk} from {collectOrder} WHERE {creationtime} like '" + todayDate + "%'";
+		//final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		//final String todayDate = sdf.format(new Date());
+		final String query = "SELECT {pk} from {collectOrder}";
+		//+" WHERE {creationtime} like '" + todayDate + "%'";
 		final SearchResult<CollectOrderModel> result = getFlexibleSearchService().search(query);
 		return CollectionUtils.isEmpty(result.getResult()) ? null : result.getResult();
 	}
@@ -146,10 +147,10 @@ public class CustomerCollectOrderDaoImpl extends AbstractItemDao implements Cust
 	@Override
 	public List<CollectOrderModel> getCollectOrdersByStatus(final String status)
 	{
-		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		final String todayDate = sdf.format(new Date());
-		final String query = "SELECT {pk} from {collectOrder} WHERE {status} IN ('" + status + "') AND {creationtime} like '"
-				+ todayDate + "%'";
+		//final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		//final String todayDate = sdf.format(new Date());
+		final String query = "SELECT {pk} from {collectOrder} WHERE {status} IN ('" + status + "')";
+		//+" AND {creationtime} like '"+ todayDate + "%'";
 		final SearchResult<CollectOrderModel> result = getFlexibleSearchService().search(query);
 		return CollectionUtils.isEmpty(result.getResult()) ? null : result.getResult();
 	}

@@ -47,7 +47,7 @@
 		</div>
 	</div>
 	<div class="diagram_block">
-		<c:set var="Total" value="${fn:length(collectOrdersDataList)}"/>
+		<c:set var="Total" value="${Queued+Active+Serviced}"/>
 		<fmt:formatNumber var="target" value="${(Serviced/Total)*100}" maxFractionDigits="0"/>
 		<c:if test="${Serviced==0 or  Total==0}">
 			<fmt:formatNumber var="target" value="0" maxFractionDigits="0"/>
