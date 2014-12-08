@@ -5,22 +5,32 @@ package com.acc.storefront.controllers.pages;
 
 import de.hybris.platform.acceleratorstorefrontcommons.controllers.pages.AbstractPageController;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
+import de.hybris.platform.commercefacades.product.ProductFacade;
+import de.hybris.platform.commercefacades.product.ProductOption;
+import de.hybris.platform.commercefacades.product.data.ProductData;
 import de.hybris.platform.commercefacades.user.data.CustomerData;
 import de.hybris.platform.core.PK;
 import de.hybris.platform.core.model.order.OrderModel;
+import de.hybris.platform.core.model.product.ProductModel;
 import de.hybris.platform.core.model.user.AddressModel;
 import de.hybris.platform.core.model.user.CustomerModel;
 import de.hybris.platform.core.model.user.UserModel;
+import de.hybris.platform.servicelayer.dto.converter.Converter;
 import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
 import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.session.SessionService;
 import de.hybris.platform.servicelayer.user.UserService;
+import de.hybris.platform.wishlist2.Wishlist2Service;
+import de.hybris.platform.wishlist2.model.Wishlist2EntryModel;
+import de.hybris.platform.wishlist2.model.Wishlist2Model;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +49,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.acc.core.enums.CSRStoreStatus;
 import com.acc.core.model.CSRCustomerDetailsModel;
 import com.acc.facades.storecustomer.StoreCustomerFacade;
+import com.acc.facades.wishlist.data.Wishlist2Data;
 import com.acc.storefront.controllers.ControllerConstants;
 import com.acc.storefront.util.CustomerOrderData;
 import com.acc.storefront.util.ProfileInformationDto;
@@ -56,6 +67,7 @@ public class CustomerListController extends AbstractPageController
 {
 	private static final String REDIRECT_TO_CUSTOMER_DETAILS = REDIRECT_PREFIX + "/customerlist/customerdeatils";
 	private static final String ACCOUNT_CMS_PAGE = "account";
+	private static final List<ProductOption> PRODUCT_OPTIONS = Arrays.asList(ProductOption.BASIC, ProductOption.PRICE);
 	@Autowired
 	private StoreCustomerFacade StoreCustomerFacade;
 	@Autowired
@@ -64,9 +76,15 @@ public class CustomerListController extends AbstractPageController
 	private ModelService modelService;
 	@Autowired
 	private SessionService sessionService;
+	@Autowired
+	private Wishlist2Service wishlistService;
+	@Autowired
+	private ProductFacade productFacade;
+	@Autowired
+	private Converter<Wishlist2Model, Wishlist2Data> wishlist2Converter;
 
 
-	@RequestMapping(value = "/assistcustomer", method = RequestMethod.GET)
+	@RequestMapping(value = "/assistcustomer", method = RequestMethod.GET, produces = "application/json")
 	public String customerHistory(final Model model, final HttpServletRequest request, final HttpServletResponse response)
 			throws CMSItemNotFoundException
 	{
@@ -74,6 +92,8 @@ public class CustomerListController extends AbstractPageController
 		final CustomerData customerData = new CustomerData();
 		final List<CustomerOrderData> customerOrderDataList = new ArrayList<CustomerOrderData>();
 		final StoreCustomerData storecustomerData = new StoreCustomerData();
+		Wishlist2Model wishlistModel = null;
+		List<Wishlist2EntryModel> wishlistEnteries=null;
 		if ((null != request.getParameter("csrId") && request.getParameter("csrId").trim().length() > 0)
 				&& null != request.getParameter("customerPK"))
 		{
@@ -81,13 +101,40 @@ public class CustomerListController extends AbstractPageController
 					request.getParameter("csrId"), request.getParameter("customerPK"), "");
 
 			final UserModel csrUserModel = userService.getUserForUID(request.getParameter("csrId"));
+			if (!wishlistService.hasDefaultWishlist(csrUserModel))
+			{
+				wishlistService.createDefaultWishlist(csrUserModel, "wishlist", "add to wishlist fuunctionality");
+				wishlistModel = wishlistService.getDefaultWishlist(csrUserModel);
+				wishlistEnteries = wishlistModel.getEntries();
+			}
+			else
+			{
+				wishlistModel = wishlistService.getDefaultWishlist(csrUserModel);
+				wishlistEnteries = wishlistModel.getEntries();
+			}
+			Wishlist2Data wishlistData = null;
+			final List<ProductData> products = new ArrayList<ProductData>();
 			if (csrUserModel instanceof CustomerModel)
 			{
 				final CustomerModel csrCustomerModel = (CustomerModel) csrUserModel;
 				customerData.setName(csrCustomerModel.getName());
 				customerData.setUid(csrCustomerModel.getUid());
 				customerData.setTitle(csrCustomerModel.getDescription());
+				if (null != wishlistEnteries)
+				{
+					wishlistData = wishlist2Converter.convert(wishlistModel);
 
+				}
+				if (null != csrCustomerModel.getRecentlyviewedproducts())
+				{
+					for (final ProductModel productModel : csrCustomerModel.getRecentlyviewedproducts())
+					{
+						products.add(productFacade.getProductForOptions(productModel, PRODUCT_OPTIONS));
+					}
+				}
+				Collections.reverse(products);
+				model.addAttribute("wishlist", wishlistData);
+				model.addAttribute("productData", products);
 			}
 			assistCustomerRecord(csrCustomerDetailsModel, storecustomerData, informationDto, customerOrderDataList);
 		}
@@ -101,9 +148,7 @@ public class CustomerListController extends AbstractPageController
 		model.addAttribute("informationDto", informationDto);
 		model.addAttribute("customerOrderDataList", customerOrderDataList);
 		model.addAttribute("customerData", customerData);
-		storeCmsPageInModel(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
-		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
-		return ControllerConstants.Views.Pages.Account.assistcustomerPage;
+		return ControllerConstants.Views.Fragments.Cart.CustomerDetailsFragment;
 
 	}
 
@@ -137,6 +182,7 @@ public class CustomerListController extends AbstractPageController
 			storecustomerData.setLoginTime(loggedTime);
 			storecustomerData.setProfilePictureURL((null == customerModel.getProfilePicture() ? contextPath : customerModel
 					.getProfilePicture().getURL2()));
+			storecustomerData.setCustomerId(customerModel.getUid());
 			informationDto.setName(csrCustomerDetailsModel.getCustomerName());
 			final Collection<AddressModel> addressList = customerModel.getAddresses();
 			if (null != addressList)
@@ -185,8 +231,9 @@ public class CustomerListController extends AbstractPageController
 		final List<StoreCustomerData> customerInServiceDataList = new ArrayList<StoreCustomerData>();
 		final List<StoreCustomerData> customerNoThanxDataList = new ArrayList<StoreCustomerData>();
 		final List<CSRCustomerDetailsModel> csrCustomerDetailsList = StoreCustomerFacade.getCSRCustomerDetails();
-		String status = request.getParameter("status");
-		final List<CSRCustomerDetailsModel> csrCustomerDetailsByStatusList = StoreCustomerFacade.getCSRCustomerDetailsByStatus(StringUtils.isEmpty(status)?CSRStoreStatus.LOGGEDIN:CSRStoreStatus.valueOf(status));
+		final String status = request.getParameter("status");
+		final List<CSRCustomerDetailsModel> csrCustomerDetailsByStatusList = StoreCustomerFacade
+				.getCSRCustomerDetailsByStatus(StringUtils.isEmpty(status) ? CSRStoreStatus.LOGGEDIN : CSRStoreStatus.valueOf(status));
 		final String contextPath = "/bncstorefront/_ui/desktop/common/images/Dummy.jpg";
 		try
 		{
@@ -211,8 +258,8 @@ public class CustomerListController extends AbstractPageController
 					storecustomerData.setWaitingTime(time);
 					storecustomerData.setLoginTime(loggedTime);
 					storecustomerData.setProfilePictureURL(profilePictureURL);
-					storecustomerData.setProcessedBy((null == customerDetails.getProcessedBy() ? "" : customerDetails
-							.getProcessedBy()));
+					storecustomerData
+							.setProcessedBy((null == customerDetails.getProcessedBy() ? "" : customerDetails.getProcessedBy()));
 					customerStatusDataList.add(storecustomerData);
 				}
 			}
@@ -222,7 +269,7 @@ public class CustomerListController extends AbstractPageController
 			//
 		}
 		model.addAttribute("customerLoggedInDataList", customerStatusDataList);
-		model.addAttribute("csrCustomerDetailsByStatusList",csrCustomerDetailsByStatusList);
+		model.addAttribute("csrCustomerDetailsByStatusList", csrCustomerDetailsByStatusList);
 		model.addAttribute("Queued", getStatusCount(csrCustomerDetailsList, CSRStoreStatus.LOGGEDIN));
 		model.addAttribute("Active", getStatusCount(csrCustomerDetailsList, CSRStoreStatus.INSERVICE));
 		model.addAttribute("Serviced", getStatusCount(csrCustomerDetailsList, CSRStoreStatus.COMPLETED));
@@ -231,14 +278,14 @@ public class CustomerListController extends AbstractPageController
 		return ControllerConstants.Views.Pages.Account.customerDetailsPage;
 
 	}
-	
+
 	/**
 	 * @param cSRCustomerDetailsModelsList
 	 */
 	private int getStatusCount(final List<CSRCustomerDetailsModel> cSRCustomerDetailsModelsList, final CSRStoreStatus status)
 	{
 		int statusCount = 0;
-		if(CollectionUtils.isNotEmpty(cSRCustomerDetailsModelsList))
+		if (CollectionUtils.isNotEmpty(cSRCustomerDetailsModelsList))
 		{
 			for (final CSRCustomerDetailsModel cSRCustomerDetailsModel : cSRCustomerDetailsModelsList)
 			{
@@ -250,9 +297,9 @@ public class CustomerListController extends AbstractPageController
 		}
 		return statusCount;
 	}
-	
-	
-	
+
+
+
 
 	@RequestMapping(value = "/csrlogout", method = RequestMethod.GET)
 	public String csrlogout()
