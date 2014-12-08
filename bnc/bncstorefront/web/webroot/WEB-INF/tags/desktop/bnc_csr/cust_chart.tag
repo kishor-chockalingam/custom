@@ -3,12 +3,12 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <div class="chart_block">
 	<c:choose>
-		<c:when test="${param.status=='InService'}">
+		<c:when test="${param.status=='INSERVICE'}">
 			<c:set var="queuedCurrent" value=""/>
 			<c:set var="activeCurrent" value=" diagramcurrent"/>
 			<c:set var="servicedCurrent" value=""/>
 		</c:when>
-		<c:when test="${param.status=='Completed'}">
+		<c:when test="${param.status=='COMPLETED'}">
 			<c:set var="queuedCurrent" value=""/>
 			<c:set var="activeCurrent" value=""/>
 			<c:set var="servicedCurrent" value=" diagramcurrent"/>
@@ -22,8 +22,8 @@
 	<div class="diagram_block${queuedCurrent}">
 		<div id="diagram-id-1" class="diagram" data-percent="${Queued}"></div>
 		<div class="digram_txt">
-			<c:url value="/orderslist/vieworders" var="queuedURL">
-				<c:param name="status" value="LoggedIn"></c:param>
+			<c:url value="/customerlist/customerdeatils" var="queuedURL">
+				<c:param name="status" value="LOGGEDIN"></c:param>
 			</c:url>
 			<a href="${queuedURL}"  style="text-decoration: none;color:#6f6f6f;">Queued</a>
 		</div>
@@ -31,8 +31,8 @@
 	<div class="diagram_block${activeCurrent}">
 		<div id="diagram-id-2" class="diagram" data-percent="${Active}"></div>
 		<div class="digram_txt">
-			<c:url value="/orderslist/vieworders" var="activeURL">
-				<c:param name="status" value="InService"></c:param>
+			<c:url value="/customerlist/customerdeatils" var="activeURL">
+				<c:param name="status" value="INSERVICE"></c:param>
 			</c:url>
 			<a href="${activeURL}" style="text-decoration: none;color:#6f6f6f;">Active</a>
 		</div>
@@ -40,8 +40,8 @@
 	<div class="diagram_block${servicedCurrent}">
 		<div id="diagram-id-3" class="diagram" data-percent="${Serviced}"></div>
 		<div class="digram_txt">
-			<c:url value="/orderslist/vieworders" var="servicedURL">
-				<c:param name="status" value="Completed"></c:param>
+			<c:url value="/customerlist/customerdeatils" var="servicedURL">
+				<c:param name="status" value="COMPLETED"></c:param>
 			</c:url>
 			<a href="${servicedURL}"  style="text-decoration: none;color:#6f6f6f;">Serviced</a>
 		</div>
