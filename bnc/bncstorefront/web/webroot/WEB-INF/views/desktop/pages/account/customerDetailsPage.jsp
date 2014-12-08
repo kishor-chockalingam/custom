@@ -226,372 +226,41 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<title>Send Greeting</title>
-<link type="text/css" rel="stylesheet"
-	href="${commonResourcePath}/bnc_css/style.css" />
-</head>
-<body>
-	<div id="main_wrapper" style="position: relative">
-		<bnc:csr_header />
-		<div class="clearboth"></div>
-		<!--Content Starts here-->
-		<div id="main_content_blk">
-			<div class="top_banner">
-				<bnc:cust_chart/>
-				<div class="clearboth"></div>
-				<bnc:dateTime/>
-			</div>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+		<title>Customers Dashboard</title>
+		<link type="text/css" rel="stylesheet" href="${commonResourcePath}/bnc_css/style.css" />
+	</head>
+	<body>
+		<div id="main_wrapper" style="position: relative">
+			<bnc:csr_header />
 			<div class="clearboth"></div>
-			<div class="inner_content_blk">
-				<div class="left_block bigger_menu">
-					<div id="order_menu">
-						<ul>
-							<li class="search_padding"><input type="text" value=""
-								placeholder="Search " name="q" class="search-text placeholder">
-							</li>
-							<c:forEach items="${customerLoggedInDataList}" var="logedInUser">
-								<li>
-									<a href="#" class="current">
-										<span class="menuperson">
-											<img src="${logedInUser.profilePictureURL}" />
-										</span>
-										${logedInUser.customerName}<br /> 
-										<span>
-											${logedInUser.loginTime}
-										</span>
-									</a>
-								</li>
-							</c:forEach>
-						</ul>
-					</div>
-				</div>
-				<div class="right_block smaller_blovk">
-					<div class="tab_menu_block">
-						<div class="tab_menu_profile">
-							<ul>
-								<li class="space"><a href="#" class="send_greeting">Send
-										Greeting</a></li>
-								<li class="divider space"></li>
-								<li class="space"><a href="#" class="start_conversation">Start
-										Conversation</a></li>
-								<li class="divider space"></li>
-								<li class="space"><a href="#" class="process_order1">Process
-										Order</a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="tab_menu_block">
-						<div class="tab_menu">
-							<ul>
-								<li><a href="#">Personal Data</a></li>
-							</ul>
-						</div>
-					</div>
-					<div class="content_tabel">
-						<!--------Personal Details Tabel Starts Here-------->
-						<div class="personal_details_tabel">
-							<table width="100%" border="0" cellspacing="0" cellpadding="0">
-								<tr>
-									<td width="43%" class="bluetext">Custome Name</td>
-									<td width="57%">&nbsp;</td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td colspan="2"><table width="100%" border="0"
-											cellspacing="0" cellpadding="0">
-											<tr>
-												<td width="43%" class="graytext">Date Of Birth</td>
-												<td width="57%" class="graytext">Address</td>
-											</tr>
-											<tr>
-												<td class="bluetext">27.11.1988</td>
-												<td class="bluetext">Lorem Ipsum</td>
-											</tr>
-										</table></td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td colspan="2"><table width="100%" border="0"
-											cellspacing="0" cellpadding="0">
-											<tr>
-												<td width="43%" class="graytext">Lorem Ipsum</td>
-												<td width="57%" class="graytext">Lorem Ipsum</td>
-											</tr>
-											<tr>
-												<td class="bluetext">Lorem Ipsum</td>
-												<td class="bluetext">Lorem Ipsum</td>
-											</tr>
-										</table></td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td colspan="2"><table width="100%" border="0"
-											cellspacing="0" cellpadding="0">
-											<tr>
-												<td width="43%" class="graytext">Lorem Ipsum</td>
-												<td width="57%" class="graytext">Lorem Ipsum</td>
-											</tr>
-											<tr>
-												<td class="bluetext">Lorem Ipsum</td>
-												<td class="bluetext">Lorem Ipsum</td>
-											</tr>
-										</table></td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td colspan="2"><table width="100%" border="0"
-											cellspacing="0" cellpadding="0">
-											<tr>
-												<td colspan="2" class="grayheading">Shopping Trend</td>
-											</tr>
-											<tr>
-												<td width="16%">&nbsp;</td>
-												<td width="84%">&nbsp;</td>
-											</tr>
-											<tr>
-												<td class="smallgraytxt">Electronics</td>
-												<td><div class="meter orange nostripes">
-														<span style="width: 160px; height: 6px"></span>
-													</div></td>
-											</tr>
-											<tr>
-												<td colspan="2" height="10"></td>
-											</tr>
-											<tr>
-												<td class="smallgraytxt">Groceries</td>
-												<td><div class="meter orange nostripes">
-														<span style="width: 250px; height: 6px"></span>
-													</div></td>
-											</tr>
-											<tr>
-												<td colspan="2" height="10"></td>
-											</tr>
-											<tr>
-												<td class="smallgraytxt">Stationary</td>
-												<td><div class="meter orange nostripes">
-														<span style="width: 40px; height: 6px"></span>
-													</div></td>
-											</tr>
-											<tr>
-												<td colspan="2" height="10"></td>
-											</tr>
-											<tr>
-												<td class="smallgraytxt">Home Decor</td>
-												<td><div class="meter orange nostripes">
-														<span style="width: 140px; height: 6px"></span>
-													</div></td>
-											</tr>
-											<tr>
-												<td>&nbsp;</td>
-												<td>&nbsp;</td>
-											</tr>
-										</table></td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td colspan="2" class="grayheading">Recently Viewed</td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td colspan="2"><div id="caurosel_block">
-											<div class="left_arrow">
-												<a href="#"><img
-													src="${commonResourcePath}/bnc_images/arrow_left.png"
-													alt="" border="0" /></a>
-											</div>
-											<div class="caurosel_center_block caurosel_center_small">
-												<div class="caurosel_widget caurosel_widget1">
-													<div class="caurosel_img">
-														<img
-															src="${commonResourcePath}/bnc_images/order_item_img/img3.jpg"
-															alt="" />
-													</div>
-													<div class="caurosel_text">
-														Product Name<br> Description Lorem Ipsum
-													</div>
-												</div>
-												<div class="caurosel_widget caurosel_widget1">
-													<div class="caurosel_img">
-														<img
-															src="${commonResourcePath}/bnc_images/order_item_img/img2.jpg"
-															alt="" />
-													</div>
-													<div class="caurosel_text">
-														Product Name<br> Description Lorem Ipsum
-													</div>
-												</div>
-												<div class="caurosel_widget caurosel_widget1">
-													<div class="caurosel_img">
-														<img
-															src="${commonResourcePath}/bnc_images/order_item_img/img1.jpg"
-															alt="" />
-													</div>
-													<div class="caurosel_text">
-														Product Name<br> Description Lorem Ipsum
-													</div>
-												</div>
-											</div>
-											<div class="right_arrow">
-												<a href="#"><img
-													src="${commonResourcePath}/bnc_images/arrow_right.png"
-													alt="" border="0" /></a>
-											</div>
-										</div></td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td colspan="2" class="grayheading">Wishlist</td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td colspan="2"><div id="caurosel_block">
-											<div class="left_arrow">
-												<a href="#"><img
-													src="${commonResourcePath}/bnc_images/arrow_left.png"
-													alt="" border="0" /></a>
-											</div>
-											<div class="caurosel_center_block caurosel_center_small">
-												<div class="caurosel_widget caurosel_widget1">
-													<div class="caurosel_img">
-														<img
-															src="${commonResourcePath}/bnc_images/order_item_img/img3.jpg"
-															alt="" />
-													</div>
-													<div class="caurosel_text">
-														Product Name<br> Description Lorem Ipsum
-													</div>
-												</div>
-												<div class="caurosel_widget caurosel_widget1">
-													<div class="caurosel_img">
-														<img
-															src="${commonResourcePath}/bnc_images/order_item_img/img2.jpg"
-															alt="" />
-													</div>
-													<div class="caurosel_text">
-														Product Name<br> Description Lorem Ipsum
-													</div>
-												</div>
-												<div class="caurosel_widget caurosel_widget1">
-													<div class="caurosel_img">
-														<img
-															src="${commonResourcePath}/bnc_images/order_item_img/img1.jpg"
-															alt="" />
-													</div>
-													<div class="caurosel_text">
-														Product Name<br> Description Lorem Ipsum
-													</div>
-												</div>
-											</div>
-											<div class="right_arrow">
-												<a href="#"><img
-													src="${commonResourcePath}/bnc_images/arrow_right.png"
-													alt="" border="0" /></a>
-											</div>
-										</div></td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-								<tr>
-									<td>&nbsp;</td>
-									<td>&nbsp;</td>
-								</tr>
-							</table>
-						</div>
-						<!--------Personal Details Tabel Starts Here-------->
-
-					</div>
+			<!--Content Starts here-->
+			<div id="main_content_blk">
+				<div class="top_banner">
+					<bnc:cust_chart/>
+					<div class="clearboth"></div>
+					<bnc:dateTime/>
 				</div>
 				<div class="clearboth"></div>
+				<div class="inner_content_blk">
+					<div class="left_block bigger_menu">
+						<bnc:customerslist/>
+					</div>
+					<div class="right_block smaller_blovk">
+						<bnc:customerDetails/>
+							<!--------Personal Details Tabel Starts Here-------->
+					</div>
+					<div class="clearboth"></div>
+				</div>
 			</div>
+			<!--Content Ends here-->
+	
 		</div>
-		<!--Content Ends here-->
-
-	</div>
-	<script
-		src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-	<script src="${commonResourcePath}/bnc_js/jquery.diagram.js"></script>
-	<script src="${commonResourcePath}/bnc_js/script.js"></script>
-</body>
+		<script
+			src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="${commonResourcePath}/bnc_js/jquery.diagram.js"></script>
+		<script src="${commonResourcePath}/bnc_js/script.js"></script>
+	</body>
 </html>
