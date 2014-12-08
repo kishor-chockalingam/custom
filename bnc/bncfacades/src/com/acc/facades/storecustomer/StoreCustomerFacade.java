@@ -5,6 +5,7 @@ package com.acc.facades.storecustomer;
 
 import java.util.List;
 
+import com.acc.core.enums.CSRStoreStatus;
 import com.acc.core.model.CSRCustomerDetailsModel;
 
 
@@ -22,7 +23,15 @@ public interface StoreCustomerFacade
 
 	/**
 	 * This method is used to update the customer details.
-	 * @param status YTODO
+	 * 
+	 * @param status
+	 *           YTODO
 	 */
 	public CSRCustomerDetailsModel updateCSRCustomerDetail(final String csrUID, final String customerUID, String status);
+
+	/**
+	 * @param CSRStoreStatus
+	 * @return List<CSRCustomerDetailsModel>
+	 */
+	public List<CSRCustomerDetailsModel> getCSRCustomerDetailsByStatus(CSRStoreStatus status);
 }

@@ -172,6 +172,42 @@ padding:0px 2px 4px 0px; overflow:hidden }
 
 
 
+/*----------------------Conversation Css Starts Here---------------------------*/
+.conversation_block{ margin-top:15px; border-bottom:2px solid #f4f4f4; }
+.conversation_close_btn{ text-align:right;}
+.conversation_bubbles_block{ margin-top:100px;}
+.customer-right.top:after {border-color: transparent #13ccde; border-width: 20px 0px 0 20px; bottom: auto; left: auto;top: -20px;}
+.customer-right:after{border-color:#13ccde transparent;border-style:solid;border-width:20px 0 0 20px;bottom:-20px; content:"";display:block;left:20px;position:absolute;width: 0;}
+.customer-right {background:#13ccde; font:normal 14px/18px Arial, Helvetica, sans-serif;color:#ffffff; margin: .8em 0 1em; padding: 15px; float:left; width:80%; position: relative;}
+.agent-right.top:after {border-color:#0c8f9c transparent; border-style:solid; border-width:20px 0 0 20px; bottom:-20px; content:""; display:block;right:20px;position:absolute; width:0;}
+.agent-right:after{border-color:#0c8f9c transparent;border-style:solid;border-width:20px 0 0 20px;bottom:-20px; content:"";display:block;right:20px;position:absolute;width: 0;}
+.agent-right {background:#0c8f9c;font:normal 14px/18px Arial, Helvetica, sans-serif;color:#ffffff; margin: .8em 0 1em; padding: 15px; float:right; width:80%; position: relative;}
+.conversation_textfield{background:url(../bnc_images/conversation_textfield_bg.png) no-repeat left 11px;border:none;height:65px; padding-bottom:5px;margin-right:50px;padding-left:10px;padding-right:10px;
+width:455px;}
+.conversation_buttons{margin:20px 0 10px 0; text-align:right;}
+/*----------------------Conversation Css Ends Here---------------------------*/
+
+
+/*----------------------Search box Css Starts Here---------------------------*/
+#search_block {border-bottom:2px solid #f4f4f4; float:left; width:100%; margin:15px 0 15px 0; padding-bottom:15px;}
+#search_form {display: -moz-box;}
+#search_text {border-radius: 5px 0 0 5px;border: 1px solid #efefef;color: #909090;background:url(../bnc_images/mic.png) no-repeat right center;font: italic 14px Arial, Helvetica, sans-serif;height: 38px;padding: 0 30px 0 8px; width:40.5em;}
+#search_submit {border-radius: 0px 5px 5px 0px;border: none;background: #000000;color: #ffffff;cursor: pointer;font-size: 13px !important;height: 38px;padding: 0 9px;}
+/*----------------------Search box Css Ends Here---------------------------*/
+
+
+
+/*----------------------Search tabel expand-collapse Css Starts Here---------------------------*/
+.search_order_tabel_block {margin: 0;padding: 0;width: 100%;}
+.searchtabel_heading {margin: 1px;color: #6f6f6f;font: normal 16px Arial, Helvetica, sans-serif;border-left: 4px solid #08c208;padding: 10px 15px 10px 15px;cursor: pointer;
+position: relative;background: #f7f5f5;}
+.searchtabel_heading1{border-left: 4px solid #ffd200;}
+.searchtabel_heading .moneytxt {float: right;}
+.search_order_tabel {font: 14px Arial, Helvetica, sans-serif;color: #6f6f6f;padding: 5px 10px;background-color: #fafafa;}
+/*----------------------Search tabel expand-collapse Css Ends Here---------------------------*/
+
+
+
 
 
 /*----------------------Right Block  Order number menu Css Ends Here---------------------------*/

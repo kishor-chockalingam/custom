@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.acc.core.enums.CSRStoreStatus;
 import com.acc.core.model.CSRCustomerDetailsModel;
 import com.acc.core.service.storecustomer.StoreCustomerService;
 import com.acc.facades.storecustomer.StoreCustomerFacade;
@@ -46,6 +47,18 @@ public class StoreCustomerFacadeImpl implements StoreCustomerFacade
 	{
 		LOG.info("Calling updateCSRCustomerDetail from facade with CSR ID [" + csrUID + "], And Customer ID [" + customerUID + "].");
 		return storeCustomerService.updateCSRCustomerDetail(csrUID, customerUID, status);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.acc.facades.storecustomer.StoreCustomerFacade#getCSRCustomerDetailsByStatus(com.acc.core.enums.CSRStoreStatus)
+	 */
+	@Override
+	public List<CSRCustomerDetailsModel> getCSRCustomerDetailsByStatus(final CSRStoreStatus status)
+	{
+		return storeCustomerService.getCSRCustomerDetailsByStatus(status);
 	}
 
 }

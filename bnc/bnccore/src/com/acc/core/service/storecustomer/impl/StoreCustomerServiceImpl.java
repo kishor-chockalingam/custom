@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -52,8 +53,9 @@ public class StoreCustomerServiceImpl implements StoreCustomerService
 		LOG.info("Point of service [" + pos + "].");
 		final FlexibleSearchQuery flexibleQuery = new FlexibleSearchQuery(
 				"Select {csrcd.pk} from {CSRCustomerDetails as csrcd JOIN CSRStoreStatus as csrss ON {csrss.pk}={csrcd.status}}"
-						+ "where {csrss.code} not in ('Completed') AND {csrcd.pointOfService}='" + pos
-						+ "' AND {csrcd.creationtime} like '" + todayDate + "%'");
+						+ "where "
+						//+"{csrss.code} not in ('Completed') AND"
+						+ " {csrcd.pointOfService}='" + pos + "' AND {csrcd.creationtime} like '" + todayDate + "%'");
 
 		final SearchResult<CSRCustomerDetailsModel> result = flexibleSearchService.search(flexibleQuery);
 
@@ -95,5 +97,27 @@ public class StoreCustomerServiceImpl implements StoreCustomerService
 		csrCustomerDetailsModel.setProcessedBy(csrUID);
 		modelService.save(csrCustomerDetailsModel);
 		return csrCustomerDetailsModel;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.acc.core.service.storecustomer.StoreCustomerService#getCSRCustomerDetailsByStatus(com.acc.core.enums.
+	 * CSRStoreStatus)
+	 */
+	@Override
+	public List<CSRCustomerDetailsModel> getCSRCustomerDetailsByStatus(final CSRStoreStatus status)
+	{
+		final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		final String todayDate = sdf.format(new Date());
+		final String pos = sessionService.getAttribute("POINT_OF_SERVICE");
+		LOG.info("Point of service [" + pos + "].");
+		final FlexibleSearchQuery flexibleQuery = new FlexibleSearchQuery(
+				"Select {csrcd.pk} from {CSRCustomerDetails as csrcd JOIN CSRStoreStatus as csrss ON {csrss.pk}={csrcd.status}}"
+						+ "where {csrss.code} in ('" + status.getCode() + "') AND {csrcd.pointOfService}='" + pos
+						+ "' AND {csrcd.creationtime} like '" + todayDate + "%'");
+		final SearchResult<CSRCustomerDetailsModel> result = flexibleSearchService.search(flexibleQuery);
+		final List<CSRCustomerDetailsModel> customerList = result.getResult();
+		return CollectionUtils.isNotEmpty(customerList) ? customerList : null;
 	}
 }

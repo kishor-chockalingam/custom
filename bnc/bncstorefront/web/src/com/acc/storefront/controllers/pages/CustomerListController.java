@@ -27,6 +27,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -34,6 +36,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.acc.core.enums.CSRStoreStatus;
 import com.acc.core.model.CSRCustomerDetailsModel;
 import com.acc.facades.storecustomer.StoreCustomerFacade;
 import com.acc.storefront.controllers.ControllerConstants;
@@ -173,21 +176,23 @@ public class CustomerListController extends AbstractPageController
 		}
 	}
 
+	@SuppressWarnings("boxing")
 	@RequestMapping(value = "/customerdeatils", method = RequestMethod.GET)
 	public String customerListDetails(final Model model, final HttpServletRequest request, final HttpServletResponse response)
 			throws CMSItemNotFoundException
 	{
-		final List<StoreCustomerData> customerLoggedInDataList = new ArrayList<StoreCustomerData>();
+		final List<StoreCustomerData> customerStatusDataList = new ArrayList<StoreCustomerData>();
 		final List<StoreCustomerData> customerInServiceDataList = new ArrayList<StoreCustomerData>();
 		final List<StoreCustomerData> customerNoThanxDataList = new ArrayList<StoreCustomerData>();
-
 		final List<CSRCustomerDetailsModel> csrCustomerDetailsList = StoreCustomerFacade.getCSRCustomerDetails();
+		String status = request.getParameter("status");
+		final List<CSRCustomerDetailsModel> csrCustomerDetailsByStatusList = StoreCustomerFacade.getCSRCustomerDetailsByStatus(StringUtils.isEmpty(status)?CSRStoreStatus.LOGGEDIN:CSRStoreStatus.valueOf(status));
 		final String contextPath = "/bncstorefront/_ui/desktop/common/images/Dummy.jpg";
 		try
 		{
-			if (null != csrCustomerDetailsList)
+			if (null != csrCustomerDetailsByStatusList)
 			{
-				for (final CSRCustomerDetailsModel customerDetails : csrCustomerDetailsList)
+				for (final CSRCustomerDetailsModel customerDetails : csrCustomerDetailsByStatusList)
 				{
 					final UserModel userModel = userService.getUserForUID(customerDetails.getCustomerId());
 					String profilePictureURL = "";
@@ -200,44 +205,15 @@ public class CustomerListController extends AbstractPageController
 					final StoreCustomerData storecustomerData = new StoreCustomerData();
 					final String time = returnLoginFromTime(customerDetails.getLoginTime());
 					final String loggedTime = returnLoggedInTime(customerDetails.getLoginTime());
-
-					if (customerDetails.getStatus().getCode().equals("LoggedIn"))
-					{
-						storecustomerData.setCustomerId(customerDetails.getCustomerId());
-						storecustomerData.setCustomerName(customerDetails.getCustomerName());
-						storecustomerData.setStoreCustomerPK(customerDetails.getPk().getLongValueAsString());
-						storecustomerData.setWaitingTime(time);
-						storecustomerData.setLoginTime(loggedTime);
-						storecustomerData.setProfilePictureURL(profilePictureURL);
-						storecustomerData.setProcessedBy((null == customerDetails.getProcessedBy() ? "" : customerDetails
-								.getProcessedBy()));
-						customerLoggedInDataList.add(storecustomerData);
-					}
-					else if (customerDetails.getStatus().getCode().equals("InService"))
-					{
-						storecustomerData.setCustomerId(customerDetails.getCustomerId());
-						storecustomerData.setCustomerName(customerDetails.getCustomerName());
-						storecustomerData.setStoreCustomerPK(customerDetails.getPk().getLongValueAsString());
-						storecustomerData.setWaitingTime(time);
-						storecustomerData.setLoginTime(loggedTime);
-						storecustomerData.setProfilePictureURL(profilePictureURL);
-						storecustomerData.setProcessedBy((null == customerDetails.getProcessedBy() ? "" : customerDetails
-								.getProcessedBy()));
-						customerInServiceDataList.add(storecustomerData);
-					}
-					else if (customerDetails.getStatus().getCode().equals("NoThanks"))
-					{
-						storecustomerData.setCustomerId(customerDetails.getCustomerId());
-						storecustomerData.setCustomerName(customerDetails.getCustomerName());
-						storecustomerData.setStoreCustomerPK(customerDetails.getPk().getLongValueAsString());
-						storecustomerData.setWaitingTime(time);
-						storecustomerData.setLoginTime(loggedTime);
-						storecustomerData.setProfilePictureURL(profilePictureURL);
-						storecustomerData.setProcessedBy((null == customerDetails.getProcessedBy() ? "" : customerDetails
-								.getProcessedBy()));
-						customerNoThanxDataList.add(storecustomerData);
-					}
-
+					storecustomerData.setCustomerId(customerDetails.getCustomerId());
+					storecustomerData.setCustomerName(customerDetails.getCustomerName());
+					storecustomerData.setStoreCustomerPK(customerDetails.getPk().getLongValueAsString());
+					storecustomerData.setWaitingTime(time);
+					storecustomerData.setLoginTime(loggedTime);
+					storecustomerData.setProfilePictureURL(profilePictureURL);
+					storecustomerData.setProcessedBy((null == customerDetails.getProcessedBy() ? "" : customerDetails
+							.getProcessedBy()));
+					customerStatusDataList.add(storecustomerData);
 				}
 			}
 		}
@@ -245,15 +221,38 @@ public class CustomerListController extends AbstractPageController
 		{
 			//
 		}
-		model.addAttribute("customerLoggedInDataList", customerLoggedInDataList);
-		model.addAttribute("customerInServiceDataList", customerInServiceDataList);
-		model.addAttribute("customerNoThanxDataList", customerNoThanxDataList);
-		storeCmsPageInModel(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
-		setUpMetaDataForContentPage(model, getContentPageForLabelOrId(ACCOUNT_CMS_PAGE));
+		model.addAttribute("customerLoggedInDataList", customerStatusDataList);
+		model.addAttribute("csrCustomerDetailsByStatusList",csrCustomerDetailsByStatusList);
+		model.addAttribute("Queued", getStatusCount(csrCustomerDetailsList, CSRStoreStatus.LOGGEDIN));
+		model.addAttribute("Active", getStatusCount(csrCustomerDetailsList, CSRStoreStatus.INSERVICE));
+		model.addAttribute("Serviced", getStatusCount(csrCustomerDetailsList, CSRStoreStatus.COMPLETED));
+		model.addAttribute("CSR_USER", sessionService.getAttribute("CSR_USER"));
 
 		return ControllerConstants.Views.Pages.Account.customerDetailsPage;
 
 	}
+	
+	/**
+	 * @param cSRCustomerDetailsModelsList
+	 */
+	private int getStatusCount(final List<CSRCustomerDetailsModel> cSRCustomerDetailsModelsList, final CSRStoreStatus status)
+	{
+		int statusCount = 0;
+		if(CollectionUtils.isNotEmpty(cSRCustomerDetailsModelsList))
+		{
+			for (final CSRCustomerDetailsModel cSRCustomerDetailsModel : cSRCustomerDetailsModelsList)
+			{
+				if (status.equals(cSRCustomerDetailsModel.getStatus()))
+				{
+					statusCount++;
+				}
+			}
+		}
+		return statusCount;
+	}
+	
+	
+	
 
 	@RequestMapping(value = "/csrlogout", method = RequestMethod.GET)
 	public String csrlogout()
