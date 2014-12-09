@@ -92,62 +92,33 @@ public class CustomerListController extends AbstractPageController
 		final CustomerData customerData = new CustomerData();
 		final List<CustomerOrderData> customerOrderDataList = new ArrayList<CustomerOrderData>();
 		final StoreCustomerData storecustomerData = new StoreCustomerData();
-		Wishlist2Model wishlistModel = null;
 		List<Wishlist2EntryModel> wishlistEnteries=null;
 		if ((null != request.getParameter("csrId") && request.getParameter("csrId").trim().length() > 0)
 				&& null != request.getParameter("customerPK"))
 		{
 			final CSRCustomerDetailsModel csrCustomerDetailsModel = StoreCustomerFacade.updateCSRCustomerDetail(
 					request.getParameter("csrId"), request.getParameter("customerPK"), "");
-
 			final UserModel csrUserModel = userService.getUserForUID(request.getParameter("csrId"));
-			if (!wishlistService.hasDefaultWishlist(csrUserModel))
-			{
-				wishlistService.createDefaultWishlist(csrUserModel, "wishlist", "add to wishlist fuunctionality");
-				wishlistModel = wishlistService.getDefaultWishlist(csrUserModel);
-				wishlistEnteries = wishlistModel.getEntries();
-			}
-			else
-			{
-				wishlistModel = wishlistService.getDefaultWishlist(csrUserModel);
-				wishlistEnteries = wishlistModel.getEntries();
-			}
-			Wishlist2Data wishlistData = null;
-			final List<ProductData> products = new ArrayList<ProductData>();
 			if (csrUserModel instanceof CustomerModel)
 			{
 				final CustomerModel csrCustomerModel = (CustomerModel) csrUserModel;
 				customerData.setName(csrCustomerModel.getName());
 				customerData.setUid(csrCustomerModel.getUid());
 				customerData.setTitle(csrCustomerModel.getDescription());
-				if (null != wishlistEnteries)
-				{
-					wishlistData = wishlist2Converter.convert(wishlistModel);
-
-				}
-				if (null != csrCustomerModel.getRecentlyviewedproducts())
-				{
-					for (final ProductModel productModel : csrCustomerModel.getRecentlyviewedproducts())
-					{
-						products.add(productFacade.getProductForOptions(productModel, PRODUCT_OPTIONS));
-					}
-				}
-				Collections.reverse(products);
-				model.addAttribute("wishlist", wishlistData);
-				model.addAttribute("productData", products);
 			}
-			assistCustomerRecord(csrCustomerDetailsModel, storecustomerData, informationDto, customerOrderDataList);
+			assistCustomerRecord(csrCustomerDetailsModel, storecustomerData, informationDto, customerOrderDataList, model);
 		}
 		else if (null != request.getParameter("customerPK"))
 		{
 			final CSRCustomerDetailsModel csrCustomerDetailsModel = modelService.get(PK.parse(request.getParameter("customerPK")));
-			assistCustomerRecord(csrCustomerDetailsModel, storecustomerData, informationDto, customerOrderDataList);
+			assistCustomerRecord(csrCustomerDetailsModel, storecustomerData, informationDto, customerOrderDataList, model);
 		}
 
 		model.addAttribute("storecustomerData", storecustomerData);
 		model.addAttribute("informationDto", informationDto);
 		model.addAttribute("customerOrderDataList", customerOrderDataList);
 		model.addAttribute("customerData", customerData);
+		model.addAttribute("CSR_USER", sessionService.getAttribute("CSR_USER"));
 		return ControllerConstants.Views.Fragments.Cart.CustomerDetailsFragment;
 
 	}
@@ -166,13 +137,38 @@ public class CustomerListController extends AbstractPageController
 	 */
 	private void assistCustomerRecord(final CSRCustomerDetailsModel csrCustomerDetailsModel,
 			final StoreCustomerData storecustomerData, final ProfileInformationDto informationDto,
-			final List<CustomerOrderData> customerOrderDataList)
+			final List<CustomerOrderData> customerOrderDataList, final Model model)
 	{
 		final UserModel userModel = userService.getUserForUID(csrCustomerDetailsModel.getCustomerId());
 		if (userModel instanceof CustomerModel)
 		{
 			final CustomerModel customerModel = (CustomerModel) userModel;
-
+			//retrieving wishlist entries
+			Wishlist2Model wishlistModel = null;
+			if (!wishlistService.hasDefaultWishlist(userModel))
+			{
+				wishlistService.createDefaultWishlist(userModel, "wishlist", "add to wishlist functionality");
+				wishlistModel = wishlistService.getDefaultWishlist(userModel);
+			}
+			else
+			{
+				wishlistModel = wishlistService.getDefaultWishlist(userModel);
+			}
+			Wishlist2Data wishlistData = null != wishlistModel.getEntries()?wishlist2Converter.convert(wishlistModel):null;
+			//end ** wishlist entries**
+			//retrieving recently viewed products
+			final List<ProductData> products = new ArrayList<ProductData>();
+			if (null != customerModel.getRecentlyviewedproducts())
+			{
+				for (final ProductModel productModel : customerModel.getRecentlyviewedproducts())
+				{
+					products.add(productFacade.getProductForOptions(productModel, PRODUCT_OPTIONS));
+				}
+			}
+			Collections.reverse(products);
+			model.addAttribute("wishlist", wishlistData);
+			model.addAttribute("productData", products);
+			//end ** recently viewed products**
 			//CSR Customer data
 			final String contextPath = "/bncstorefront/_ui/desktop/common/images/Dummy.jpg";
 			storecustomerData.setCustomerName(csrCustomerDetailsModel.getCustomerName());
