@@ -43,6 +43,11 @@
 					<span>
 						${logedInUser.loginTime}
 					</span>
+					<c:if test="${param.status=='INSERVICE' || param.status=='COMPLETED'}">
+						<span>
+							processed by ${logedInUser.processedBy}
+						</span>
+					</c:if>
 				</a>
 			</li>
 		</c:forEach>

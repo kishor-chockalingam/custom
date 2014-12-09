@@ -8,12 +8,20 @@
 		<div class="tab_menu_block">
 			<div class="tab_menu_profile">
 				<ul>
-					<li class="space"><input name="" class="assist_btn"
-						type="button" value="Assist"></li>
-					<li class="divider space"></li>
-					<li class="space"><input name="" class="assist_btn"
-						type="button" value="No Thanks"></li>
-					<li class="divider space"></li>
+					<c:choose>
+						<c:when test="${param.status=='INSERVICE' && not empty storecustomerData.processedBy && storecustomerData.processedBy==CSR_USER}">
+							<li class="space"><input name="" class="assist_btn"	type="button" value="Serviced"></li>
+							<li class="divider space"></li>
+						</c:when>
+						<c:when test="${param.status=='COMPLETED'}">
+						</c:when>
+						<c:otherwise>
+							<li class="space"><input name="" class="assist_btn"	type="button" value="Assist"></li>
+							<li class="divider space"></li>
+							<li class="space"><input name="" class="assist_btn" type="button" value="No Thanks"></li>
+							<li class="divider space"></li>
+						</c:otherwise>
+					</c:choose>
 					<li class="space"><a href="#" class="send_greeting">Send
 							Greeting</a></li>
 				</ul>

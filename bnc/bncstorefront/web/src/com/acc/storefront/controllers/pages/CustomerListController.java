@@ -183,6 +183,7 @@ public class CustomerListController extends AbstractPageController
 			storecustomerData.setProfilePictureURL((null == customerModel.getProfilePicture() ? contextPath : customerModel
 					.getProfilePicture().getURL2()));
 			storecustomerData.setCustomerId(customerModel.getUid());
+			storecustomerData.setProcessedBy((null == csrCustomerDetailsModel.getProcessedBy() ? "" : csrCustomerDetailsModel.getProcessedBy()));
 			informationDto.setName(csrCustomerDetailsModel.getCustomerName());
 			final Collection<AddressModel> addressList = customerModel.getAddresses();
 			if (null != addressList)
