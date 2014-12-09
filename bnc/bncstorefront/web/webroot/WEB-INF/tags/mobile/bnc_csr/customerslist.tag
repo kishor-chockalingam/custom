@@ -26,7 +26,7 @@
 <div id="order_menu">
 	<ul>
 		<li class="search_padding"><input type="text" value=""
-			placeholder="Search " name="q" class="search-text placeholder">
+			placeholder="Search " name="q" class="search-text placeholder" id="customername" onblur="javascript:searchByCustomerName();">
 		</li>
 		<c:forEach items="${customerLoggedInDataList}" var="logedInUser" varStatus="counter">
 			<c:set var="currentClass" value=""/>

@@ -33,4 +33,9 @@ public interface StoreCustomerService
 	 * @return List<CSRCustomerDetailsModel>
 	 */
 	public List<CSRCustomerDetailsModel> getCSRCustomerDetailsByStatus(CSRStoreStatus status);
-}
+
+	public CSRCustomerDetailsModel getCollectOrderByCustomerName(String customerName);
+	
+	}
+
+

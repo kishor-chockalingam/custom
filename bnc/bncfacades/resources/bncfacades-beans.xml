@@ -42,6 +42,19 @@
 		<value>COLLECTED</value>
 	</enum>
 	
+	
+	<bean class="com.acc.facades.CSRCustomerDetails.data.CSRCustomerDetailsData">
+		<property name="pk" type="String"/>
+		<property name="customerName" type="String"/>
+		<property name="customerId" type="String"/>
+		<property name="status" type="com.acc.core.enums.CSRStoreStatus"/>
+		<property name="loginTime" type="java.util.Date"/>
+		<property name="UUID" type="String"/>
+		<property name="processedBy" type="String"/>
+		<property name="pointOfService" type="String"/>
+		
+		
+	</bean> 
 	<!--Start: Wishlist2EntryData -->
 
 <bean class="com.acc.facades.wishlist.data.Wishlist2EntryData">

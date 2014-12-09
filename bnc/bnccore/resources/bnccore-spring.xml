@@ -455,9 +455,14 @@
 		<property name="rootCategoryCode" value="categories"/>
 	</bean>
 	
+		<bean id="storeCustomerDao" class="com.acc.core.dao.storecustomer.impl.StoreCustomerDaoImpl" parent="abstractItemDao">
+	</bean>
 	<alias name="storeCustomerServiceImpl" alias="storeCustomerService" />
 	<bean id="storeCustomerServiceImpl" class="com.acc.core.service.storecustomer.impl.StoreCustomerServiceImpl" >
+	<property name="storeCustomerDao" ref="storeCustomerDao"/>
 	</bean>
+	
+
 	
 	
 	<bean id="bnCPrepareInterceptor" class="com.acc.core.interceptors.BnCPrepareInterceptor"

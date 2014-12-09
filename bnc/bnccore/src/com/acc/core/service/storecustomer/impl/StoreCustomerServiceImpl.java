@@ -18,6 +18,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.acc.core.dao.storecustomer.StoreCustomerDao;
 import com.acc.core.enums.CSRStoreStatus;
 import com.acc.core.model.CSRCustomerDetailsModel;
 import com.acc.core.service.storecustomer.StoreCustomerService;
@@ -37,6 +38,27 @@ public class StoreCustomerServiceImpl implements StoreCustomerService
 	private FlexibleSearchService flexibleSearchService;
 	@Autowired
 	private ModelService modelService;
+	@Autowired
+	private StoreCustomerDao storeCustomerDao;
+
+
+
+	/**
+	 * @return the storeCustomerDao
+	 */
+	public StoreCustomerDao getStoreCustomerDao()
+	{
+		return storeCustomerDao;
+	}
+
+	/**
+	 * @param storeCustomerDao
+	 *           the storeCustomerDao to set
+	 */
+	public void setStoreCustomerDao(final StoreCustomerDao storeCustomerDao)
+	{
+		this.storeCustomerDao = storeCustomerDao;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -120,4 +142,18 @@ public class StoreCustomerServiceImpl implements StoreCustomerService
 		final List<CSRCustomerDetailsModel> customerList = result.getResult();
 		return CollectionUtils.isNotEmpty(customerList) ? customerList : null;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.acc.core.service.storecustomer.StoreCustomerService#getCollectOrderByCustomerName(java.lang.String)
+	 */
+	@Override
+	public CSRCustomerDetailsModel getCollectOrderByCustomerName(final String customerName)
+	{
+		return storeCustomerDao.getCollectOrderByCustomerName(customerName);
+	}
+
+
+
 }

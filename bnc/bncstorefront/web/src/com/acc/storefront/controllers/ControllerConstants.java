@@ -159,6 +159,7 @@ public interface ControllerConstants
 				String OrdersListFragmentPage = "fragments/cart/ordersListFragmentPage";
 				String OrderByDateTime = "fragments/cart/orderByDateTime";
 				String PersonalDetails = "fragments/cart/personalDetails";
+				String OrderByCustomerName = "fragments/cart/orderByCustomerName";
 				String CustomerDetailsFragment = "fragments/cart/customerdetailsfragment";
 			}
 

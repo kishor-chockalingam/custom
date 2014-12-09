@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.acc.core.enums.CSRStoreStatus;
 import com.acc.core.model.CSRCustomerDetailsModel;
+import com.acc.facades.CSRCustomerDetails.data.CSRCustomerDetailsData;
 
 
 /**
@@ -34,4 +35,7 @@ public interface StoreCustomerFacade
 	 * @return List<CSRCustomerDetailsModel>
 	 */
 	public List<CSRCustomerDetailsModel> getCSRCustomerDetailsByStatus(CSRStoreStatus status);
+
+	public CSRCustomerDetailsData getCollectOrderByCustomerName(String customerName);
+
 }

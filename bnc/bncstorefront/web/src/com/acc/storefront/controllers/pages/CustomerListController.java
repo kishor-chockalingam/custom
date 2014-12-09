@@ -39,15 +39,18 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.acc.core.enums.CSRStoreStatus;
 import com.acc.core.model.CSRCustomerDetailsModel;
+import com.acc.facades.CSRCustomerDetails.data.CSRCustomerDetailsData;
 import com.acc.facades.storecustomer.StoreCustomerFacade;
 import com.acc.facades.wishlist.data.Wishlist2Data;
 import com.acc.storefront.controllers.ControllerConstants;
@@ -67,7 +70,9 @@ public class CustomerListController extends AbstractPageController
 {
 	private static final String REDIRECT_TO_CUSTOMER_DETAILS = REDIRECT_PREFIX + "/customerlist/customerdeatils";
 	private static final String ACCOUNT_CMS_PAGE = "account";
-	private static final List<ProductOption> PRODUCT_OPTIONS = Arrays.asList(ProductOption.BASIC, ProductOption.PRICE);
+	
+	private static final Logger LOG = Logger.getLogger(CustomerListController.class);
+
 	@Autowired
 	private StoreCustomerFacade StoreCustomerFacade;
 	@Autowired
@@ -355,4 +360,32 @@ public class CustomerListController extends AbstractPageController
 		}
 		return time;
 	}
+	@RequestMapping(value = "/customerName", method = RequestMethod.GET, produces = "application/json")
+	public String SearchByCustomerName(@RequestParam("customername") final String customerName, final Model model, final HttpServletRequest request,
+			final HttpServletResponse response) throws CMSItemNotFoundException
+
+	{
+		LOG.info("In controller of SearchByCustomerName");
+		final CSRCustomerDetailsData csrCustomerDetailsData = StoreCustomerFacade.getCollectOrderByCustomerName(customerName);
+		if(null!=csrCustomerDetailsData)
+		{
+			LOG.info("customer data in csutomer list controller"+csrCustomerDetailsData);
+
+		LOG.info("customer name in csutomer list controller"+csrCustomerDetailsData.getCustomerName());
+		LOG.info("customer id in csutomer list controller"+csrCustomerDetailsData.getCustomerId());
+		
+		}
+		model.addAttribute("collectOrderDataByCustomerName", csrCustomerDetailsData);
+		
+		LOG.info("In controller of SearchByCustomerName");
+		
+		
+		
+		/*final OrderData orderData = customerCollectOrderFacade.getOrderDetailsForCode(collectOrderData.getOrderId());
+		model.addAttribute("orderData", orderData);
+		model.addAttribute("collectOrderStatusList", BnCGenericUtil.getStatusList());
+		model.addAttribute("collectOrderData", collectOrderData);*/
+		return ControllerConstants.Views.Fragments.Cart.OrderByCustomerName;
+	}
+
 }

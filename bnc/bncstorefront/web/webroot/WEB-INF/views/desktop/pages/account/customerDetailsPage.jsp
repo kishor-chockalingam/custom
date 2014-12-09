@@ -227,6 +227,34 @@
 <!DOCTYPE html>
 <html>
 	<head>
+	
+	<script type="text/javascript">
+	
+	
+	function searchByCustomerName() {
+		
+		alert("hello");
+		var customername = document.getElementById('customername').value;
+		 if (document.getElementById('customername').value =='' ) { 
+		alert("Please enter the customername!");
+			document.getElementById('customername').focus();
+			return false;
+		}
+		 alert("Adding "+customername);
+		$.ajax({
+			type : 'GET',
+			url : "${contextPath}/customerlist/customerName",
+			data : "customername=" + customername,
+			dataType : 'json',
+			success : function(response) {
+			$("#customersDivId").html(response.searchby_customername);
+			},
+			error : function(e) {
+				alert("Please enter correct customername");
+			}
+		});
+	}
+	</script>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
 		<title>Customers Dashboard</title>
@@ -250,6 +278,8 @@
 					</div>
 					<div class="right_block smaller_blovk" id="customer_details_block">
 							<!--------Personal Details Table Will go here-------->
+							<div id= "customersDivId">
+		</div>
 					</div>
 					<div class="clearboth"></div>
 				</div>
@@ -257,6 +287,8 @@
 			<!--Content Ends here-->
 	
 		</div>
+		
+		
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script src="${commonResourcePath}/bnc_js/jquery.diagram.js"></script>
 		<script src="${commonResourcePath}/bnc_js/script.js"></script>
