@@ -45,7 +45,7 @@
 					</span>
 					<c:if test="${param.status=='INSERVICE' || param.status=='COMPLETED'}">
 						<span>
-							processed by ${logedInUser.processedBy}
+							assisted by ${logedInUser.processedBy}
 						</span>
 					</c:if>
 				</a>
