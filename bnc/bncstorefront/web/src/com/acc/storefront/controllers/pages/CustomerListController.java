@@ -87,7 +87,7 @@ public class CustomerListController extends AbstractPageController
 	@Autowired
 	private ProductFacade productFacade;
 	@Autowired
-	private Converter<Wishlist2Model, Wishlist2Data> wishlist2Converter;
+	private Converter<Wishlist2Model, Wishlist2Data> Wishlist2Converter;
 
 
 	@RequestMapping(value = "/assistcustomer", method = RequestMethod.GET, produces = "application/json")
@@ -365,19 +365,102 @@ public class CustomerListController extends AbstractPageController
 			final HttpServletResponse response) throws CMSItemNotFoundException
 
 	{
-		LOG.info("In controller of SearchByCustomerName");
+		Wishlist2Model wishlistModel = null;
+		List<Wishlist2EntryModel> wishlistEnteries=null;
 		final CSRCustomerDetailsData csrCustomerDetailsData = StoreCustomerFacade.getCollectOrderByCustomerName(customerName);
+		final UserModel userModel = userService.getUserForUID(csrCustomerDetailsData.getCustomerId());
+		final CustomerModel customerModel = (CustomerModel) userModel;
+		final List<ProductData> products = new ArrayList<ProductData>();
+		Wishlist2Data wishlistData = null;
+		
+		 if (wishlistService.hasDefaultWishlist(userModel) == false)
+			{
+			 wishlistService.createDefaultWishlist(userModel, "wishlist", "add to wishlist fuunctionality");
+
+				System.out.println("inside create deafultwishlist");
+				wishlistModel = wishlistService.getDefaultWishlist(userModel);
+				 wishlistEnteries = wishlistModel.getEntries();
+			
+			}
+			else
+			{
+				wishlistModel = wishlistService.getDefaultWishlist(userModel);
+				wishlistEnteries = wishlistModel.getEntries();
+			}
+
+			
+			if (userModel instanceof CustomerModel)
+			{
+				if (null != wishlistEnteries)
+				{
+					wishlistData = Wishlist2Converter.convert(wishlistModel);
+
+				}
+				if (null != customerModel.getRecentlyviewedproducts())
+				{
+					for (final ProductModel productModel : customerModel.getRecentlyviewedproducts())
+					{
+						products.add(productFacade.getProductForOptions(productModel, PRODUCT_OPTIONS));
+					}
+				}
+			}
+		final String contextPath = "/bncstorefront/_ui/desktop/common/images/Dummy.jpg";
+		LOG.info("In controller of SearchByCustomerName");
+		
+		
+		String profilePictureURL = "";
+
+		if (null != userModel && userModel instanceof CustomerModel)
+		{
+			
+			profilePictureURL = (null == customerModel.getProfilePicture() ? contextPath : customerModel
+					.getProfilePicture().getURL2());
+		}
+		final StoreCustomerData storecustomerData = new StoreCustomerData();
+		storecustomerData.setProfilePictureURL(profilePictureURL);
+		
+		storecustomerData.setCustomerId(csrCustomerDetailsData.getCustomerId());
+		storecustomerData.setCustomerName(csrCustomerDetailsData.getCustomerName());
+		final Collection<AddressModel> addressList = customerModel.getAddresses();
+		LOG.info("address model ############"+addressList);
+		if (null != addressList)
+		{
+			for (final AddressModel addressModel : addressList)
+			{
+				addressModel.getContactAddress();
+				addressModel.getLine1();
+				addressModel.getLine2();
+				addressModel.getAppartment();
+				addressModel.getPostalcode();
+				addressModel.getCountry();
+				addressModel.getDateOfBirth();
+				addressModel.getCountry();
+				addressModel.getCellphone();
+				addressModel.getStreetname();
+				model.addAttribute("addressdata", addressModel);
+				LOG.info("address model ###############"+addressModel);
+				if (null!=addressModel)
+				{
+					LOG.info("address model#############"+addressModel.getStreetname());
+				}
+			}
+
+		}
 		if(null!=csrCustomerDetailsData)
 		{
 			LOG.info("customer data in csutomer list controller"+csrCustomerDetailsData);
 
 		LOG.info("customer name in csutomer list controller"+csrCustomerDetailsData.getCustomerName());
 		LOG.info("customer id in csutomer list controller"+csrCustomerDetailsData.getCustomerId());
-		
+		LOG.info("store customer data"+storecustomerData.getProfilePictureURL());
 		}
 		model.addAttribute("collectOrderDataByCustomerName", csrCustomerDetailsData);
-		
+		model.addAttribute("storecustomerData", storecustomerData);
+		Collections.reverse(products);
+		model.addAttribute("wishlist", wishlistData);
 		LOG.info("In controller of SearchByCustomerName");
+		model.addAttribute("productData", products);
+		LOG.info("#############recetly viewed data" + products);
 		
 		
 		

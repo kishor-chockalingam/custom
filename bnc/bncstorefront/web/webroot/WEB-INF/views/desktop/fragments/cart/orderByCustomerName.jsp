@@ -6,6 +6,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="bnc" tagdir="/WEB-INF/tags/desktop/bnc_csr" %>
 <%@ taglib prefix="format" tagdir="/WEB-INF/tags/shared/format" %>
+<%@ taglib prefix="product" tagdir="/WEB-INF/tags/desktop/product" %>
 
 <json:object>
 	<json:property name="searchby_customername" escapeXml="false">
@@ -58,8 +59,8 @@
 									<td width="57%" class="graytext">Address</td>
 								</tr>
 								<tr>
-									<td class="bluetext">${informationDto.dob}</td>
-									<td class="bluetext">${informationDto.line1}&nbsp;${informationDto.line2}&nbsp;${informationDto.apartment}&nbsp;${informationDto.postalCode}</td>
+									<td class="bluetext">${addressdata.dob}</td>
+									<td class="bluetext">${addressdata.line1}&nbsp;${addressdata.line2}&nbsp;${addressdata.apartment}&nbsp;${addressdata.postalCode}</td>
 								</tr>
 							</table></td>
 					</tr>
