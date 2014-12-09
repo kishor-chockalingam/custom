@@ -70,6 +70,7 @@ public class CustomerListController extends AbstractPageController
 {
 	private static final String REDIRECT_TO_CUSTOMER_DETAILS = REDIRECT_PREFIX + "/customerlist/customerdeatils";
 	private static final String ACCOUNT_CMS_PAGE = "account";
+	private static final List<ProductOption> PRODUCT_OPTIONS = Arrays.asList(ProductOption.BASIC, ProductOption.PRICE);
 	
 	private static final Logger LOG = Logger.getLogger(CustomerListController.class);
 
@@ -97,7 +98,6 @@ public class CustomerListController extends AbstractPageController
 		final CustomerData customerData = new CustomerData();
 		final List<CustomerOrderData> customerOrderDataList = new ArrayList<CustomerOrderData>();
 		final StoreCustomerData storecustomerData = new StoreCustomerData();
-		List<Wishlist2EntryModel> wishlistEnteries=null;
 		if ((null != request.getParameter("csrId") && request.getParameter("csrId").trim().length() > 0)
 				&& null != request.getParameter("customerPK"))
 		{
