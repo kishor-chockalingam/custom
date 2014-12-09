@@ -159,7 +159,7 @@ public class CustomerListController extends AbstractPageController
 			{
 				wishlistModel = wishlistService.getDefaultWishlist(userModel);
 			}
-			Wishlist2Data wishlistData = null != wishlistModel.getEntries()?wishlist2Converter.convert(wishlistModel):null;
+			Wishlist2Data wishlistData = null != wishlistModel.getEntries()?Wishlist2Converter.convert(wishlistModel):null;
 			//end ** wishlist entries**
 			//retrieving recently viewed products
 			final List<ProductData> products = new ArrayList<ProductData>();
