@@ -10,20 +10,7 @@
 
 <json:object>
 	<json:property name="searchby_customername" escapeXml="false">
-	<div class="tab_menu_block">
-			<div class="tab_menu_profile">
-				<ul>
-					<li class="space"><input name="" class="assist_btn"
-						type="button" value="Assist"></li>
-					<li class="divider space"></li>
-					<li class="space"><input name="" class="assist_btn"
-						type="button" value="No Thanks"></li>
-					<li class="divider space"></li>
-					<li class="space"><a href="#" class="send_greeting">Send
-							Greeting</a></li>
-				</ul>
-			</div>
-		</div>
+
 		<div class="tab_menu_block">
 			<div class="tab_menu">
 				<ul>
@@ -59,8 +46,8 @@
 									<td width="57%" class="graytext">Address</td>
 								</tr>
 								<tr>
-									<td class="bluetext">${addressdata.dob}</td>
-									<td class="bluetext">${addressdata.line1}&nbsp;${addressdata.line2}&nbsp;${addressdata.apartment}&nbsp;${addressdata.postalCode}</td>
+									<td class="bluetext">${addressdata.dateOfBirth}</td>
+									<td class="bluetext">${addressdata.line1}&nbsp;${addressdata.line2}&nbsp;${addressdata.appartment}&nbsp;${addressdata.postalcode}</td>
 								</tr>
 							</table></td>
 					</tr>
@@ -244,7 +231,7 @@
 	                  		<div class="left_arrow">
 	                  			<a href="#"><img src="${commonResourcePath}/bnc_images/arrow_left.png" alt="" border="0"/></a>
 	                  		</div>
-	                  		<div class="caurosel_center_block">
+	                  		<div class="caurosel_center_block" style="width: 31%;">
 	                  			<c:forEach items="${wishlist.entries}" var="wishlist">
 											<div class="caurosel_widget">
 		                      			<div class="caurosel_img">
