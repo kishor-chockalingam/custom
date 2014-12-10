@@ -247,7 +247,7 @@
 			data : "customername=" + customername,
 			dataType : 'json',
 			success : function(response) {
-			$("#customersDivId").html(response.searchby_customername);
+			$("#customer_list_block").html(response.searchby_customername);
 			},
 			error : function(e) {
 				alert("Please enter correct customername");
@@ -273,13 +273,12 @@
 				</div>
 				<div class="clearboth"></div>
 				<div class="inner_content_blk">
-					<div class="left_block bigger_menu">
+					<div class="left_block bigger_menu" id="customer_list_block">
 						<bnc:customerslist/>
 					</div>
 					<div class="right_block smaller_blovk" id="customer_details_block">
 							<!--------Personal Details Table Will go here-------->
-							<div id= "customersDivId">
-		</div>
+							
 					</div>
 					<div class="clearboth"></div>
 				</div>

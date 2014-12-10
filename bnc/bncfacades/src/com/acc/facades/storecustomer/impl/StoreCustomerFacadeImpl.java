@@ -32,6 +32,8 @@ public class StoreCustomerFacadeImpl implements StoreCustomerFacade
 	@Autowired
 	private StoreCustomerService storeCustomerService;
 
+
+
 	@Resource(name = "csrCustomerDetailsConverter")
 	private Converter<CSRCustomerDetailsModel, CSRCustomerDetailsData> csrCustomerDetailsConverter;
 
@@ -94,12 +96,13 @@ public class StoreCustomerFacadeImpl implements StoreCustomerFacade
 	private List<CSRCustomerDetailsData> convert(final List<CSRCustomerDetailsModel> CSRCustomerDetailsList)
 	{
 		final List<CSRCustomerDetailsData> CSRCustomerDetailsData = new ArrayList<CSRCustomerDetailsData>();
+
 		if (CollectionUtils.isNotEmpty(CSRCustomerDetailsList))
 		{
 			for (final CSRCustomerDetailsModel customerDetailsModel : CSRCustomerDetailsList)
 			{
-
 				CSRCustomerDetailsData.add(csrCustomerDetailsConverter.convert(customerDetailsModel));
+
 			}
 		}
 		return CSRCustomerDetailsData;

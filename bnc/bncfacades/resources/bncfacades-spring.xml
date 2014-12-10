@@ -194,9 +194,14 @@
 	
 	<bean id="storeCustomerFacade" class="com.acc.facades.storecustomer.impl.StoreCustomerFacadeImpl" >
 	<property name="storeCustomerService" ref="storeCustomerService"/>
+	
+	
+	
 	</bean>
 	
-	<bean id="csrCustomerDetailsPopulator" class="com.acc.facade.csrCustomerDetails.populator.CSRCustomerDetailsPopulator" />
+	<bean id="csrCustomerDetailsPopulator" class="com.acc.facade.csrCustomerDetails.populator.CSRCustomerDetailsPopulator" >
+		<property name="userService" ref="userService"/>
+	</bean>
 	
 	<bean id="csrCustomerDetailsData" class="com.acc.facades.CSRCustomerDetails.data.CSRCustomerDetailsData" scope="prototype"/>
 	

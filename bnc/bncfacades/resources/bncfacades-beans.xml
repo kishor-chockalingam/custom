@@ -52,6 +52,8 @@
 		<property name="UUID" type="String"/>
 		<property name="processedBy" type="String"/>
 		<property name="pointOfService" type="String"/>
+		<property name="profilePictureURL" type="String"/>
+		
 		
 		
 	</bean> 

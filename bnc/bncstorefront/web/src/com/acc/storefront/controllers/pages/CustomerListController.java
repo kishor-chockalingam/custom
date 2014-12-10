@@ -365,32 +365,16 @@ public class CustomerListController extends AbstractPageController
 			final HttpServletResponse response) throws CMSItemNotFoundException
 
 	{
-		
 		final List<CSRCustomerDetailsData> csrCustomerDetailsData = StoreCustomerFacade.getCollectOrderByCustomerName(customerName);
-		
-			
-		
-	
 		if(null!=csrCustomerDetailsData)
 		{
 			LOG.info("customer data in csutomer list controller"+csrCustomerDetailsData);
 
 		LOG.info("customer name in csutomer list controller"+csrCustomerDetailsData.get(0).getCustomerName());
 		LOG.info("customer id in csutomer list controller"+csrCustomerDetailsData.get(0).getCustomerId());
-		
 		}
 		model.addAttribute("collectOrderDataByCustomerName", csrCustomerDetailsData);
-		
 		LOG.info("In controller of SearchByCustomerName");
-		
-		
-		
-		
-		
-		/*final OrderData orderData = customerCollectOrderFacade.getOrderDetailsForCode(collectOrderData.getOrderId());
-		model.addAttribute("orderData", orderData);
-		model.addAttribute("collectOrderStatusList", BnCGenericUtil.getStatusList());
-		model.addAttribute("collectOrderData", collectOrderData);*/
 		return ControllerConstants.Views.Fragments.Cart.OrderByCustomerName;
 	}
 
