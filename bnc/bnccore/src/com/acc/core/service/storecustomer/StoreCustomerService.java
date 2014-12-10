@@ -36,4 +36,7 @@ public interface StoreCustomerService
 
 	public List<CSRCustomerDetailsModel> getCollectOrderByCustomerName(String customerName);
 
+	public List<CSRCustomerDetailsModel> getCustomerDetailsByDateAndTime(final String fromDate, final String toDate,
+			final String fromTime, final String toTime);
+
 }

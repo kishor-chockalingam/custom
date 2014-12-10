@@ -254,6 +254,53 @@
 			}
 		});
 	}
+	
+	function getCustomersByFromDate()
+	{
+		
+		
+		alert("date");
+		var fdate = document.getElementById('searchTimeBarFromDate').value;
+		var tdate = document.getElementById('searchTimeBarToDate').value;
+		var ftime = document.getElementById('searchTimeBarFromTime').value;
+		var ttime = document.getElementById('searchTimeBarToTime').value;
+		if (fdate =='' ) 
+		{ 
+			alert("Please enter the from Date!");
+			document.getElementById('searchTimeBarFromDate').focus();
+			return false;
+		}
+		if (tdate =='' ) 
+		{ 
+			alert("Please enter the to Date!");
+			document.getElementById('searchTimeBarToDate').focus();
+			return false;
+		}
+		if (ftime =='' ) 
+		{ 
+			alert("Please enter the from Time!");
+			document.getElementById('searchTimeBarFromTime').focus();
+			return false;
+		}
+		if (ttime =='' ) 
+		{ 
+			alert("Please enter the to Time!");
+			document.getElementById('searchTimeBarToTime').focus();
+			return false;
+		}
+		$.ajax({
+			type : 'GET',
+			url : "${contextPath}/customerlist/datetime",
+			data : "fdate=" + fdate+"&tdate="+tdate+"&ftime="+ftime+"&ttime="+ttime,
+			dataType : 'json',
+			success : function(response) {
+				$("#customerByTimeDivId").html(response.searchby_time);
+			},
+			error : function(e) {
+				alert("Please enter dates in proper format! Dates as DD.MM.YYYY and Time as HH:MM AM/PM!!\n\n FromDate should be before ToDate!!");
+			}
+		});
+	}
 	</script>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
@@ -269,8 +316,9 @@
 				<div class="top_banner">
 					<bnc:cust_chart/>
 					<div class="clearboth"></div>
-					<bnc:dateTime/>
+					<bnc:cust_dateTime/>
 				</div>
+				
 				<div class="clearboth"></div>
 				<div class="inner_content_blk">
 					<div class="left_block bigger_menu" id="customer_list_block">
@@ -281,8 +329,10 @@
 							
 					</div>
 					<div class="clearboth"></div>
+					<div id ="customerByTimeDivId"></div>
 				</div>
 			</div>
+			
 			<!--Content Ends here-->
 	
 		</div>

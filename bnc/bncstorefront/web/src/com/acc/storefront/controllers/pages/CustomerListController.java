@@ -5,6 +5,7 @@ package com.acc.storefront.controllers.pages;
 
 import de.hybris.platform.acceleratorstorefrontcommons.controllers.pages.AbstractPageController;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
+import de.hybris.platform.commercefacades.order.data.OrderData;
 import de.hybris.platform.commercefacades.product.ProductFacade;
 import de.hybris.platform.commercefacades.product.ProductOption;
 import de.hybris.platform.commercefacades.product.data.ProductData;
@@ -50,7 +51,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.acc.core.enums.CSRStoreStatus;
 import com.acc.core.model.CSRCustomerDetailsModel;
+import com.acc.core.util.BnCGenericUtil;
 import com.acc.facades.CSRCustomerDetails.data.CSRCustomerDetailsData;
+import com.acc.facades.collectOrder.data.CollectOrderData;
 import com.acc.facades.storecustomer.StoreCustomerFacade;
 import com.acc.facades.wishlist.data.Wishlist2Data;
 import com.acc.storefront.controllers.ControllerConstants;
@@ -352,5 +355,22 @@ public class CustomerListController extends AbstractPageController
 		LOG.info("In controller of SearchByCustomerName");
 		return ControllerConstants.Views.Fragments.Cart.OrderByCustomerName;
 	}
+	
+	
+	@RequestMapping(value = "/datetime", method = RequestMethod.GET, produces = "application/json")
+	public String searchByDateTime(@RequestParam("fdate") final String fromDate, @RequestParam("tdate") final String toDate,
+			@RequestParam("ftime") final String fromTime, @RequestParam("ttime") final String toTime, final Model model,
+			final HttpServletRequest request, final HttpServletResponse response) throws CMSItemNotFoundException
+
+	{
+		final List<CSRCustomerDetailsData> csrCustomerDataList = StoreCustomerFacade.getCustomerDetailsByDateAndTime(fromDate, toDate, fromTime, toTime);
+		model.addAttribute("csrCustomerDataList", csrCustomerDataList);
+
+		
+		model.addAttribute("CSRCustomerDetailsData", CollectionUtils.isEmpty(csrCustomerDataList)?
+					new CSRCustomerDetailsData() : StoreCustomerFacade.getCollectOrderByCustomerName(csrCustomerDataList.get(0).getCustomerName()));
+		return ControllerConstants.Views.Fragments.Cart.CustomerByDateTime;
+	}
+
 
 }

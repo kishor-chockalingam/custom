@@ -120,4 +120,17 @@ public class StoreCustomerFacadeImpl implements StoreCustomerFacade
 		return convert(CSRCustomerDetails);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.acc.facades.storecustomer.StoreCustomerFacade#getCustomerDetailsByDateAndTime(java.lang.String,
+	 * java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<CSRCustomerDetailsData> getCustomerDetailsByDateAndTime(final String fromDate, final String toDate,
+			final String fromTime, final String toTime)
+	{
+		return convert(storeCustomerService.getCustomerDetailsByDateAndTime(fromDate, toDate, fromTime, toTime));
+	}
+
 }

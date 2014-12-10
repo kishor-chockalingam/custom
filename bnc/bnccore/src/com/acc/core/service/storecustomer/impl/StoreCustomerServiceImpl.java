@@ -154,6 +154,18 @@ public class StoreCustomerServiceImpl implements StoreCustomerService
 		return storeCustomerDao.getCollectOrderByCustomerName(customerName);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.acc.core.service.storecustomer.StoreCustomerService#getCustomerDetailsByDateAndTime(java.lang.String,
+	 * java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<CSRCustomerDetailsModel> getCustomerDetailsByDateAndTime(final String fromDate, final String toDate,
+			final String fromTime, final String toTime)
+	{
+		return storeCustomerDao.getCustomerDetailsByDateAndTime(fromDate, toDate, fromTime, toTime);
+	}
 
 
 }
