@@ -5,10 +5,12 @@ package com.acc.facades.storecustomer.impl;
 
 import de.hybris.platform.servicelayer.dto.converter.Converter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -88,15 +90,20 @@ public class StoreCustomerFacadeImpl implements StoreCustomerFacade
 		return storeCustomerService.getCSRCustomerDetailsByStatus(status);
 	}
 
-	/*
-	 * private List<CSRCustomerDetailsData> convert(final List<CSRCustomerDetailsModel> csrCustomerDetailsModelList) {
-	 * final List<CSRCustomerDetailsData> CSRCustomerDetailsDataList = new ArrayList<CSRCustomerDetailsData>(); if
-	 * (CollectionUtils.isNotEmpty(csrCustomerDetailsModelList)) { for (final CSRCustomerDetailsModel
-	 * csrCustomerDetailsModel : csrCustomerDetailsModelList) {
-	 * 
-	 * CSRCustomerDetailsDataList.add(CSRCustomerDetailsModelConverter.convert(csrCustomerDetailsModel)); } } return
-	 * CSRCustomerDetailsDataList; }
-	 */
+
+	private List<CSRCustomerDetailsData> convert(final List<CSRCustomerDetailsModel> CSRCustomerDetailsList)
+	{
+		final List<CSRCustomerDetailsData> CSRCustomerDetailsData = new ArrayList<CSRCustomerDetailsData>();
+		if (CollectionUtils.isNotEmpty(CSRCustomerDetailsList))
+		{
+			for (final CSRCustomerDetailsModel customerDetailsModel : CSRCustomerDetailsList)
+			{
+
+				CSRCustomerDetailsData.add(csrCustomerDetailsConverter.convert(customerDetailsModel));
+			}
+		}
+		return CSRCustomerDetailsData;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -104,9 +111,10 @@ public class StoreCustomerFacadeImpl implements StoreCustomerFacade
 	 * @see com.acc.core.collectorder.facade.CustomerCollectOrderFacade#getCollectOrderByCustomerName(java.lang.String)
 	 */
 	@Override
-	public CSRCustomerDetailsData getCollectOrderByCustomerName(final String customerName)
+	public List<CSRCustomerDetailsData> getCollectOrderByCustomerName(final String customerName)
 	{
-		return csrCustomerDetailsConverter.convert(storeCustomerService.getCollectOrderByCustomerName(customerName));
+		final List<CSRCustomerDetailsModel> CSRCustomerDetails = storeCustomerService.getCollectOrderByCustomerName(customerName);
+		return convert(CSRCustomerDetails);
 	}
 
 }

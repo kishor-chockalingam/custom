@@ -149,7 +149,7 @@ public class StoreCustomerServiceImpl implements StoreCustomerService
 	 * @see com.acc.core.service.storecustomer.StoreCustomerService#getCollectOrderByCustomerName(java.lang.String)
 	 */
 	@Override
-	public CSRCustomerDetailsModel getCollectOrderByCustomerName(final String customerName)
+	public List<CSRCustomerDetailsModel> getCollectOrderByCustomerName(final String customerName)
 	{
 		return storeCustomerDao.getCollectOrderByCustomerName(customerName);
 	}

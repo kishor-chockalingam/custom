@@ -3,6 +3,8 @@
  */
 package com.acc.core.dao.storecustomer;
 
+import java.util.List;
+
 import com.acc.core.model.CSRCustomerDetailsModel;
 
 
@@ -13,5 +15,5 @@ import com.acc.core.model.CSRCustomerDetailsModel;
  */
 public interface StoreCustomerDao
 {
-	public CSRCustomerDetailsModel getCollectOrderByCustomerName(String customerName);
+	public List<CSRCustomerDetailsModel> getCollectOrderByCustomerName(String customerName);
 }

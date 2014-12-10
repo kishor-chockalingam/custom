@@ -36,6 +36,6 @@ public interface StoreCustomerFacade
 	 */
 	public List<CSRCustomerDetailsModel> getCSRCustomerDetailsByStatus(CSRStoreStatus status);
 
-	public CSRCustomerDetailsData getCollectOrderByCustomerName(String customerName);
+	public List<CSRCustomerDetailsData> getCollectOrderByCustomerName(String customerName);
 
 }
