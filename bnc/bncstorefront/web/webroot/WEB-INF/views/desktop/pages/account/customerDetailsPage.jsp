@@ -278,7 +278,8 @@
 					</div>
 					<div class="right_block smaller_blovk" id="customer_details_block">
 							<!--------Personal Details Table Will go here-------->
-							
+							<div id= "customersDivId">
+		</div>
 					</div>
 					<div class="clearboth"></div>
 				</div>

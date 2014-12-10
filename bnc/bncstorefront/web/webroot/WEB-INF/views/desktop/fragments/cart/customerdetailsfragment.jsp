@@ -5,7 +5,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <json:object>
 	<json:property name="customer_details" escapeXml="false">
-	<div id="customersDivId">
 		<div class="tab_menu_block">
 			<div class="tab_menu_profile">
 				<ul>
@@ -35,9 +34,6 @@
 				</ul>
 			</div>
 		</div>
-			<div class="inner_content_blk">
-	
-			<div class="right_block">
 		<div class="content_tabel">
 			<!--------Personal Details Tabel Starts Here-------->
 			<div class="personal_details_tabel">
@@ -290,8 +286,5 @@
 				</table>
 			</div>
 		</div>
-		</div>
-		</div>
-	</div>
 	</json:property>
 </json:object>
