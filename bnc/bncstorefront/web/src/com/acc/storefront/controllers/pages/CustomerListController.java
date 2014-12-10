@@ -95,34 +95,16 @@ public class CustomerListController extends AbstractPageController
 			throws CMSItemNotFoundException
 	{
 		final ProfileInformationDto informationDto = new ProfileInformationDto();
-		final CustomerData customerData = new CustomerData();
 		final List<CustomerOrderData> customerOrderDataList = new ArrayList<CustomerOrderData>();
 		final StoreCustomerData storecustomerData = new StoreCustomerData();
-		if ((null != request.getParameter("csrId") && request.getParameter("csrId").trim().length() > 0)
-				&& null != request.getParameter("customerPK"))
-		{
-			final CSRCustomerDetailsModel csrCustomerDetailsModel = StoreCustomerFacade.updateCSRCustomerDetail(
-					request.getParameter("csrId"), request.getParameter("customerPK"), "");
-			final UserModel csrUserModel = userService.getUserForUID(request.getParameter("csrId"));
-			if (csrUserModel instanceof CustomerModel)
-			{
-				final CustomerModel csrCustomerModel = (CustomerModel) csrUserModel;
-				customerData.setName(csrCustomerModel.getName());
-				customerData.setUid(csrCustomerModel.getUid());
-				customerData.setTitle(csrCustomerModel.getDescription());
-			}
-			assistCustomerRecord(csrCustomerDetailsModel, storecustomerData, informationDto, customerOrderDataList, model);
-		}
-		else if (null != request.getParameter("customerPK"))
+		if (null != request.getParameter("customerPK"))
 		{
 			final CSRCustomerDetailsModel csrCustomerDetailsModel = modelService.get(PK.parse(request.getParameter("customerPK")));
 			assistCustomerRecord(csrCustomerDetailsModel, storecustomerData, informationDto, customerOrderDataList, model);
 		}
-
 		model.addAttribute("storecustomerData", storecustomerData);
 		model.addAttribute("informationDto", informationDto);
 		model.addAttribute("customerOrderDataList", customerOrderDataList);
-		model.addAttribute("customerData", customerData);
 		model.addAttribute("CSR_USER", sessionService.getAttribute("CSR_USER"));
 		return ControllerConstants.Views.Fragments.Cart.CustomerDetailsFragment;
 
@@ -149,16 +131,8 @@ public class CustomerListController extends AbstractPageController
 		{
 			final CustomerModel customerModel = (CustomerModel) userModel;
 			//retrieving wishlist entries
-			Wishlist2Model wishlistModel = null;
-			if (!wishlistService.hasDefaultWishlist(userModel))
-			{
-				wishlistService.createDefaultWishlist(userModel, "wishlist", "add to wishlist functionality");
-				wishlistModel = wishlistService.getDefaultWishlist(userModel);
-			}
-			else
-			{
-				wishlistModel = wishlistService.getDefaultWishlist(userModel);
-			}
+			Wishlist2Model wishlistModel = wishlistService.hasDefaultWishlist(userModel)?wishlistService
+					.getDefaultWishlist(userModel):wishlistService.createDefaultWishlist(userModel, "wishlist", "add to wishlist functionality");
 			Wishlist2Data wishlistData = null != wishlistModel.getEntries()?Wishlist2Converter.convert(wishlistModel):null;
 			//end ** wishlist entries**
 			//retrieving recently viewed products
@@ -185,6 +159,7 @@ public class CustomerListController extends AbstractPageController
 					.getProfilePicture().getURL2()));
 			storecustomerData.setCustomerId(customerModel.getUid());
 			storecustomerData.setProcessedBy((null == csrCustomerDetailsModel.getProcessedBy() ? "" : csrCustomerDetailsModel.getProcessedBy()));
+			storecustomerData.setCustStatus(csrCustomerDetailsModel.getStatus().getCode());
 			informationDto.setName(csrCustomerDetailsModel.getCustomerName());
 			final Collection<AddressModel> addressList = customerModel.getAddresses();
 			if (null != addressList)
