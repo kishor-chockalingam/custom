@@ -10,7 +10,29 @@
 
 <json:object>
 	<json:property name="searchby_customername" escapeXml="false">
-
+	<div id="customersDivId">
+		<div class="tab_menu_block">
+			<div class="tab_menu_profile">
+				<ul>
+					<c:choose>
+						<c:when test="${param.status=='INSERVICE' && not empty storecustomerData.processedBy && storecustomerData.processedBy==CSR_USER}">
+							<li class="space"><input name="" class="assist_btn"	type="button" value="Serviced"></li>
+							<li class="divider space"></li>
+						</c:when>
+						<c:when test="${param.status=='COMPLETED'}">
+						</c:when>
+						<c:otherwise>
+							<li class="space"><input name="" class="assist_btn"	type="button" value="Assist"></li>
+							<li class="divider space"></li>
+							<li class="space"><input name="" class="assist_btn" type="button" value="No Thanks"></li>
+							<li class="divider space"></li>
+						</c:otherwise>
+					</c:choose>
+					<li class="space"><a href="#" class="send_greeting">Send
+							Greeting</a></li>
+				</ul>
+			</div>
+		</div>
 		<div class="tab_menu_block">
 			<div class="tab_menu">
 				<ul>
@@ -18,6 +40,10 @@
 				</ul>
 			</div>
 		</div>
+		
+		
+	<div class="inner_content_blk">
+		<div class="right_block">
 		<div class="content_tabel">
 			<!--------Personal Details Tabel Starts Here-------->
 			<div class="personal_details_tabel">
@@ -231,7 +257,7 @@
 	                  		<div class="left_arrow">
 	                  			<a href="#"><img src="${commonResourcePath}/bnc_images/arrow_left.png" alt="" border="0"/></a>
 	                  		</div>
-	                  		<div class="caurosel_center_block" style="width: 31%;">
+	                  		<div class="caurosel_center_block" style="width: 70%;">
 	                  			<c:forEach items="${wishlist.entries}" var="wishlist">
 											<div class="caurosel_widget">
 		                      			<div class="caurosel_img">
@@ -270,7 +296,9 @@
 				</table>
 			</div>
 		</div>
-				
+		</div>
+		</div>
+	</div>		
 	</json:property>
 	</json:object>
 	
