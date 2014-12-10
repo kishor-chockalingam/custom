@@ -6,18 +6,24 @@
 <%@ taglib prefix="bnc" tagdir="/WEB-INF/tags/desktop/bnc_csr" %>
 <json:object>
 	<json:property name="searchby_time" escapeXml="false">
+	<div id="order_menu">
 	
-	<div class="inner_content_blk">
-			<div class="left_block">
-				<div id="order_menu">
+	<ul>
+	
+	<li class="search_padding"><input type="text" value=""
+					placeholder="Search " name="q" class="search-text placeholder" id="customername" onblur="javascript:searchByCustomerName();">
+				</li>
+			
 				
 				<c:forEach items="${csrCustomerDataList}" var="customerByTime">
 				
-				${customerByTime.customerName} </br>
+				${customerByTime.customerName} </br></br>
 				</c:forEach>
 					
-					</div>
-					</div>
+				
+			
+					
+	</ul>
 	</div>
 	</json:property>
 	</json:object>
