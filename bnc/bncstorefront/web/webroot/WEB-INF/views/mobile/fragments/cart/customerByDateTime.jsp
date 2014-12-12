@@ -17,6 +17,8 @@
 					data : "customerPK="+customerPK,
 					dataType : 'json',
 					success : function(response) {
+						$("a").removeClass("current");
+						$("#"+customerPK).addClass("current");
 						$("#customer_details_block").html(response.customer_details);
 					},
 					error : function(e) {
@@ -51,7 +53,7 @@
 						<input type="hidden" id="currentUserId" value="${logedInUser.pk}"/>
 					</c:if>
 					<li>
-						<a onclick="javascript:getCustomerDetails('${logedInUser.pk}');" ${currentClass}>
+						<a id="${logedInUser.pk}" onclick="javascript:getCustomerDetails('${logedInUser.pk}');" ${currentClass}>
 							<span class="menuperson">
 								<img src="${logedInUser.profilePictureURL}" />
 							</span>
