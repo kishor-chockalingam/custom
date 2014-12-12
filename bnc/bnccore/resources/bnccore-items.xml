@@ -243,10 +243,21 @@
 			</attribute>
          </attributes>
       </itemtype>
-			
-			
-			
 		</typegroup>
-
+		
+		<typegroup name="Processes">
+			<itemtype code="SendGreetingProcess" extends="StoreFrontCustomerProcess"
+				autocreate="true" generate="true"
+				jaloclass="de.hybris.platform.commerceservices.jalo.process.SendGreetingProcess">
+				<description>Represents process that is used for sending greeting.</description>
+				<attributes>
+					<attribute qualifier="token" type="java.lang.String">
+						<persistence type="property" />
+						<description>Attribute contains token that is used in this process.</description>
+					</attribute>
+				</attributes>
+			</itemtype>
+		</typegroup>
+		
 	</itemtypes>
 </items>

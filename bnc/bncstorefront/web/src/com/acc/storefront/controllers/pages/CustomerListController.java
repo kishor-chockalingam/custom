@@ -4,6 +4,7 @@
 package com.acc.storefront.controllers.pages;
 
 import de.hybris.platform.acceleratorstorefrontcommons.controllers.pages.AbstractPageController;
+import de.hybris.platform.basecommerce.model.site.BaseSiteModel;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.order.data.OrderData;
 import de.hybris.platform.commercefacades.product.ProductFacade;
@@ -17,10 +18,12 @@ import de.hybris.platform.core.model.user.AddressModel;
 import de.hybris.platform.core.model.user.CustomerModel;
 import de.hybris.platform.core.model.user.UserModel;
 import de.hybris.platform.servicelayer.dto.converter.Converter;
+import de.hybris.platform.servicelayer.event.EventService;
 import de.hybris.platform.servicelayer.exceptions.UnknownIdentifierException;
 import de.hybris.platform.servicelayer.model.ModelService;
 import de.hybris.platform.servicelayer.session.SessionService;
 import de.hybris.platform.servicelayer.user.UserService;
+import de.hybris.platform.site.BaseSiteService;
 import de.hybris.platform.wishlist2.Wishlist2Service;
 import de.hybris.platform.wishlist2.model.Wishlist2EntryModel;
 import de.hybris.platform.wishlist2.model.Wishlist2Model;
@@ -35,6 +38,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -50,10 +54,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.acc.core.enums.CSRStoreStatus;
+import com.acc.core.event.SendGreetingEvent;
 import com.acc.core.model.CSRCustomerDetailsModel;
 import com.acc.core.util.BnCGenericUtil;
 import com.acc.facades.CSRCustomerDetails.data.CSRCustomerDetailsData;
 import com.acc.facades.collectOrder.data.CollectOrderData;
+import com.acc.facades.process.email.context.SendGreetingEmailContext;
 import com.acc.facades.storecustomer.StoreCustomerFacade;
 import com.acc.facades.wishlist.data.Wishlist2Data;
 import com.acc.storefront.controllers.ControllerConstants;
@@ -91,7 +97,10 @@ public class CustomerListController extends AbstractPageController
 	private ProductFacade productFacade;
 	@Autowired
 	private Converter<Wishlist2Model, Wishlist2Data> Wishlist2Converter;
-
+	@Autowired
+    private EventService eventService;
+	@Resource(name = "baseSiteService")
+	private BaseSiteService baseSiteService;
 
 	@RequestMapping(value = "/assistcustomer", method = RequestMethod.GET, produces = "application/json")
 	public String customerHistory(final Model model, final HttpServletRequest request, final HttpServletResponse response)
@@ -365,12 +374,30 @@ public class CustomerListController extends AbstractPageController
 	{
 		final List<CSRCustomerDetailsData> csrCustomerDataList = StoreCustomerFacade.getCustomerDetailsByDateAndTime(fromDate, toDate, fromTime, toTime);
 		model.addAttribute("csrCustomerDataList", csrCustomerDataList);
-
-		
 		model.addAttribute("CSRCustomerDetailsData", CollectionUtils.isEmpty(csrCustomerDataList)?
 					new CSRCustomerDetailsData() : StoreCustomerFacade.getCollectOrderByCustomerName(csrCustomerDataList.get(0).getCustomerName()));
 		return ControllerConstants.Views.Fragments.Cart.CustomerByDateTime;
 	}
 
+	@RequestMapping(value = "/greeting", method = RequestMethod.GET, produces = "application/json")
+	public void sendGreeting(@RequestParam("customerPK") final String customerPK, final Model model, final HttpServletRequest request,
+			final HttpServletResponse response) throws CMSItemNotFoundException
+	{
+		LOG.info("inside controller greeting method");
+		final CSRCustomerDetailsModel csrCustomerDetailsModel = modelService.get(PK.parse(request.getParameter("customerPK")));
+		final UserModel userModel = userService.getUserForUID(csrCustomerDetailsModel.getCustomerId());
+		if (null != userModel && userModel instanceof CustomerModel)
+		{
+			final CustomerModel customerModel = (CustomerModel) userModel;
+			SendGreetingEvent event = new SendGreetingEvent();
+			event.setCustomer(customerModel);
+			BaseSiteModel siteModel = baseSiteService.getCurrentBaseSite();
+			event.setSite(siteModel);
+			event.setLanguage(siteModel.getStores().get(0).getDefaultLanguage());
+			event.setBaseStore(siteModel.getStores().get(0));
+			event.setCurrency(siteModel.getStores().get(0).getDefaultCurrency());
+			eventService.publishEvent(event);
+		}
+	}
 
 }

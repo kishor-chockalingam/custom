@@ -195,6 +195,11 @@
 		<property name="modelService" ref="modelService"/>
 		<property name="businessProcessService" ref="businessProcessService"/>
 	</bean>
+	<bean id="sendGreetingEventListener"
+	      class="com.acc.core.event.SendGreetingEventListener" parent="abstractSiteEventListener">
+		<property name="modelService" ref="modelService"/>
+		<property name="businessProcessService" ref="businessProcessService"/>
+	</bean>
 	<bean id="submitOrderEventListener" class="com.acc.core.event.SubmitOrderEventListener" parent="abstractSiteEventListener">
 		<property name="businessProcessService" ref="businessProcessService"/>
 		<property name="modelService" ref="modelService"/>
@@ -244,6 +249,10 @@
 	<bean id="forgottenPasswordEmailProcessDefinitionResource"
 	      class="de.hybris.platform.processengine.definition.ProcessDefinitionResource" >
 		<property name="resource" value="classpath:/bnccore/processes/forgottenPasswordEmailProcess.xml"/>
+	</bean>
+	<bean id="sendGreetingEmailProcessDefinitionResource"
+	      class="de.hybris.platform.processengine.definition.ProcessDefinitionResource" >
+		<property name="resource" value="classpath:/bnccore/processes/sendGreetingEmailProcess.xml"/>
 	</bean>
 	<bean id="orderConfirmationEmailProcessDefinitionResource"
 	      class="de.hybris.platform.processengine.definition.ProcessDefinitionResource" >
@@ -304,6 +313,10 @@
 
 	<bean id="generateForgottenPasswordEmail" parent="abstractGenerateEmailAction">
 		<property name="frontendTemplateName" value="ForgottenPasswordEmailTemplate"/>
+	</bean>
+	
+	<bean id="generateSendGreetingEmail" parent="abstractGenerateEmailAction">
+		<property name="frontendTemplateName" value="SendGreetingEmailTemplate"/>
 	</bean>
 
 	<bean id="generateOrderConfirmationEmail" parent="abstractGenerateEmailAction">

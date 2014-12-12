@@ -275,6 +275,7 @@
 		<entry key="login" value="/login"/>
 		<entry key="checkout-login" value="/login/checkout"/>
 		<entry key="forgottenPassword" value="/login/pw/request"/>
+		<entry key="sendGreeting" value="/customerlist/greeting"/>
 		<entry key="updatePassword" value="/my-account/update-password"/>
 		<entry key="notFound" value="/error"/>
 
@@ -295,6 +296,7 @@
 		<entry key="mobile-login" value="/login"/>
 		<entry key="mobile-checkout-login" value="/login/checkout"/>
 		<entry key="mobile-forgottenPassword" value="/login/pw/request"/>
+		<entry key="mobile-sendGreeting" value="/customerlist/greeting"/>
 		<entry key="mobile-updatePassword" value="/my-account/update-password"/>
 		<entry key="mobile-register" value="/register"/>
 		<entry key="mobile-orderConfirmationPage" value="/my-account/order"/>

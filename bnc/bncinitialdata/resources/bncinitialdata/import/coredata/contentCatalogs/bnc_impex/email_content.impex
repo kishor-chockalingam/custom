@@ -1,0 +1,49 @@
+#
+# Import the CMS content for the site emails
+#
+$contentCatalog=electronicsContentCatalog
+$contentCV=catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]),CatalogVersion.version[default=Staged])[default=$contentCatalog:Staged]
+$wideContent=CMSImageComponent,BannerComponent
+$jarResourceCms=jar:com.acc.core.setup.CoreSystemSetup&/bnccore/import/cockpits/cmscockpit
+$emailResource=jar:com.acc.core.setup.CoreSystemSetup&/bnccore/import/emails
+$emailPackageName=com.acc.facades.process.email.context
+$lang=en
+
+# CMS components and Email velocity templates
+UPDATE RendererTemplate;code[unique=true];description[lang=$lang];templateScript[lang=$lang,translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;electronics_Email_Send_Greeting_Body;"Send Greeting Email Body";$emailResource/email_sendGreetingBody.vm
+;electronics_Email_Send_Greeting_Subject;"Send Greeting Email Subject";$emailResource/email_sendGreetingSubject.vm
+
+# Email Pages
+UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];fromEmail[lang=$lang];fromName[lang=$lang]
+;;SendGreetingEmail;"customerservicesbnc@hybris.com";"Customer Services Team"
+
+# Email page Template
+INSERT_UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true];name;active;frontendTemplateName;subject(code);htmlTemplate(code);restrictedPageTypes(code)
+;;SendGreetingEmailTemplate;Send Greeting Email Template;true;sendGreetingEmail;electronics_Email_Send_Greeting_Subject;electronics_Email_Send_Greeting_Body;EmailPage
+
+# Templates for CMS Cockpit Page Edit
+UPDATE EmailPageTemplate;$contentCV[unique=true];uid[unique=true];velocityTemplate[translator=de.hybris.platform.commerceservices.impex.impl.FileLoaderValueTranslator]
+;;SendGreetingEmailTemplate;$jarResourceCms/structure-view/structure_sendGreetingEmailTemplate.vm
+
+INSERT_UPDATE ContentSlotName;name[unique=true];template(uid,$contentCV)[unique=true][default='SendGreetingEmailTemplate'];validComponentTypes(code)
+;SiteLogo;;;logo
+;TopContent;;$wideContent;
+;BottomContent;;$wideContent;
+
+INSERT_UPDATE ContentSlotForTemplate;$contentCV[unique=true];uid[unique=true];position[unique=true];pageTemplate(uid,$contentCV)[unique=true][default='SendGreetingEmailTemplate'];contentSlot(uid,$contentCV)[unique=true];allowOverwrite
+;;SiteLogo-SendGreetingEmail;SiteLogo;;EmailSiteLogoSlot;true
+;;TopContent-SendGreetingEmail;TopContent;;EmailTopSlot;true
+;;BottomContent-SendGreetingEmail;BottomContent;;EmailBottomSlot;true
+
+# Email Pages
+INSERT_UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];name;masterTemplate(uid,$contentCV);defaultPage;approvalStatus(code)[default='approved']
+;;SendGreetingEmail;Send Greeting Email;SendGreetingEmailTemplate;true;
+
+# Email velocity templates
+INSERT_UPDATE RendererTemplate;code[unique=true];contextClass;rendererType(code)[default='velocity']
+;electronics_Email_Send_Greeting_Body;$emailPackageName.SendGreetingEmailContext
+;electronics_Email_Send_Greeting_Subject;$emailPackageName.SendGreetingEmailContext
+
+UPDATE EmailPage;$contentCV[unique=true];uid[unique=true];previewImage(code, $contentCV)
+;;SendGreetingEmail;EmailPageModel_preview

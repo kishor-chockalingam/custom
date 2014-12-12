@@ -16,8 +16,10 @@
 		alert('${param.customerPK}');
 		window.location = "${contextPath}/customerlist/statusUpdate?status=Completed&customerPK=${param.customerPK}";
 	}
-	function showSendGreetingBlock()
+		function showSendGreetingBlock()
 	{
+		$("#mail_messages").removeClass("mail_text");
+		$("#mail_messages").html("");
 		if($("#send_greeting_block_id").css("display")=="none")
 		{
 			$("#send_greeting_id").addClass("send_greeting_selected");
@@ -29,6 +31,25 @@
 			$("#send_greeting_block_id").css("display","none");
 		}
 		
+	}
+	function sendGreeting()
+	{
+		$.ajax({
+			type : 'GET',
+			url : "${contextPath}/customerlist/greeting",
+			data : "customerPK=" + '${param.customerPK}',
+			dataType : 'json',
+			success : function(response) {
+				$("#mail_messages").addClass("mail_text");
+				$("#mail_messages").css("color","green");
+				$("#mail_messages").html("Main sent successfully");
+			},
+			error : function(e) {
+				$("#mail_messages").addClass("mail_text");
+				$("#mail_messages").css("color","red");
+				$("#mail_messages").html("Error sending mail.");
+			}
+		});
 	}
 </script>
 <div class="tab_menu_block">
@@ -55,13 +76,14 @@
 </div>
 <div class="clearboth"></div>
 <div id="send_greeting_block_id" class="send_greeting_block" style="display: none;">
+	<div id="mail_messages"></div>
 	<div class="mail_text">Hi ${storecustomerData.customerName},<br>
 		<br>
 		Welcome to our store Chiba. Please proceed with your selections. Our customer service representative will be with you shortly. Thanks! 
 	</div>
 	<div class="send_greeting_buttons">
-		<input name="" class="assist_btn" type="button" value="Cancel">
-		<input name="" class="assist_btn" type="button" value="Send">
+		<input name="" class="assist_btn" type="button" value="Cancel" onclick="javascript:showSendGreetingBlock();">
+		<input name="" class="assist_btn" type="button" value="Send" onclick="javascript:sendGreeting();">
 	</div>
 </div>
 <div class="tab_menu_block">

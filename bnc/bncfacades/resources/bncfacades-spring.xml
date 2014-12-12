@@ -125,6 +125,9 @@
 		<property name="customerConverter" ref="customerConverter"/>
 	</bean>
 	
+	<bean id="sendGreetingEmailContext" class="com.acc.facades.process.email.context.SendGreetingEmailContext" parent="customerEmailContext" scope="prototype" >
+	</bean>
+	
 	<bean id="orderNotificationEmailContext" class="com.acc.facades.process.email.context.OrderNotificationEmailContext" parent="abstractEmailContext" scope="prototype" >
 		<property name="orderConverter" ref="orderConverter"/>
 	</bean>
