@@ -35,7 +35,7 @@ public class StoreCustomerDaoImpl extends AbstractItemDao implements StoreCustom
 	public List<CSRCustomerDetailsModel> getCollectOrderByCustomerName(final String customerName)
 	{
 
-		final String query = "SELECT {pk} from {CSRCustomerDetails} WHERE {customerName}='" + customerName + "'";
+		final String query = "SELECT {pk} from {CSRCustomerDetails} WHERE {customerName} LIKE '%" + customerName + "%'";
 		final SearchResult<CSRCustomerDetailsModel> result = getFlexibleSearchService().search(query);
 		return CollectionUtils.isEmpty(result.getResult()) ? null : result.getResult();
 

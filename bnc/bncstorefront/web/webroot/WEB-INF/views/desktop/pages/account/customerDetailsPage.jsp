@@ -230,17 +230,32 @@
 	
 	<script type="text/javascript">
 	
+	function getCustomerDetails(customerPK)
+	{
+		$.ajax({
+			type : 'GET',
+			url : "${contextPath}/customerlist/assistcustomer",
+			data : "customerPK="+customerPK,
+			dataType : 'json',
+			success : function(response) {
+				$("a").removeClass("current");
+				$("#"+customerPK).addClass("current");
+				$("#customer_details_block").html(response.customer_details);
+			},
+			error : function(e) {
+				alert("No customer has logged in yet");
+			}
+		});
+	}
 	
 	function searchByCustomerName() {
 		
-		alert("hello");
 		var customername = document.getElementById('customername').value;
 		 if (document.getElementById('customername').value =='' ) { 
 		alert("Please enter the customername!");
 			document.getElementById('customername').focus();
 			return false;
 		}
-		 alert("Adding "+customername);
 		$.ajax({
 			type : 'GET',
 			url : "${contextPath}/customerlist/customerName",
@@ -259,7 +274,6 @@
 	{
 		
 		
-		alert("date");
 		var fdate = document.getElementById('searchTimeBarFromDate').value;
 		var tdate = document.getElementById('searchTimeBarToDate').value;
 		var ftime = document.getElementById('searchTimeBarFromTime').value;

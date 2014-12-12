@@ -8,30 +8,12 @@
 	<json:property name="searchby_time" escapeXml="false">
 	
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-		<script type="text/javascript">
-			function getCustomerDetails(customerPK)
-			{
-				$.ajax({
-					type : 'GET',
-					url : "${contextPath}/customerlist/assistcustomer",
-					data : "customerPK="+customerPK,
-					dataType : 'json',
-					success : function(response) {
-						$("a").removeClass("current");
-						$("#"+customerPK).addClass("current");
-						$("#customer_details_block").html(response.customer_details);
-					},
-					error : function(e) {
-						alert("Please enter correct UCOID");
-					}
-				});
-			}
-			
-			$(document).ready(function() {
-				//run the first time; all subsequent calls will take care of themselves -->
-				getCustomerDetails(document.getElementById("currentUserId").value);
-			});
-		</script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			//run the first time; all subsequent calls will take care of themselves -->
+			getCustomerDetails(document.getElementById("currentUserId").value);
+		});
+	</script>
 	<div id="order_menu">
 			<ul>
 				
@@ -59,11 +41,12 @@
 							</span>
 							${logedInUser.customerName}<br /> 
 							<span>
-								${logedInUser.loginTime}
+								Logged in by ${logedInUser.loginTime}
 							</span>
-							<c:if test="${param.status=='INSERVICE' || param.status=='COMPLETED'}">
+							<c:if test="${logedInUser.status=='INSERVICE' || logedInUser.status=='COMPLETED'}">
+								<br>
 								<span>
-									assisted by ${logedInUser.processedBy}
+									${logedInUser.status} assisted by ${logedInUser.processedBy}
 								</span>
 							</c:if>
 						</a>
