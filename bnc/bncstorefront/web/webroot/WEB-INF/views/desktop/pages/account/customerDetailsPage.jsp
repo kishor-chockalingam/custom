@@ -294,7 +294,7 @@
 			data : "fdate=" + fdate+"&tdate="+tdate+"&ftime="+ftime+"&ttime="+ttime,
 			dataType : 'json',
 			success : function(response) {
-				$("#customerByTimeDivId").html(response.searchby_time);
+				$("#customer_list_block").html(response.searchby_time);
 			},
 			error : function(e) {
 				alert("Please enter dates in proper format! Dates as DD.MM.YYYY and Time as HH:MM AM/PM!!\n\n FromDate should be before ToDate!!");
