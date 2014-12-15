@@ -227,9 +227,21 @@
 <!DOCTYPE html>
 <html>
 	<head>
-	
 	<script type="text/javascript">
-	
+	function loadOrderDetails(orderCode)
+	{
+		$.ajax({
+			type : 'GET',
+			url : "${contextPath}/customerlist/order/orderCode",
+			data: "orderCode="+orderCode,
+			dataType : 'json',
+			success : function(response) {
+			$("#orderDetails_"+orderCode).html(response.customer_dashboard_order_details_for_accordion);
+			},
+			error : function(e) {
+			}
+		});
+	}
 	function getCustomerDetails(customerPK)
 	{
 		$.ajax({

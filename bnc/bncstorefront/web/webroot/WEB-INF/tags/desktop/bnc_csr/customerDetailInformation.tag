@@ -3,6 +3,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="format" tagdir="/WEB-INF/tags/shared/format" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#accordion").accordion();
+});
+</script>
 <div class="content_tabel">
 	<!--------Personal Details Tabel Starts Here-------->
 	<div class="personal_details_tabel">
@@ -134,6 +142,68 @@
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 			</tr>
+			<c:if test="${not empty customerOrderDataList}">
+				<tr>
+					<td colspan="2" class="grayheading">Order History</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<div id="accordion">
+							<c:forEach items="${customerOrderDataList}" var="order" begin="0" end="0">
+								<h3 onclick="javascript:loadOrderDetails('${order.orderCode}');">
+									<span style="font:normal 16px/20px Arial, Helvetica, sans-serif; color:#6f6f6f;">${order.orderCode}&nbsp;&nbsp;&nbsp;&nbsp;Total::${order.total}&nbsp;&nbsp;&nbsp;&nbsp;Placed on ${order.placedDate}</span>
+								</h3>
+								<div id="orderDetails_${order.orderCode}">
+									<table width="100%" border="0" cellspacing="0" cellpadding="0" class="orderitemtabel">
+				              	<c:forEach items="${orderData.entries}" var="entry">
+											<c:url value="${entry.product.url}" var="productUrl" />
+											<tr>
+						                      <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+						                          <tr>
+						                            <td width="8%"><product:productPrimaryImage	product="${entry.product}" format="thumbnail" /></td>
+						                            <td width="2%"></td>
+						                            <td width="25%">${entry.product.name}</td>
+						                            <td width="12%">${entry.quantity}</td>
+						                            <td width="11%"><format:price priceData="${entry.basePrice}"	displayFreeForZero="true" /></td>
+						                            <td width="21%">$${entry.quantity * entry.basePrice.value}</td>
+						                            <td width="3%">&nbsp;</td>
+						                          </tr>
+						                        </table></td>
+						                    </tr>
+						                    <tr>
+						                      <td height="10"></td>
+						                    </tr>
+										</c:forEach>
+				                </table>
+								</div>
+							</c:forEach>
+							<c:forEach items="${customerOrderDataList}" var="order" begin="1">
+								<h3 onclick="javascript:loadOrderDetails('${order.orderCode}');">
+									<span style="font:normal 16px/20px Arial, Helvetica, sans-serif; color:#6f6f6f;">${order.orderCode}&nbsp;&nbsp;&nbsp;&nbsp;Total::${order.total}&nbsp;&nbsp;&nbsp;&nbsp;Placed on ${order.placedDate}</span>
+								</h3>
+								<div id="orderDetails_${order.orderCode}">
+								</div>
+							</c:forEach>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+			</c:if>
 			<c:if test="${not empty productData}">
 				<tr>
 					<td colspan="2" class="grayheading">Recently Viewed</td>
@@ -171,7 +241,7 @@
 												<product:productPrimaryImage product="${product}" format="thumbnail"/>
 											</div>
 									  </div>
-									  <div class="caurosel_text">${product.name}<br>
+									  <div class="caurosel_text">${fn:substring(product.name,0,20)}<br>
 									    <format:fromPrice priceData="${product.price}"/>
 									   </div>
 									</div>

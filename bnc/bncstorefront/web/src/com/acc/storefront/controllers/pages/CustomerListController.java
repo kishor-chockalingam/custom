@@ -7,10 +7,13 @@ import de.hybris.platform.acceleratorstorefrontcommons.controllers.pages.Abstrac
 import de.hybris.platform.basecommerce.model.site.BaseSiteModel;
 import de.hybris.platform.cms2.exceptions.CMSItemNotFoundException;
 import de.hybris.platform.commercefacades.order.data.OrderData;
+import de.hybris.platform.commercefacades.order.data.OrderHistoryData;
 import de.hybris.platform.commercefacades.product.ProductFacade;
 import de.hybris.platform.commercefacades.product.ProductOption;
 import de.hybris.platform.commercefacades.product.data.ProductData;
 import de.hybris.platform.commercefacades.user.data.CustomerData;
+import de.hybris.platform.commerceservices.search.pagedata.PageableData;
+import de.hybris.platform.commerceservices.search.pagedata.SearchPageData;
 import de.hybris.platform.core.PK;
 import de.hybris.platform.core.model.order.OrderModel;
 import de.hybris.platform.core.model.product.ProductModel;
@@ -44,6 +47,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -53,6 +57,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.acc.core.collectorder.facade.CustomerCollectOrderFacade;
 import com.acc.core.enums.CSRStoreStatus;
 import com.acc.core.event.SendGreetingEvent;
 import com.acc.core.model.CSRCustomerDetailsModel;
@@ -63,6 +68,7 @@ import com.acc.facades.process.email.context.SendGreetingEmailContext;
 import com.acc.facades.storecustomer.StoreCustomerFacade;
 import com.acc.facades.wishlist.data.Wishlist2Data;
 import com.acc.storefront.controllers.ControllerConstants;
+import com.acc.storefront.controllers.pages.AbstractSearchPageController.ShowMode;
 import com.acc.storefront.util.CustomerOrderData;
 import com.acc.storefront.util.ProfileInformationDto;
 import com.acc.storefront.util.StoreCustomerData;
@@ -80,8 +86,10 @@ public class CustomerListController extends AbstractPageController
 	private static final String REDIRECT_TO_CUSTOMER_DETAILS = REDIRECT_PREFIX + "/customerlist/customerdeatils";
 	private static final String ACCOUNT_CMS_PAGE = "account";
 	private static final List<ProductOption> PRODUCT_OPTIONS = Arrays.asList(ProductOption.BASIC, ProductOption.PRICE);
+	private static final String ORDER_CODE_PATH_VARIABLE_PATTERN = "{orderCode:.*}";
 	
 	private static final Logger LOG = Logger.getLogger(CustomerListController.class);
+	private static final int MAX_PAGE_LIMIT = 100;
 
 	@Autowired
 	private StoreCustomerFacade StoreCustomerFacade;
@@ -101,6 +109,8 @@ public class CustomerListController extends AbstractPageController
     private EventService eventService;
 	@Resource(name = "baseSiteService")
 	private BaseSiteService baseSiteService;
+	@Autowired
+	private CustomerCollectOrderFacade customerCollectOrderFacade;
 
 	@RequestMapping(value = "/assistcustomer", method = RequestMethod.GET, produces = "application/json")
 	public String customerHistory(final Model model, final HttpServletRequest request, final HttpServletResponse response)
@@ -117,6 +127,8 @@ public class CustomerListController extends AbstractPageController
 		model.addAttribute("storecustomerData", storecustomerData);
 		model.addAttribute("informationDto", informationDto);
 		model.addAttribute("customerOrderDataList", customerOrderDataList);
+		final OrderData orderData = CollectionUtils.isEmpty(customerOrderDataList)?new OrderData():customerCollectOrderFacade.getOrderDetailsForCode(customerOrderDataList.get(0).getOrderCode());
+		model.addAttribute("orderData", orderData);
 		model.addAttribute("CSR_USER", sessionService.getAttribute("CSR_USER"));
 		return ControllerConstants.Views.Fragments.Cart.CustomerDetailsFragment;
 
@@ -263,11 +275,10 @@ public class CustomerListController extends AbstractPageController
 		model.addAttribute("Active", getStatusCount(csrCustomerDetailsList, CSRStoreStatus.INSERVICE));
 		model.addAttribute("Serviced", getStatusCount(csrCustomerDetailsList, CSRStoreStatus.COMPLETED));
 		model.addAttribute("CSR_USER", sessionService.getAttribute("CSR_USER"));
-
 		return ControllerConstants.Views.Pages.Account.customerDetailsPage;
 
 	}
-
+	
 	/**
 	 * @param cSRCustomerDetailsModelsList
 	 */
@@ -398,6 +409,15 @@ public class CustomerListController extends AbstractPageController
 			event.setCurrency(siteModel.getStores().get(0).getDefaultCurrency());
 			eventService.publishEvent(event);
 		}
+	}
+	
+	@RequestMapping(value = "/order/" + ORDER_CODE_PATH_VARIABLE_PATTERN, method = RequestMethod.GET, produces = "application/json")
+	public String postOrderDetails(@RequestParam("orderCode") final String orderCode, final Model model,
+			final HttpServletRequest request, final HttpServletResponse response) throws CMSItemNotFoundException
+	{
+		final OrderData orderData = customerCollectOrderFacade.getOrderDetailsForCode(orderCode);
+		model.addAttribute("orderData", orderData);
+		return ControllerConstants.Views.Fragments.Cart.OrderDetailsAccordion;
 	}
 
 }

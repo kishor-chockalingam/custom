@@ -162,6 +162,7 @@ public interface ControllerConstants
 				String OrderByCustomerName = "fragments/cart/orderByCustomerName";
 				String CustomerDetailsFragment = "fragments/cart/customerdetailsfragment";
 				String CustomerByDateTime = "fragments/cart/customerByDateTime";
+				String OrderDetailsAccordion = "fragments/cart/orderDetailsAccordion";
 			}
 
 			interface Account

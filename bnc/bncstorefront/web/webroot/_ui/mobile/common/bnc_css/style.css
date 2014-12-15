@@ -153,7 +153,7 @@ padding:0px 2px 4px 0px; overflow:hidden }
 
 #caurosel_block{float:left; height:auto; width:100%;}
 #caurosel_block .left_arrow{ float:left; padding-top:25px}
-#caurosel_block .caurosel_center_block{float:left; width:95%;}
+#caurosel_block .caurosel_center_block{float:left; width:90%;}
 #caurosel_block .caurosel_center_small{width:94%!important;}
 
 #caurosel_block .caurosel_center_block .caurosel_widget{ float:left; text-align:center; margin:0 3.9%}
