@@ -1,10 +1,10 @@
 <%@ tag language="java" pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
 		//run the first time; all subsequent calls will take care of themselves -->
 		getCustomerDetails(document.getElementById("currentUserId").value);
+		setTimeout(function () {$("#accordion").accordion();}, 5000);
 	});
 </script>
 <div id="order_menu">
