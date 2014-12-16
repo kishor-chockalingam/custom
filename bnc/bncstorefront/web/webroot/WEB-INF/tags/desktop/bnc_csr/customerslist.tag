@@ -3,8 +3,11 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		//run the first time; all subsequent calls will take care of themselves -->
-		getCustomerDetails(document.getElementById("currentUserId").value);
-		setTimeout(function () {$("#accordion").accordion();}, 5000);
+		if(document.getElementById("currentUserId")!=null)
+		{
+			getCustomerDetails(document.getElementById("currentUserId").value);
+			setTimeout(function () {$("#accordion").accordion();}, 5000);
+		}
 	});
 </script>
 <div id="order_menu">
