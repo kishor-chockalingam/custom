@@ -179,7 +179,7 @@
 										<product:productPrimaryImage product="${product}" format="thumbnail"/>
 									</div>
 							  </div>
-							  <div class="caurosel_text">${product.name}<br>
+							  <div class="caurosel_text">${fn:substring(product.name,0,20)}<br>
 							    <format:fromPrice priceData="${product.price}"/>
 							   </div>
 							</div>
