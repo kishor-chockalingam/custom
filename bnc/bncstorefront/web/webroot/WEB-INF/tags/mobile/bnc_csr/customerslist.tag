@@ -6,9 +6,10 @@
 		if(document.getElementById("currentUserId")!=null)
 		{
 			getCustomerDetails(document.getElementById("currentUserId").value);
-			setTimeout(function () {$("#accordion").accordion();}, 5000);
+			setTimeout(function () {$("#accordion").accordion();}, 3000);
 		}
 	});
+	
 </script>
 <div id="order_menu">
 	<ul>

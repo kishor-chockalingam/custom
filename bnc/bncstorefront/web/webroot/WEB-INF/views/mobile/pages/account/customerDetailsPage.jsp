@@ -68,7 +68,7 @@
 				if(document.getElementById("currentUserId")!=null)
 				{
 					getCustomerDetails(document.getElementById("currentUserId").value);
-					setTimeout(function () {$("#accordion").accordion();}, 5000);
+					setTimeout(function () {$("#accordion").accordion();}, 3000);
 				} 
 			},
 			error : function(e) {
@@ -119,7 +119,7 @@
 				if(document.getElementById("currentUserId")!=null)
 				{
 					getCustomerDetails(document.getElementById("currentUserId").value);
-					setTimeout(function () {$("#accordion").accordion();}, 5000);
+					setTimeout(function () {$("#accordion").accordion();}, 3000);
 				} 
 			},
 			error : function(e) {
@@ -127,6 +127,10 @@
 			}
 		});
 	}
+	
+	$(document).ready(function() {
+		setTimeout(function () {window.location.href="${contextPath}/customerlist/customerdeatils?size="+'${Queued}'+"&status="+'${param.status}';}, 60000);
+	});
 	</script>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
@@ -158,7 +162,15 @@
 					<div id ="customerByTimeDivId"></div>
 				</div>
 			</div>
-			
+			<c:if test="${not empty param.size && Queued!=param.size}">
+			<script type="text/javascript">
+				var audio = {};
+				audio["walk"] = new Audio();
+				audio["walk"].src = '${commonResourcePath}'+"/bnc_audio/bellring01.mp3"			
+				audio["walk"].play();
+				document.getElementById("bell_number").innerHTML = ${Queued};
+			</script>
+		</c:if>
 			<!--Content Ends here-->
 			<script src="${commonResourcePath}/bnc_js/jquery.diagram.js"></script>
 			<script src="${commonResourcePath}/bnc_js/script.js"></script>
