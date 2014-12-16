@@ -4,13 +4,6 @@
 <%@ taglib prefix="json" uri="http://www.atg.com/taglibs/json" %>
 <json:object>
 	<json:property name="searchby_customername" escapeXml="false">
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-		<script type="text/javascript">
-			$(document).ready(function() {
-				//run the first time; all subsequent calls will take care of themselves -->
-				getCustomerDetails(document.getElementById("currentUserId").value);
-			});
-		</script>
 		<div id="order_menu">
 			<ul>
 				<li class="search_padding"><input type="text" value=""

@@ -64,7 +64,12 @@
 			data : "customername=" + customername,
 			dataType : 'json',
 			success : function(response) {
-			$("#customer_list_block").html(response.searchby_customername);
+				$("#customer_list_block").html(response.searchby_customername);
+				if(document.getElementById("currentUserId")!=null)
+				{
+					getCustomerDetails(document.getElementById("currentUserId").value);
+					setTimeout(function () {$("#accordion").accordion();}, 5000);
+				} 
 			},
 			error : function(e) {
 				alert("Please enter correct customername");
@@ -111,6 +116,11 @@
 			dataType : 'json',
 			success : function(response) {
 				$("#customer_list_block").html(response.searchby_time);
+				if(document.getElementById("currentUserId")!=null)
+				{
+					getCustomerDetails(document.getElementById("currentUserId").value);
+					setTimeout(function () {$("#accordion").accordion();}, 5000);
+				} 
 			},
 			error : function(e) {
 				alert("Please enter dates in proper format! Dates as DD.MM.YYYY and Time as HH:MM AM/PM!!\n\n FromDate should be before ToDate!!");
