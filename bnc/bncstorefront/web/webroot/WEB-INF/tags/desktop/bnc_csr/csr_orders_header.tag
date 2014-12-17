@@ -5,14 +5,10 @@
  <script type="text/javascript">
     function redirectToOrdersDashboard()
     {
-    	$("a").removeClass("select");
-    	$("#orders_dashboard").addClass("select");
     	window.location.href="/bncstorefront/electronics/en/orderslist/vieworders";
     }
     function redirectToCustomersDashboard()
     {
-    	$("a").removeClass("select");
-    	$("#cust_dashboard").addClass("select");
     	window.location.href="/bncstorefront/electronics/en/customerlist/customerdeatils";
     }
     </script>
@@ -39,13 +35,13 @@
 			<nav class="main-nav">
 				<ol>
 					<li>
-						<a href="#" class="select"  id="cust_dashboard" onClick="redirectToCustomersDashboard()" style="border-top:1px solid #494949"   >
+						<a href="#" onClick="redirectToCustomersDashboard()" style="border-top:1px solid #494949"   >
 							<img src="${commonResourcePath}/bnc_images/dashboard_icon.png" alt=""/>
 							<span>Customers<br>Dashboard</span>
 						</a>
 					</li>
 					<li>
-						<a href="#" id="orders_dashboard" onClick="redirectToOrdersDashboard()" >
+						<a href="#" class="select" onClick="redirectToOrdersDashboard()" >
 							<img src="${commonResourcePath}/bnc_images/dashboard_icon.png" alt="" />
 							<span>Orders<br>Dashboard</span>
 						</a>

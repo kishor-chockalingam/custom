@@ -74,7 +74,7 @@
 	<body>
 		<div id="main_wrapper" style="position:relative"> 
 			<!--Header Starts here-->
-			<bnc:csr_header />
+			<bnc:csr_orders_header/>
 			<!-- Header Ends here-->
 			<div class="clearboth"></div>
 			<!--Content Starts here-->

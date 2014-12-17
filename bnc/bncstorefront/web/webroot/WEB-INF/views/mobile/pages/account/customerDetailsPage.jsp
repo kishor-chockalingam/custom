@@ -139,7 +139,7 @@
 	</head>
 	<body>
 		<div id="main_wrapper" style="position: relative">
-			<bnc:csr_header />
+			<bnc:csr_customers_header/>
 			<div class="clearboth"></div>
 			<!--Content Starts here-->
 			<div id="main_content_blk">
